@@ -1,5 +1,5 @@
 # INSTRUCTION: Just need to change this path and can run game
-PATH = 'E:\Project\Project-Pikachu\Pikachu' 
+PATH = 'C:\\Users\\Minh Duc\\OneDrive\\Documents\\PikachuProject\\Project-Pikachu\\Pikachu' 
 
 import pygame, sys, random, copy, time, collections, os
 from pygame.locals import *
@@ -13,7 +13,7 @@ import json
 
 current_level = 1  # Màn chơi hiện tại
 max_level = 5  # Số lượng màn chơi tối đa
-FPS = 10
+FPS = 60
 WINDOWWIDTH = 1060
 WINDOWHEIGHT = 600
 BOXSIZE = 55
@@ -47,7 +47,7 @@ BLACK = (0, 0, 0)
 BGCOLOR = NAVYBLUE
 HIGHLIGHTCOLOR = BLUE
 BORDERCOLOR = RED
-font_path = "Roboto/Roboto-Regular.ttf"
+font_path = 'Roboto\\Minecraft.ttf'
 FONT = pygame.font.Font(font_path, 36)
 
 # Định nghĩa lớp InputBox (hộp nhập liệu)
@@ -56,39 +56,75 @@ class InputBox:
         self.rect = pygame.Rect(x, y, w, h)
         self.color = GRAY
         self.text = text
-        self.txt_surface = FONT.render(text, True, WHITE)
+        self.txt_surface = FONT.render(text, True, self.color)
         self.active = False
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            self.active = self.rect.collidepoint(event.pos)
-            self.color = WHITE if self.active else GRAY
-        if event.type == pygame.KEYDOWN and self.active:
-            if event.key == pygame.K_BACKSPACE:
-                self.text = self.text[:-1]
+            # If the user clicked on the input_box rect.
+            if self.rect.collidepoint(event.pos):
+                # Toggle the active variable.
+                self.active = not self.active
             else:
-                self.text += event.unicode
-            self.txt_surface = FONT.render(self.text, True, WHITE)
+                self.active = False
+            # Change the current color of the input box.
+            self.color = WHITE if self.active else GRAY
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_RETURN:
+                    print(self.text)
+                    self.text = ''
+                elif event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    self.text += event.unicode
+                # Re-render the text.
+                self.txt_surface = FONT.render(self.text, True, self.color)
+                # Check if the text width exceeds the input box width
+                if self.txt_surface.get_width() > self.rect.width:
+                    # Truncate the text to fit within the input box
+                    while self.txt_surface.get_width() > self.rect.width and len(self.text) > 0:
+                        self.text = self.text[:-1]
+                        self.txt_surface = FONT.render(self.text, True, self.color)
+
+    def update(self):
+        # Resize the box if the text is too long.
+        width = max(220, self.txt_surface.get_width()+12)
+        self.rect.w = width
 
     def draw(self, screen):
-        screen.blit(self.txt_surface, (self.rect.x + 9, self.rect.y - 5))
+        # Blit the text.
+        screen.blit(self.txt_surface, (self.rect.x+8, self.rect.y+8))
+        # Blit the rect.
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
 #tạo nút bấm
 class Button:
-    def __init__(self, x, y, w, h, COLOR = WHITE, font = FONT, text = "Sign up", ColorOfWord = BLACK):
+    def __init__(self, x, y, w, h, COLOR=WHITE, font=FONT, text="Sign up", ColorOfWord=BLACK):
         self.rect = pygame.Rect(x, y, w, h)
         self.color = COLOR
-        self.font = font
         self.text = text
-        self.txt_surface = font.render(self.text, True, ColorOfWord)
+        self.font = font
+        self.ColorOfWord = ColorOfWord
+        self.txt_surface = self.font.render(self.text, True, self.ColorOfWord)
+        self.fixed_width = w
+        self.fixed_height = h
+        self.padding = 20  # Add padding to make the button slightly larger
+        self.update()
+
+    def update(self):
+        # Ensure the button has a fixed size with padding
+        self.rect.width = self.fixed_width + self.padding
+        self.rect.height = self.fixed_height + self.padding
+        self.txt_surface = self.font.render(self.text, True, self.ColorOfWord)
+
+    def draw(self, screen):
+        # Blit the button.
+        pygame.draw.rect(screen, self.color, self.rect)
+        # Blit the text.
+        screen.blit(self.txt_surface, (self.rect.x + (self.rect.width - self.txt_surface.get_width()) // 2,
+                                       self.rect.y + (self.rect.height - self.txt_surface.get_height()) // 2))
         
-    def draw(self, screen, size = 0):
-        #vẽ nút bấm
-        pygame.draw.rect(screen, self.color, self.rect, size)
-        text_x = self.rect.x + (self.rect.w - self.txt_surface.get_width()) // 2
-        text_y = self.rect.y + (self.rect.h - self.txt_surface.get_height()) // 2
-        screen.blit(self.txt_surface, (text_x, text_y))
         
     def updateNodeNode(self, new_text):
         self.text = new_text
@@ -158,12 +194,12 @@ def register(username, password):
         users = {}
     
     if username in list(users.keys()):
-        return f"Tài khoản đã tồn tại!"
+        return f"This account has already existed!"
     board = []
     users[username] = [password, board]
     with open("users.json", "w", encoding="utf-8") as out_file:
         json.dump(users, out_file, indent=4)
-    return f"Đăng ký thành công!"
+    return f"Register successfully!"
 
 # Hàm đăng nhập
 def login(username, password):
@@ -171,13 +207,13 @@ def login(username, password):
         with open("users.json", "r", encoding="utf-8") as file:
             users = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
-        return "Không tìm thấy dữ liệu người dùng!"
+        return "No data of this user found!"
 
     if username in users and users[username][0] == password:
         global INTRO
         INTRO = False  # Cập nhật trạng thái để chuyển sang trò chơi
-        return ["Đăng nhập thành công!", users[username][1], username]
-    return ["Sai tài khoản hoặc mật khẩu!", 0, 0]
+        return ["Login successfully!", users[username][1], username]
+    return ["Wrong account or password", 0, 0]
 
 def LogIn(screen):
     global board, username
@@ -266,7 +302,7 @@ def LogIn(screen):
             screen.blit(title, (475, 100))
         else:
             screen.blit(title, (450, 100))
-        if message == "Đăng nhập thành công!":
+        if message == "Login successfully!":
             return ["MainMenu", board, username]
         # Hiển thị thông báo
         register_button.draw(screen)
@@ -342,8 +378,8 @@ def main():
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     pygame.display.set_caption('Pikachu')
-    BASICFONT = pygame.font.SysFont('comicsansms', 70)
-    LIVESFONT = pygame.font.SysFont('comicsansms', 45)
+    BASICFONT = pygame.font.SysFont(font_path, 70)
+    LIVESFONT = pygame.font.SysFont(font_path, 45)
     LEVEL = current_level
     global gameState
     gameState, board, username = LogIn(DISPLAYSURF)
@@ -370,7 +406,7 @@ def showStartScreen():
     # pygame.display.update()
     
     while True:
-        HelloUser = FONT.render(f"Xin chào {username}!", True, WHITE)
+        HelloUser = FONT.render(f"Welcome {username}!", True, WHITE)
         screen_width, screen_height = DISPLAYSURF.get_size()
         text_width = HelloUser.get_width()
         center_x = (screen_width - text_width) / 2
@@ -431,7 +467,7 @@ def draw_level_selector(current_level):
     right_arrow = FONT.render(">", True, WHITE if current_level < max_level else RED)
     
     # Vẽ thông tin màn chơi
-    level_text = FONT.render(f"Màn chơi {current_level}", True, GREEN)
+    level_text = FONT.render(f"Level {current_level}", True, GREEN)
     
     # Lấy vị trí cho các nút và text
     left_arrow_rect = left_arrow.get_rect(center=(WINDOWWIDTH // 4, WINDOWHEIGHT // 2))
@@ -492,7 +528,7 @@ def ScreenLevel():
                 if ButtonExit.isClicked(event):
                     return showStartScreen()
         if msgPressed:
-            msg = f"Chọn màn {current_level}!" if not flag else ""
+            msg = f"Choose level {current_level}!" if not flag else ""
             msgRender = FONT.render(msg, True, WHITE)
             DISPLAYSURF.blit(msgRender, (425, 370))
             # msgPressed = False
@@ -526,7 +562,7 @@ def runGame(mainBoard = MAINBOARD):
     hint = getHint(mainBoard)
     ButtonHint = Button(10, 70, 150, 50, WHITE, FONT, "Hint")
     ButtonHintPressed = False
-    ButtonRandom = Button(10, 150, 150, 50, WHITE, FONT, "RanDom")
+    ButtonRandom = Button(10, 150, 150, 50, WHITE, FONT, "Random")
     ButtonRandomPressed = False
     ButtonSaveGame = Button(10, 230, 150, 50, WHITE, FONT, "Save")
     ButtonSaveGamePressed = False
