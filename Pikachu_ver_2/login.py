@@ -4,11 +4,13 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk  # For displaying images
 import time
+import threading  # Thêm mô-đun threading
+
 class Login:
     def __init__(self, root):
         self.root = root
         self.root.title("Login Page")
-        self.root.geometry("1350x700+0+0")  # Same size as register
+        self.root.geometry("1350x700+0+0")
         self.root.config(bg="white")
 
         # === Background Image ===
@@ -22,7 +24,6 @@ class Login:
         frame.place(x=480, y=100, width=400, height=500)
 
         # === Logo Image ===
-        current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, 'images', 'side.jpg')
         self.left = ImageTk.PhotoImage(file=image_path)
         left = Label(self.root, image=self.left).place(x=250, y=250, width=230, height=230)
@@ -46,6 +47,15 @@ class Login:
         # === Register Button ===
         btn_register = Button(frame, text="Register", font=("times new roman", 15), bg="blue", fg="white", command=self.register_window).place(x=50, y=410, width=300)
 
+        # === Start loading game in the background ===
+        self.game_thread = threading.Thread(target=self.preload_game, daemon=True)
+        self.game_thread.start()
+
+    def preload_game(self):
+        """Load the game in the background."""
+        import Pikachu
+        self.preloaded_game = Pikachu  # Store game reference for later use
+
     def login(self):
         email = self.txt_email.get()
         password = self.txt_password.get()
@@ -56,7 +66,7 @@ class Login:
                 for user in data:
                     if user["email"] == email and user["password"] == password:
                         messagebox.showinfo("Success", "Login Successful!")
-                        self.open_game(email)  # Truyền email vào hàm open_game
+                        self.open_game(email)
                         return
                 messagebox.showerror("Error", "Invalid Email or Password!")
         except FileNotFoundError:
@@ -65,12 +75,17 @@ class Login:
             messagebox.showerror("Error", "Error loading user data!")
         
     def open_game(self, email):
-        self.root.withdraw()
-        import Pikachu  # Import Pikachu.py vào trong file này
-        result = Pikachu.main(email)
+        """Show the game immediately after login."""
+        self.root.withdraw()  # Hide login window
+        if hasattr(self, "preloaded_game"):
+            result = self.preloaded_game.main(email)  # Launch the preloaded game
+        else:
+            messagebox.showerror("Error", "Game not preloaded successfully!")
+            return
+        
+        # Handle logout if needed
         if result == "LOG OUT":
             self.root.deiconify()
-
 
     def register_window(self):
         self.root.destroy()  # Close current window
