@@ -14,23 +14,20 @@ os.chdir(PATH)
 FPS = 144
 WINDOWWIDTH = 1000
 WINDOWHEIGHT = 570
-BOXSIZE = 55
+BOXSIZEX = 40
+BOXSIZEY = 50
 BOARDWIDTH = 14
 BOARDHEIGHT = 9
 NUMHEROES_ONBOARD = (BOARDWIDTH - 2) * (BOARDHEIGHT - 2) // 4
 NUMSAMEHEROES = 4
-XMARGIN = (WINDOWWIDTH - (BOXSIZE * BOARDWIDTH)) // 2
-YMARGIN = (WINDOWHEIGHT - (BOXSIZE * BOARDHEIGHT)) // 2
+XMARGIN = (WINDOWWIDTH - (BOXSIZEX * BOARDWIDTH)) // 2
+YMARGIN = (WINDOWHEIGHT - (BOXSIZEY * BOARDHEIGHT)) // 2
 TIMEBAR_LENGTH = 300
 TIMEBAR_WIDTH = 30
 LEVELMAX = 5
 LIVES = 3
 GAMETIME = random.randrange(240, 361, 10)
 GETHINTTIME = 20
-
-
-XMARGIN = (WINDOWWIDTH - (BOXSIZE * BOARDWIDTH)) // 2
-YMARGIN = (WINDOWHEIGHT - (BOXSIZE * BOARDHEIGHT)) // 2
 
 # set up the colors
 GRAY = (100, 100, 100)
@@ -54,14 +51,6 @@ barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, YMARGIN // 2 - TIMEBAR_WIDTH /
 barSize = (TIMEBAR_LENGTH, TIMEBAR_WIDTH)
 borderColor = WHITE
 barColor = BOLDGREEN
-
-# Make a dict to store scaled images
-LISTHEROES = os.listdir(PATH + '/images/images_icon/Gen1/')
-NUMHEROES = len(LISTHEROES)
-HEROES_DICT = {}
-
-for i in range(len(LISTHEROES)):
-    HEROES_DICT[i + 1] = pygame.transform.scale(pygame.image.load('images/images_icon/Gen1/' + LISTHEROES[i]), (BOXSIZE, BOXSIZE))
 
 def Mouse_on_button(surface, rect):
     x,y,w,h = rect
@@ -455,7 +444,7 @@ startScreenSound = pygame.mixer.Sound('sound_effect/music_background/introductio
 listMusicBG = [f"sound_effect/music_background/music_{i}.mp3" for i in range(1, 5)]
 
 def main(email):
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZE, XMARGIN, YMARGIN, HEROES_DICT
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, HEROES_DICT
 
     # Khởi tạo Pygame và các tài nguyên cơ bản
     pygame.init()
@@ -467,9 +456,6 @@ def main(email):
     BASICFONT = pygame.font.SysFont('comicsansms', 70)
     LIVESFONT = pygame.font.SysFont('comicsansms', 45)
 
-    # Tính toán lề ban đầu dựa trên giá trị mặc định
-    XMARGIN = (WINDOWWIDTH - (BOXSIZE * BOARDWIDTH)) // 2
-    YMARGIN = (WINDOWHEIGHT - (BOXSIZE * BOARDHEIGHT)) // 2
     pygame.event.clear(pygame.MOUSEBUTTONUP)
 
     global savemenu, SettingGame, score_manager
@@ -479,7 +465,7 @@ def main(email):
     return
 
 def MainGame(email):
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZE, XMARGIN, YMARGIN, HEROES_DICT, savemenu, SettingGame, score_manager
+    global FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, HEROES_DICT, savemenu, SettingGame, score_manager
     
     while True:
         random.shuffle(listBG)
@@ -547,13 +533,13 @@ def MainGame(email):
 
 class RunningBox:
     def __init__(self):
-        self.runningbox = pygame.transform.scale(pygame.image.load('images/multiplier/runningbox.png'), (BOXSIZE + 2, BOXSIZE + 2))
+        self.runningbox = pygame.transform.scale(pygame.image.load('images/multiplier/runningbox.png'), (BOXSIZEX + 2, BOXSIZEY + 2))
         self.x = 1
         self.y = 1
         self.mode = 'normal'
     def draw(self):
         left, top = leftTopCoordsOfBox(self.x, self.y)
-        runningboxRect = pygame.Rect(left, top, BOXSIZE, BOXSIZE)
+        runningboxRect = pygame.Rect(left, top, BOXSIZEX + 2, BOXSIZEY + 2)
         DISPLAYSURF.blit(self.runningbox, runningboxRect)
     def active(self):
         return self.x, self.y
@@ -875,7 +861,7 @@ def showStartScreen(email):
 
 def load_heroes_images(gen_folder):
     """Tải danh sách ảnh từ thư mục tương ứng với Gen."""
-    global HEROES_DICT, LISTHEROES, NUMHEROES, BOXSIZE
+    global HEROES_DICT, LISTHEROES, NUMHEROES, BOXSIZEX, BOXSIZEY
     path = PATH + f'/images/images_icon/{gen_folder}/'
     if not os.path.exists(path):
         raise FileNotFoundError(f"Folder {path} không tồn tại!")
@@ -887,7 +873,7 @@ def load_heroes_images(gen_folder):
     for i in range(len(LISTHEROES)):
         HEROES_DICT[i + 1] = pygame.transform.scale(
             pygame.image.load(path + LISTHEROES[i]),
-            (BOXSIZE, BOXSIZE)
+            (BOXSIZEX, BOXSIZEY)
         )
     print(f"Loaded {NUMHEROES} heroes from {gen_folder}.")
 
@@ -932,8 +918,10 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
 
     settings.quit_callback = lambda: sys.exit()
     settings.main_menu_callback = go_to_main_menu
+    boxx, boxy = 0, 0
     
     def logic_game(boxx, boxy, mouseClicked, enterPress):
+        print('bbb', boxx, boxy)
         global TIMEBONUS, lastTimeGetPoint, hint, mainBoard, firstSelection, clickedBoxes
         # Phần logic game
         if (
@@ -976,12 +964,16 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     clickedBoxes = []
                     firstSelection = None
     
-    global BOARDHEIGHT, BOARDWIDTH, XMARGIN, YMARGIN, BOXSIZE
+    global BOARDHEIGHT, BOARDWIDTH, XMARGIN, YMARGIN, BOXSIZEX, BOXSIZEY
     size = saved_state["size"] if saved_state else size
     BOARDWIDTH, BOARDHEIGHT = size[0] + 2, size[1] + 2
-    BOXSIZE = min(800 // BOARDWIDTH, 500 // BOARDHEIGHT)
-    XMARGIN = (WINDOWWIDTH - (BOXSIZE * BOARDWIDTH)) // 2
-    YMARGIN = (WINDOWHEIGHT - (BOXSIZE * BOARDHEIGHT)) // 2
+    BOXSIZEX, BOXSIZEY = 800 // BOARDWIDTH, 560 // BOARDHEIGHT
+    if BOXSIZEX * 1.25 < BOXSIZEY:
+        BOXSIZEY = int(BOXSIZEX * 1.25)
+    else:
+        BOXSIZEX = int(BOXSIZEY // 1.25)
+    XMARGIN = (WINDOWWIDTH - (BOXSIZEX * BOARDWIDTH)) // 2
+    YMARGIN = (WINDOWHEIGHT - (BOXSIZEY * BOARDHEIGHT)) // 2 + 17
     
     if saved_state:
         name = saved_state["name"]
@@ -1030,11 +1022,12 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
             restart_flag = not restart_flag
             pygame.mixer.music.stop()
             if name == None:
-                new_map_name = EnterMapName(250, 160, 500, 250, DISPLAYSURF, email, False)
-                while True:
-                    name = new_map_name.appear()
-                    if name:
-                        break
+                if list(size) in ([8,8], [16,9], [20,12]):
+                    new_map_name = EnterMapName(250, 160, 500, 250, DISPLAYSURF, email, False)
+                    while True:
+                        name = new_map_name.appear()
+                        if name:
+                            break
             return showGameOverScreen(mainBoard, name, email, size, LEVEL, gen, device, score_manager.score)
         # Vẽ hint
         hint = getHint(mainBoard)
@@ -1150,7 +1143,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                         running_box.find_nearest(mainBoard)
                 elif event.key == pygame.K_RETURN:
                     enterPress = True
-
+        print(boxx, boxy)
         # Nếu Settings bị đóng, xóa các sự kiện chuột dư thừa
         if not settings.visible and mouseClicked:
             pygame.event.clear(pygame.MOUSEBUTTONUP)  # Xóa sự kiện chuột dư thừa
@@ -1230,28 +1223,35 @@ def save_game_state(email, mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTI
         settings.saved = True
 
 def drawInfo(name, device, gen, level, size):
-    name_render = font.render(name if name else 'NO NAME MAP', True, BLUE if name else RED)
-    DISPLAYSURF.blit(name_render, (500 - name_render.get_width() / 2,20))
-    DISPLAYSURF.blit(font.render(f'Map size: {size[0]}x{size[1]}', True, RED), (50, 500))
-    delta_x = font.render(f'Map size: {size[0]}x{size[1]}', True, RED).get_width()
-    DISPLAYSURF.blit(font.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED), (50 + delta_x + 20, 500))
-    delta_x += font.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED).get_width() + 20
-    DISPLAYSURF.blit(font.render(f'Gen: {gen}', True, RED), (50 + delta_x + 20, 500))
-    delta_x += font.render(f'Gen: {gen}', True, RED).get_width() + 20
-    DISPLAYSURF.blit(font.render(f'Level: {level}', True, RED), (50 + delta_x + 20, 500))
+    fonts = pygame.font.Font('font_pixel.otf', 15)
+    name_render = pygame.font.Font('font_pixel.otf', 20).render(name if name else 'NO NAME MAP', True, BLUE if name else RED)
+    DISPLAYSURF.blit(name_render, (500 - name_render.get_width() / 2,40))
+    DISPLAYSURF.blit(fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED), (20, 535))
+    delta_x = fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED).get_width()
+    DISPLAYSURF.blit(fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED), (20 + delta_x + 20, 535))
+    delta_x += fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED).get_width() + 20
+    DISPLAYSURF.blit(fonts.render(f'Gen: {gen}', True, RED), (20 + delta_x + 20, 535))
+    delta_x += fonts.render(f'Gen: {gen}', True, RED).get_width() + 20
+    DISPLAYSURF.blit(fonts.render(f'Level: {level}', True, RED), (20 + delta_x + 20, 535))
 
 def getRandomizedBoard():
     k_max = (BOARDHEIGHT - 2)*(BOARDWIDTH - 2)
-    i = 2
-    for i in range(2,k_max,2):
-        if k_max // i <= len(HEROES_DICT):
-            break
-    NUMSAMEHEROES = i
-    NUMHEROES_ONBOARD = (BOARDWIDTH - 2) * (BOARDHEIGHT - 2) // NUMSAMEHEROES
-    list_pokemons = list(range(1, len(HEROES_DICT) + 1))
+    list_pokemons = []
+    index = 1
+    temp = 2
+    if k_max >= 64:
+        for temp in range(4,k_max + 1,2):
+            if k_max // temp <= 36:
+                break
+    repeat = temp
+    for i in range(k_max // 2):
+        list_pokemons.extend([index] * repeat)
+        index += 1
+        if index > 36:
+            index = 1
+    list_pokemons = list_pokemons[:k_max]
     random.shuffle(list_pokemons)
-    list_pokemons = list_pokemons[:NUMHEROES_ONBOARD] * NUMSAMEHEROES
-    random.shuffle(list_pokemons)
+
     board = [[0 for _ in range(BOARDWIDTH)] for _ in range(BOARDHEIGHT)]
     # We create a board of images surrounded by 4 arrays of zeroes
     k = 0
@@ -1262,14 +1262,14 @@ def getRandomizedBoard():
     return board
 
 def leftTopCoordsOfBox(boxx, boxy):
-    left = boxx * BOXSIZE + XMARGIN
-    top = boxy * BOXSIZE + YMARGIN
+    left = boxx * BOXSIZEX + XMARGIN
+    top = boxy * BOXSIZEY + YMARGIN
     return left, top
 
 def getBoxAtPixel(x, y):
     if x <= XMARGIN or x >= WINDOWWIDTH - XMARGIN or y <= YMARGIN or y >= WINDOWHEIGHT - YMARGIN:
-        return None, None
-    return (x - XMARGIN) // BOXSIZE, (y - YMARGIN) // BOXSIZE
+        return 0, 0
+    return (x - XMARGIN) // BOXSIZEX, (y - YMARGIN) // BOXSIZEY
 
 def drawBoard(board, clickedBoxes=[]):
     for boxx in range(len(board[0])):
@@ -1280,7 +1280,7 @@ def drawBoard(board, clickedBoxes=[]):
                 
                 # Áp dụng hiệu ứng nhạt màu nếu ô nằm trong clickedBoxes
                 if (boxx, boxy) in clickedBoxes:
-                    s = pygame.Surface((BOXSIZE, BOXSIZE))
+                    s = pygame.Surface((BOXSIZEX, BOXSIZEY))
                     s.set_alpha(100)  # Đặt độ trong suốt (0-255)
                     s.fill((255, 255, 255))  # Phủ màu trắng nhạt
                     DISPLAYSURF.blit(s, (left, top))
@@ -1291,12 +1291,12 @@ def drawHighlightBox(board, boxx, boxy):
     
     # Vẽ một khung chữ nhật màu đỏ đậm quanh ô (highlight)
     pygame.draw.rect(DISPLAYSURF, HIGHLIGHTCOLOR, 
-                     (left - 2, top - 2, BOXSIZE + 4, BOXSIZE + 4), 4)  # Độ dày 4 pixel
+                     (left - 2, top - 2, BOXSIZEX + 4, BOXSIZEY + 4), 4)  # Độ dày 4 pixel
 
 def drawClickedBox(board, clickedBoxes):
     for boxx, boxy in clickedBoxes:
         left, top = leftTopCoordsOfBox(boxx, boxy)
-        boxRect = pygame.Rect(left, top, BOXSIZE, BOXSIZE)
+        boxRect = pygame.Rect(left, top, BOXSIZEX, BOXSIZEY)
         image = HEROES_DICT[board[boxy][boxx]].copy()
 
         # Kiểm tra xem ảnh có alpha channel không, nếu chưa có thì thêm
@@ -1370,7 +1370,7 @@ def bfs(board, boxy1, boxx1, boxy2, boxx2):
 
 def getCenterPos(pos):
     left, top = leftTopCoordsOfBox(pos[1], pos[0])
-    return tuple([left + BOXSIZE // 2, top + BOXSIZE // 2])
+    return tuple([left + BOXSIZEX // 2, top + BOXSIZEY // 2])
 
 def drawPath(board, path):
     for i in range(len(path) - 1):
@@ -1415,8 +1415,6 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
                 pass
         with open(os.path.join("saves/save_game", f"{email}_saved_game.json"), 'w') as save_file:
             json.dump(saved_game, save_file, indent=4)
-        print('gamename', gamename)
-        print('size', size, type(size))
         if list(size) in ([8,8], [16,9], [20,12]):
             print('aaa')
             strsize = f'{size[0]}x{size[1]}'
@@ -1549,8 +1547,7 @@ def getHint(board):
 def drawHint(hint):
     for boxy, boxx in hint:
         left, top = leftTopCoordsOfBox(boxx, boxy)
-        pygame.draw.rect(DISPLAYSURF, GREEN, (left, top,
-                                                       BOXSIZE, BOXSIZE), 2)
+        pygame.draw.rect(DISPLAYSURF, GREEN, (left, top, BOXSIZEX, BOXSIZEY), 2)
 
 def resetBoard(board):
     pokesOnBoard = []
@@ -2145,7 +2142,7 @@ class Settings:
             if not self.start_pause:
                 self.start_pause = time.time()
             # if not self.appear_again:
-            crop_image = DISPLAYSURF.subsurface((XMARGIN + BOXSIZE, YMARGIN + BOXSIZE, BOXSIZE * (BOARDWIDTH - 2), BOXSIZE * (BOARDHEIGHT - 2)))
+            crop_image = DISPLAYSURF.subsurface((XMARGIN + BOXSIZEX, YMARGIN + BOXSIZEY, BOXSIZEX * (BOARDWIDTH - 2), BOXSIZEY * (BOARDHEIGHT - 2)))
             pygame.image.save(crop_image, 'saves/save_game/temporary.png')
             pygame.draw.rect(self.screen, self.box_color, self.box_rect, border_radius=3)
             pygame.draw.rect(self.screen, self.box_border_color, self.box_rect, width=2, border_radius=3)
