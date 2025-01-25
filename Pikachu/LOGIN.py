@@ -175,7 +175,7 @@ class LoginUI(QWidget):
                 QLineEdit {{
                     border-image: url(./images/login_images/border_input_login.png) 0 0 0 0 stretch stretch;
                     padding-left: {int(25 * self.scale_x)}px;
-                    padding_right: {int(25 * self.scale_x)}px;
+                    padding-right: {int(25 * self.scale_x)}px;
                     color: black;
                     height: {int(40 * self.scale_y)}px;
                 }}
@@ -187,7 +187,7 @@ class LoginUI(QWidget):
                 QLineEdit {{
                     border-image: url(./images/login_images/border_input_login.png) 0 0 0 0 stretch stretch;
                     padding-left: {int(10 * self.scale_x)}px;
-                    padding_right: {int(10 * self.scale_x)}px;
+                    padding-right: {int(10 * self.scale_x)}px;
                     color: black;
                     height: {int(40 * self.scale_y)}px;
                 }}
