@@ -1,0 +1,47 @@
+[
+    {
+        "namegame": "game1",
+        "user": "mno",
+        "size": "8x8",
+        "gamemode": "3",
+        "gen": "1",
+        "device": "Mouse",
+        "score": 1150
+    },
+    {
+        "namegame": "abc",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": "1",
+        "device": "Mouse",
+        "score": 840
+    },
+    {
+        "namegame": "abc",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": "1",
+        "device": "Mouse",
+        "score": 840
+    },
+    {
+        "namegame": "12345",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": 1,
+        "device": "Mouse",
+        "score": 0
+    },
+    {
+        "namegame": "hahahaha",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": "3",
+        "device": "Mouse",
+        "score": 770
+    }
+]
