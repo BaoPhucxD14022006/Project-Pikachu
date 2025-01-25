@@ -1,8 +1,8 @@
 import os
 import json
 import threading
-from PyQt5.QtWidgets import (QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QDialog, QMessageBox)
-from PyQt5.QtGui import QFont, QPixmap, QMovie
+from PyQt5.QtWidgets import (QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QDialog, QMessageBox, QGraphicsDropShadowEffect)
+from PyQt5.QtGui import QFont, QPixmap, QMovie, QColor
 from PyQt5.QtCore import Qt, QTimer, QUrl
 from PyQt5.QtMultimedia import QSoundEffect
 import string
@@ -85,7 +85,7 @@ class LoginUI(QWidget):
         container.setGeometry(
             int(450 * self.scale_x),
             int(120 * self.scale_y),
-            int(500 * self.scale_x),
+            int(520 * self.scale_x),
             int(400 * self.scale_y),
         )
         layout = QVBoxLayout(container)
@@ -107,19 +107,6 @@ class LoginUI(QWidget):
         self.lbl_captcha.setStyleSheet("color: blue; background-color: lightgray;")
         self.lbl_captcha.setAlignment(Qt.AlignCenter)
 
-        # Input Captcha
-        self.txt_captcha = QLineEdit()
-        self.txt_captcha.setFont(QFont("Times New Roman", int(15 * self.scale_y)))
-        self.txt_captcha.setStyleSheet(f""" 
-            QLineEdit {{
-                background-color: lightyellow;
-                border: {int(1 * self.scale_x)}px solid gray;
-                padding-left: {int(10 * self.scale_x)}px;
-                color: black;
-                height: {int(30 * self.scale_y)}px;
-            }}
-        """)
-
         # Refresh Captcha Button
         btn_refresh_captcha = QLabel()
         btn_refresh_captcha.setPixmap(QPixmap("./images/login_images/refresh_icon.png").scaled(
@@ -136,11 +123,11 @@ class LoginUI(QWidget):
         layout.addLayout(captcha_layout)
 
         # Buttons
-        self.btn_login = self.create_button('login_button.png', 540, 420, 150, 100)
+        self.btn_login = self.create_button('login_button.png', 560, 420, 150, 100)
         self.btn_login.mousePressEvent = self.logic.login
         self.add_hover_effect(self.btn_login)
 
-        self.btn_register = self.create_button('register_button.png', 700, 420, 150, 100)
+        self.btn_register = self.create_button('register_button.png', 720, 420, 150, 100)
         self.btn_register.mousePressEvent = self.logic.register_window
         self.add_hover_effect(self.btn_register)
 
@@ -166,9 +153,21 @@ class LoginUI(QWidget):
 
     def create_label_input(self, parent, text, layout, password=False):
         label = QLabel(text, parent)
-        label.setFont(QFont("Times New Roman", int(15 * self.scale_y), QFont.Bold))
-        label.setStyleSheet("color: black;")
+        label.setFont(QFont("Times New Roman", int(20 * self.scale_y), QFont.Bold))
+        label.setStyleSheet("""
+            QLabel {
+                color: black;
+                background: transparent;  /* Nền trong suốt để hiệu ứng bóng hoạt động */
+            }
+        """)
+        # Áp dụng hiệu ứng bóng chữ bằng QGraphicsDropShadowEffect
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(4)  # Độ mờ của bóng
+        shadow.setOffset(1, 1)   # Độ lệch của bóng
+        shadow.setColor(QColor("white"))  # Màu của bóng
+        label.setGraphicsEffect(shadow)
         layout.addWidget(label)
+        
         if text != "":
             input_field = QLineEdit(parent)
             input_field.setFont(QFont("Times New Roman", int(15 * self.scale_y)))
@@ -176,6 +175,7 @@ class LoginUI(QWidget):
                 QLineEdit {{
                     border-image: url(./images/login_images/border_input_login.png) 0 0 0 0 stretch stretch;
                     padding-left: {int(25 * self.scale_x)}px;
+                    padding_right: {int(25 * self.scale_x)}px;
                     color: black;
                     height: {int(40 * self.scale_y)}px;
                 }}
@@ -187,6 +187,7 @@ class LoginUI(QWidget):
                 QLineEdit {{
                     border-image: url(./images/login_images/border_input_login.png) 0 0 0 0 stretch stretch;
                     padding-left: {int(10 * self.scale_x)}px;
+                    padding_right: {int(10 * self.scale_x)}px;
                     color: black;
                     height: {int(40 * self.scale_y)}px;
                 }}
