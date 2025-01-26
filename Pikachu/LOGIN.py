@@ -295,7 +295,7 @@ class LoginLogic:
         self.label_info = QLabel("Redirecting to Register Page...", self.ui)
     
         # Đặt vị trí ở góc trên bên phải
-        self.label_info.setGeometry(1100, 50, 300, 50)  # Điều chỉnh vị trí của thông báo
+        self.label_info.setGeometry(1050, 50, 300, 50)  # Điều chỉnh vị trí của thông báo
 
         # Thêm nền màu và căn giữa chữ
         self.label_info.setStyleSheet("""
