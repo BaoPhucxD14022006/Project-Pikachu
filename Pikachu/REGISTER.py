@@ -261,7 +261,7 @@ class RegisterLogic(RegisterUI):
         self.label_info.hide()
         self.close()
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        os.system(f"python {os.path.join(current_dir, 'LOGIN.py')}")
+        os.system(f'python "{os.path.join(current_dir, "LOGIN.py")}"')
 
     def register_data(self, event=None):
         self.play_click_sound()  # Phát âm thanh
