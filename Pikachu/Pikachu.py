@@ -22,11 +22,11 @@ NUMHEROES_ONBOARD = (BOARDWIDTH - 2) * (BOARDHEIGHT - 2) // 4
 NUMSAMEHEROES = 4
 XMARGIN = (WINDOWWIDTH - (BOXSIZEX * BOARDWIDTH)) // 2
 YMARGIN = (WINDOWHEIGHT - (BOXSIZEY * BOARDHEIGHT)) // 2
-TIMEBAR_LENGTH = 300
-TIMEBAR_WIDTH = 30
+TIMEBAR_LENGTH = 600
+TIMEBAR_WIDTH = 60
 LEVELMAX = 5
 LIVES = 3
-GAMETIME = random.randrange(240, 361, 10)
+GAMETIME = 240
 GETHINTTIME = 20
 
 # set up the colors
@@ -162,8 +162,8 @@ class Score:
             self.multiplier_image = None  # Xóa ảnh sau 5 giây
 
 class LoadGif:
-    def __init__(self, screen, width=None, height=None):
-        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 1000, 570
+    def __init__(self, screen, WINDOWWIDTH, WINDOWHEIGHT, width=None, height=None):
+        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = WINDOWWIDTH, WINDOWHEIGHT
         self.screen = screen
         self.clock, self.last_update_time = pygame.time.Clock(), pygame.time.get_ticks()
         self.frame_counters = 0
@@ -217,23 +217,25 @@ class LoadGif:
         self.clock.tick(60)
 
 class SettingMenu:
-    def __init__(self, screen = None, muteSound = True, muteSFX = True, Volume = 0.5, dragging = False):
+    def __init__(self, w, h, screen = None, muteSound = True, muteSFX = True, Volume = 0.5, dragging = False):
+        self.w = w
+        self.h = h
         self.muteSound = muteSound
         self.muteSFX = muteSFX
-        self.volumeSound = Volume
-        self.volumeSFX = Volume
+        self.volumeSound = 0.3
+        self.volumeSFX = 1
         self.draggingSound = dragging
         self.draggingSFX = dragging
         self.screen = screen
         self.actived = False
         self.font = pygame.font.Font('font_pixel.otf', 25)
-        self.gif = LoadGif(screen, 200, 178)
+        self.gif = LoadGif(screen, w, h, 400, 356)
         self.handle_x_sfx = 0
         self.handle_y_sfx = 0
         self.handle_x_sound = 0
         self.handle_y_sound = 0
         self.flag = False
-        
+     
     def WriteMsg(self, text = "text", color = WHITE, posY = 130):
         msg = self.font.render(text, True, color)
         screen_width = self.screen.get_size()[0]
@@ -241,7 +243,7 @@ class SettingMenu:
         centerX = (screen_width - text_width) / 2
         self.screen.blit(msg, (centerX + 5, posY))
     
-    def loadImages(self, linkImage,  posX = 0, posY = 0, W = 1000, H = 650):
+    def loadImages(self, linkImage,  posX = 0, posY = 0, W = WINDOWWIDTH, H = WINDOWHEIGHT):
         image = pygame.image.load(linkImage)
         image = pygame.transform.scale(image, (W, H))
         imageRect = image.get_rect(topleft = (posX, posY))
@@ -253,38 +255,38 @@ class SettingMenu:
     def Option(self):
         
         # Kích thước thanh trượt của âm thanh
-        slider_x_sound = 600  
-        slider_y_sound = 230  
-        slider_width_sound = 200
-        slider_height_sound = 10
-        handle_radius_sound = 15
+        slider_x_sound = 1200
+        slider_y_sound = 460  
+        slider_width_sound = 400
+        slider_height_sound = 20
+        handle_radius_sound = 30
 
         # Vị trí nút điều chỉnh của âm thanh
-        handle_x_sound = slider_x_sound + slider_width_sound // 2  
+        handle_x_sound = slider_x_sound + int(slider_width_sound * 0.3)
         handle_y_sound = slider_y_sound + slider_height_sound // 2
         
         # Kích thước thanh trượt của SFX
-        slider_x_sfx = 600 
-        slider_y_sfx = 330 
-        slider_width_sfx = 200
-        slider_height_sfx = 10
-        handle_radius_sfx = 15
+        slider_x_sfx = 1200
+        slider_y_sfx = 660 
+        slider_width_sfx = 400
+        slider_height_sfx = 20
+        handle_radius_sfx = 30
 
         # Vị trí nút điều chỉnh của SFX
-        handle_x_sfx = slider_x_sfx + slider_width_sfx // 2  
+        handle_x_sfx = slider_x_sfx + slider_width_sfx
         handle_y_sfx = slider_y_sfx + slider_height_sfx // 2
         
         # Nút bấm về menu
         # ButtonExit = Button(50, 580, 200, 50, WHITE, , "Main Menu", 2)
         Gif = self.gif
         
-        image_background = self.loadImages("images/image_background/backgroundSetting.jpg")
+        image_background = self.loadImages("images/image_background/backgroundSetting.jpg", 0, 0, self.w, self.h)
         # image_menu = self.loadImages("image_background/menudachinhsua1.jpg", 200, 86, 50, 520)
-        image_sound_on = self.loadImages("images/image_button/on.png", 820, 185, 100, 100)
-        image_sound_off = self.loadImages("images/image_button/off.png", 820, 185, 100, 100)
-        image_sfx_on = self.loadImages("images/image_button/on.png", 820, 285, 100, 100)
-        image_sfx_off = self.loadImages("images/image_button/off.png", 820, 285, 100, 100)
-        image_back_home = self.loadImages("images/image_button/buttonbackhome.png", 50, 470, 120, 80)
+        image_sound_on = self.loadImages("images/image_button/on.png", 1640, 370, 200, 200)
+        image_sound_off = self.loadImages("images/image_button/off.png", 1640, 370, 200, 200)
+        image_sfx_on = self.loadImages("images/image_button/on.png", 1640, 570, 200, 200)
+        image_sfx_off = self.loadImages("images/image_button/off.png", 1640, 570, 200, 200)
+        image_back_home = self.loadImages("images/image_button/buttonbackhome.png", 50, self.h - 200, 240, 160)
         
         # Vẽ hình các nút bấm
         button_image_sound_rect = image_sound_on[1]
@@ -407,32 +409,8 @@ class SettingMenu:
             # Cập nhật màn hình
             pygame.display.flip()
 
-class Button:
-    def __init__(self, x, y, image, scale):
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False
-
-    def draw(self, surface):
-        # Hiển thị nút
-        surface.blit(self.image, (self.rect.x, self.rect.y))
-
-    def is_clicked(self):
-        pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(pos) and pygame.mouse.get_pressed()[0]:
-            if not self.clicked:
-                self.clicked = True
-                return True
-        if not pygame.mouse.get_pressed()[0]:
-            self.clicked = False
-        return False
-
 # Load background
-startBG = pygame.image.load('images/image_background/introduction_image.jpg')
-startBG = pygame.transform.scale(startBG, (WINDOWWIDTH, WINDOWHEIGHT))
+
 listBG = ['images/image_background/image_game_{}.jpg'.format(i) for i in range(1, 5)]
 
 # Load sound and music
@@ -440,18 +418,23 @@ pygame.mixer.pre_init()
 pygame.mixer.init()
 clickSound = pygame.mixer.Sound('sound_effect/beep4.ogg')
 getPointSound = pygame.mixer.Sound('sound_effect/beep1.ogg')
+wrongSound = pygame.mixer.Sound('sound_effect/wrong.mp3')
 startScreenSound = pygame.mixer.Sound('sound_effect/music_background/introduction.wav')
 listMusicBG = [f"sound_effect/music_background/music_{i}.mp3" for i in range(1, 5)]
 
 def main(email):
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, HEROES_DICT
+    global WINDOWHEIGHT, WINDOWWIDTH, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN
 
     # Khởi tạo Pygame và các tài nguyên cơ bản
     pygame.init()
     pygame.font.init()
-
+    WINDOWWIDTH = pygame.display.Info().current_w
+    WINDOWHEIGHT = pygame.display.Info().current_h
+    print(WINDOWWIDTH, WINDOWHEIGHT)
     FPSCLOCK = pygame.time.Clock()
-    DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    DISPLAYSURF = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    WINDOWWIDTH = pygame.display.Info().current_w
+    WINDOWHEIGHT = pygame.display.Info().current_h
     pygame.display.set_caption('Pikachu')
     BASICFONT = pygame.font.SysFont('comicsansms', 70)
     LIVESFONT = pygame.font.SysFont('comicsansms', 45)
@@ -460,13 +443,15 @@ def main(email):
 
     global savemenu, SettingGame, score_manager
     savemenu = SaveMenu(DISPLAYSURF, email)
-    SettingGame = SettingMenu(DISPLAYSURF)
+    SettingGame = SettingMenu(WINDOWWIDTH, WINDOWHEIGHT, DISPLAYSURF)
     score_manager = Score(LIVESFONT, PATH)
     return
 
 def MainGame(email):
-    global FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, HEROES_DICT, savemenu, SettingGame, score_manager
-    
+    global startBG, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, savemenu, SettingGame, score_manager
+
+    startBG = pygame.image.load('images/image_background/introduction_image.jpg')
+    startBG = pygame.transform.scale(startBG, (WINDOWWIDTH, WINDOWHEIGHT))
     while True:
         random.shuffle(listBG)
         random.shuffle(listMusicBG)
@@ -487,7 +472,6 @@ def MainGame(email):
         if action == "LOG OUT":
             return "LOG OUT" # Trả về trạng thái LOG OUT cho ứng dụng
         
-        #Ai làm phần game thì để ý chỗ này
         elif action == "NEW GAME" :
             new_game_option = NewGameOption(DISPLAYSURF)
             new_game_option.appear()
@@ -599,8 +583,8 @@ class RunningBox:
 
 class NewGameOption:
     def __init__(self, screen):
-        self.font = pygame.font.Font('font_pixel.otf', 25)
-        self.fonts = pygame.font.Font('font_pixel.otf', 20)
+        self.font = pygame.font.Font('font_pixel.otf', 50)
+        self.fonts = pygame.font.Font('font_pixel.otf', 40)
         self.visible = False
         self.screen = screen
         self.is_draw = False
@@ -617,11 +601,14 @@ class NewGameOption:
 
     def playable(self):
         for i in (self.size_choose, self.gen_choose, self.level_choose, self.device_choose):
+            if i == None:
+                return False
+            if self.size_choose == 3 and (self.row_text == '' or self.col_text == ''):
+                return False
             if self.size_choose == 3 and self.row_text != '' and self.col_text != '':
                 if (int(self.row_text) * int(self.col_text)) % 2 != 0:
                     return False
-            if i == None:
-                return False
+
         return True
 
     def appear(self):
@@ -632,68 +619,70 @@ class NewGameOption:
         self.level_rects = []
         self.device_rects = []
         nen = pygame.image.load('images/new_game/new_game_background.png')
+        nen = pygame.transform.scale(nen, (WINDOWWIDTH, WINDOWHEIGHT))
         self.screen.blit(nen, (0, 0))
         size = ('8x8', '9x16', '12x20')
-        x, y = 100, 65
-        self.screen.blit(self.font.render('SIZE', True, RED), (x + 40, y))
+        x, y = 200, 130
+        self.screen.blit(self.font.render('SIZE', True, RED), (x + 80, y))
         for i in range(3):
-            y += 70
+            y += 140
             if i == self.size_choose:
                 color = BLUE
             else:
                 color = BLACK
-            pygame.draw.rect(self.screen, color, (x, y, 150, 60), 2)
-            self.size_rects.append(pygame.Rect(x, y, 150, 60))
-            self.screen.blit(self.font.render(size[i], True, BLACK), (x + 75 - self.font.render(size[i], True, BLACK).get_width()/2, y + 7)) 
-        x, y = 400, 65
-        self.screen.blit(self.font.render('GEN', True, RED), (x + 70, y))
+            pygame.draw.rect(self.screen, color, (x, y, 300, 120), 4)
+            self.size_rects.append(pygame.Rect(x, y, 300, 120))
+            self.screen.blit(self.font.render(size[i], True, BLACK), (x + 150 - self.font.render(size[i], True, BLACK).get_width()/2, y + 14)) 
+        x, y = 800, 130
+        self.screen.blit(self.font.render('GEN', True, RED), (x + 1400, y))
         for i in range(2):
-            y += 80
-            x = 340
+            y += 160
+            x = 680
             for j in range(2):
-                pygame.draw.rect(self.screen, BLUE if self.gen_choose == 2 * i + j else BLACK, (x, y, 150, 60), 2)
-                self.gen_rects.append(pygame.Rect(x, y, 150, 60))
-                self.screen.blit(self.font.render(f'GEN{i*2 + j + 1}', True, BLACK), (x + 75 - self.font.render(f'GEN{i*2 + j + 1}', True, BLACK).get_width()/2, y + 7))
-                x += 170
-        x, y = 775, 65
-        self.screen.blit(self.font.render('LEVEL', True, RED), (x + 25, y))
+                pygame.draw.rect(self.screen, BLUE if self.gen_choose == 2 * i + j else BLACK, (x, y, 300, 120), 4)
+                self.gen_rects.append(pygame.Rect(x, y, 300, 120))
+                self.screen.blit(self.font.render(f'GEN{i*2 + j + 1}', True, BLACK), (x + 150 - self.font.render(f'GEN{i*2 + j + 1}', True, BLACK).get_width()/2, y + 14))
+                x += 340
+        x, y = 1550, 130
+        self.screen.blit(self.font.render('LEVEL', True, RED), (x + 50, y))
         for i in range(5):
-            y += 55
+            y += 110
             color = BLUE if i == self.level_choose else BLACK
-            pygame.draw.rect(self.screen, color, (x, y, 120, 40), 2)
-            self.level_rects.append(pygame.Rect(x, y, 120, 40))
-            self.screen.blit(self.font.render(f'{i + 1}', True, BLACK), (x + 65 - self.font.render(f'{i + 1}', True, BLACK).get_width()/2, y - 2))
+            pygame.draw.rect(self.screen, color, (x, y, 240, 80), 4)
+            self.level_rects.append(pygame.Rect(x, y, 240, 80))
+            self.screen.blit(self.font.render(f'{i + 1}', True, BLACK), (x + 130 - self.font.render(f'{i + 1}', True, BLACK).get_width()/2, y - 4))
         
-        self.screen.blit(self.font.render('DEVICE:', True, RED), (730, 400))
+        self.screen.blit(self.font.render('DEVICE:', True, RED), (1460, 770))
         device = ('MOUSE', 'KEYBOARD')
-        x, y = 470, 450
+        x, y = 940, 870
         for i in range(2):
-            x += 155
+            x += 310
             color = BLUE if i == self.device_choose else BLACK
-            pygame.draw.rect(self.screen, color, (x, y, 150, 50), 2)
-            self.device_rects.append(pygame.Rect(x, y, 150, 50))
-            self.screen.blit(self.font.render(device[i], True, BLACK), (x + 75 - self.font.render(device[i], True, BLACK).get_width()/2, y + 5))
-        x, y = 70, 400
+            pygame.draw.rect(self.screen, color, (x, y, 300, 100), 4)
+            self.device_rects.append(pygame.Rect(x, y, 300, 100))
+            self.screen.blit(self.font.render(device[i], True, BLACK), (x + 150 - self.font.render(device[i], True, BLACK).get_width()/2, y + 10))
+        x, y = 140, 770
         
-        pygame.draw.rect(self.screen, BLUE if self.size_choose == 3 else BLACK, (x, y, 200, 100), 2)
-        self.screen.blit(self.fonts.render('COL', True, RED), (x + 10, y + 10))
-        pygame.draw.rect(self.screen, BLUE if self.col_active else GRAY, (x + 60, y + 15, 120, 30), 2)
-        self.col_rect = pygame.Rect(x + 60, y + 15, 120, 30)
-        self.screen.blit(self.fonts.render('ROW', True, RED), (x + 10, y + 50))
-        pygame.draw.rect(self.screen, BLUE if self.row_active else GRAY, (x + 60, y + 55, 120, 30), 2)
-        self.row_rect = pygame.Rect(x + 60, y + 55, 120, 30)
-        self.size_rects.append(pygame.Rect(x, y, 200, 100))
-        self.screen.blit(self.fonts.render(self.col_text, True, BLACK), (x + 90, y + 13))
-        self.screen.blit(self.fonts.render(self.row_text, True, BLACK), (x + 90, y + 53))
+        pygame.draw.rect(self.screen, BLUE if self.size_choose == 3 else BLACK, (x, y, 400, 200), 4)
+        self.screen.blit(self.fonts.render('COL', True, RED), (x + 20, y + 20))
+        pygame.draw.rect(self.screen, BLUE if self.col_active else GRAY, (x + 120, y + 30, 240, 60), 4)
+        self.col_rect = pygame.Rect(x + 120, y + 30, 240, 60)
+        self.screen.blit(self.fonts.render('ROW', True, RED), (x + 20, y + 100))
+        pygame.draw.rect(self.screen, BLUE if self.row_active else GRAY, (x + 120, y + 110, 240, 60), 4)
+        self.row_rect = pygame.Rect(x + 120, y + 110, 240, 60)
+        self.size_rects.append(pygame.Rect(x, y, 400, 200))
+        self.screen.blit(self.fonts.render(self.col_text, True, BLACK), (x + 180, y + 26))
+        self.screen.blit(self.fonts.render(self.row_text, True, BLACK), (x + 180, y + 106))
         
         home_button = pygame.image.load('images/new_game/home_button.png')
-        home_button = pygame.transform.scale(home_button, (50,50))
-        self.home_button_rect = (pygame.Rect(930, 20, 50, 50),)
-        self.screen.blit(home_button, (930, 20))
+        home_button = pygame.transform.scale(home_button, (100, 100))
+        self.home_button_rect = (pygame.Rect(WINDOWWIDTH - 110, 10, 100, 100),)
+        self.screen.blit(home_button, (WINDOWWIDTH - 110, 10, 100, 100))
         
-        pygame.draw.rect(self.screen, GRAY, (460, 510, 80, 40), 2)
-        self.play_button_rect = (pygame.Rect(460, 510, 80, 40),)
-        self.screen.blit(self.font.render('PLAY', True, RED if self.playable() else GRAY), (465, 500))
+        pygame.draw.rect(self.screen, GRAY, (WINDOWWIDTH // 2 - 80, WINDOWHEIGHT - 130, 160, 80), 4)
+        self.play_button_rect = (pygame.Rect(WINDOWWIDTH // 2 - 80, WINDOWHEIGHT - 130, 160, 80),)
+        play_word = self.font.render('PLAY', True, RED if self.playable() else GRAY)
+        self.screen.blit(play_word, (WINDOWWIDTH // 2 - play_word.get_width()//2, WINDOWHEIGHT - 130))
         pygame.display.update()
     
     def handle_event(self):
@@ -777,37 +766,44 @@ def showStartScreen(email):
             if user["email"] == email:
                 username = user["username"]
     cur_rect = None
-    pixel_font = pygame.font.Font('font_pixel.otf', 30)
+    pixel_font = pygame.font.Font('font_pixel.otf', 60)
     startScreenSound.set_volume(SettingGame.volumeSFX)
     if SettingGame.muteSFX:
         startScreenSound.play()
     pygame.event.clear()
     button_folder = 'images/button'
     new_game_button = pygame.image.load(f'{button_folder}/new_game_button.png')
+    new_game_button = pygame.transform.scale(new_game_button, (400, 120))
     load_game_button = pygame.image.load(f'{button_folder}/load_game_button.png')
+    load_game_button = pygame.transform.scale(load_game_button, (400, 120))
     rank_button = pygame.image.load(f'{button_folder}/rank_button.png')
+    rank_button = pygame.transform.scale(rank_button, (400, 120))
     setting_button = pygame.image.load(f'{button_folder}/setting_button.png')
+    setting_button = pygame.transform.scale(setting_button, (400, 120))
     log_out_button = pygame.image.load(f'{button_folder}/log_out_button.png')
+    log_out_button = pygame.transform.scale(log_out_button, (300, 120))
     quit_game_button = pygame.image.load(f'{button_folder}/quit_game_button.png')
+    quit_game_button = pygame.transform.scale(quit_game_button, (300, 120))
     buttons = [new_game_button, load_game_button, rank_button, setting_button, log_out_button, quit_game_button]
     buttons_rect = []
     y = 30
     for i in range(4):
-        buttons_rect.append((240,y,buttons[i].get_width(), buttons[i].get_height()))
-        y += buttons[i].get_height() + 20
-    buttons_rect.append((WINDOWWIDTH - (buttons[4].get_width() + 30), 90, buttons[4].get_width(), buttons[4].get_height()))
-    buttons_rect.append((265, 450, buttons[5].get_width(), buttons[5].get_height()))
+        buttons_rect.append((358,y,buttons[i].get_width(), buttons[i].get_height()))
+        y += buttons[i].get_height() + 40
+    buttons_rect.append((WINDOWWIDTH - (buttons[4].get_width() + 30), 180, buttons[4].get_width(), buttons[4].get_height()))
+    buttons_rect.append((358, WINDOWHEIGHT - 200, buttons[5].get_width(), buttons[5].get_height()))
     buttons_Rect = tuple(pygame.Rect(i[0], i[1], i[2], i[3]) for i in buttons_rect)
     DISPLAYSURF.blit(startBG, (0, 0))
     for i in range(6):
         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
-    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (buttons[4].get_width() + 30), 1))
+    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (180 + pixel_font.render('Welcome:', True, BLACK).get_width()//2), 1))
     email_render = pixel_font.render(username, True, RED)
-    if (email_render.get_width() / 2) <= 105:
-        email_render_x = 895 - email_render.get_width() // 2
+    email_render_x = WINDOWWIDTH - 180
+    if email_render.get_width() // 2 <= 180:
+        email_render_x = email_render_x - email_render.get_width() // 2
     else:
-        email_render_x = 1000 - email_render.get_width()
-    DISPLAYSURF.blit(email_render, (email_render_x, 35))
+        email_render_x = WINDOWWIDTH - email_render.get_width()
+    DISPLAYSURF.blit(email_render, (email_render_x, 70))
     while True:
         for event in pygame.event.get():
             is_drawed = False
@@ -828,13 +824,8 @@ def showStartScreen(email):
                     cur_rect = None
                     for i in range(6):
                         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
-                    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (buttons[4].get_width() + 30), 1))
-                    email_render = pixel_font.render(username, True, RED)
-                    if (email_render.get_width() / 2) <= 105:
-                        email_render_x = 895 - email_render.get_width() // 2
-                    else:
-                        email_render_x = 1000 - email_render.get_width()
-                    DISPLAYSURF.blit(email_render, (email_render_x, 35))
+                    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (180 + pixel_font.render('Welcome:', True, BLACK).get_width()//2), 1))
+                    DISPLAYSURF.blit(email_render, (email_render_x, 70))
             elif event.type == MOUSEBUTTONUP:
                 pygame.event.clear(pygame.MOUSEBUTTONUP)  # Xóa sự kiện chuột còn lại trước khi xử lý
                 mousex, mousey = event.pos
@@ -847,7 +838,7 @@ def showStartScreen(email):
                         elif i == 2:  # RANK
                             print("Rank selected")
                             import RANKSCREEN
-                            RANKSCREEN.main()
+                            RANKSCREEN.main(WINDOWWIDTH, WINDOWHEIGHT, DISPLAYSURF)
                         elif i == 3:  # OPTION
                             SettingGame.Option()
                         elif i == 4:  # LOG OUT
@@ -859,29 +850,30 @@ def showStartScreen(email):
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
-def load_heroes_images(gen_folder):
+def load_poke_images(gen_folder):
     """Tải danh sách ảnh từ thư mục tương ứng với Gen."""
-    global HEROES_DICT, LISTHEROES, NUMHEROES, BOXSIZEX, BOXSIZEY
+    global POKES_DICT, LISTPOKES, NUMPOKES, BOXSIZEX, BOXSIZEY
     path = PATH + f'/images/images_icon/{gen_folder}/'
     if not os.path.exists(path):
         raise FileNotFoundError(f"Folder {path} không tồn tại!")
 
-    LISTHEROES = os.listdir(path)
-    NUMHEROES = len(LISTHEROES)
-    HEROES_DICT = {}
+    LISTPOKES = os.listdir(path)
+    NUMPOKES = len(LISTPOKES)
+    POKES_DICT = {}
 
-    for i in range(len(LISTHEROES)):
-        HEROES_DICT[i + 1] = pygame.transform.scale(
-            pygame.image.load(path + LISTHEROES[i]),
+    for i in range(len(LISTPOKES)):
+        POKES_DICT[i + 1] = pygame.transform.scale(
+            pygame.image.load(path + LISTPOKES[i]),
             (BOXSIZEX, BOXSIZEY)
         )
-    print(f"Loaded {NUMHEROES} heroes from {gen_folder}.")
+    print(f"Loaded {NUMPOKES} heroes from {gen_folder}.")
 
 def runGame(email, saved_state, level, gen, device, size, randomBG):
     global update_map_name
     update_map_name = None
     clickSound.set_volume(SettingGame.volumeSFX)
     getPointSound.set_volume(SettingGame.volumeSFX)
+    wrongSound.set_volume(SettingGame.volumeSFX)
     
     global font
     font = pygame.font.Font('font_pixel.otf', 30)
@@ -921,7 +913,6 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
     boxx, boxy = 0, 0
     
     def logic_game(boxx, boxy, mouseClicked, enterPress):
-        print('bbb', boxx, boxy)
         global TIMEBONUS, lastTimeGetPoint, hint, mainBoard, firstSelection, clickedBoxes
         # Phần logic game
         if (
@@ -958,7 +949,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
 
                     else:  # Nếu không tìm được đường nối
                         if SettingGame.muteSFX:
-                            clickSound.play()
+                            wrongSound.play()
 
                     # Reset trạng thái sau lần click thứ hai
                     clickedBoxes = []
@@ -967,7 +958,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
     global BOARDHEIGHT, BOARDWIDTH, XMARGIN, YMARGIN, BOXSIZEX, BOXSIZEY
     size = saved_state["size"] if saved_state else size
     BOARDWIDTH, BOARDHEIGHT = size[0] + 2, size[1] + 2
-    BOXSIZEX, BOXSIZEY = 800 // BOARDWIDTH, 560 // BOARDHEIGHT
+    BOXSIZEX, BOXSIZEY = 1700 // BOARDWIDTH, 1000 // BOARDHEIGHT
     if BOXSIZEX * 1.25 < BOXSIZEY:
         BOXSIZEY = int(BOXSIZEX * 1.25)
     else:
@@ -998,7 +989,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
         device = device
         gen = gen
         score = 0
-    load_heroes_images(f'Gen{int(gen) + 1}')
+    load_poke_images(f'Gen{int(gen) + 1}')
     score_manager.score = score
     global Background
     Background = pygame.image.load(BG)
@@ -1023,7 +1014,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
             pygame.mixer.music.stop()
             if name == None:
                 if list(size) in ([8,8], [16,9], [20,12]):
-                    new_map_name = EnterMapName(250, 160, 500, 250, DISPLAYSURF, email, False)
+                    new_map_name = EnterMapName(WINDOWWIDTH // 2 - 500, WINDOWHEIGHT // 2 - 250, 1000, 500, DISPLAYSURF, email, False)
                     while True:
                         name = new_map_name.appear()
                         if name:
@@ -1098,8 +1089,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     else:
                         restart_flag = not restart_flag
                         pygame.mixer.music.stop()
-                        action =  showGameOverScreen(mainBoard)
-                        return 
+                        return showGameOverScreen(mainBoard)
                 if imageClockRect.collidepoint(mousePos):
                     if time.time() - STARTTIME - 30 > 0:
                         STARTTIME += 30
@@ -1143,6 +1133,34 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                         running_box.find_nearest(mainBoard)
                 elif event.key == pygame.K_RETURN:
                     enterPress = True
+                elif event.key == pygame.K_h:
+                    if LIVES > 0:
+                        LIVES -= 1
+                        hintPressed = True
+                    else:
+                        restart_flag = not restart_flag
+                        pygame.mixer.music.stop()
+                        return showGameOverScreen(mainBoard)
+                elif event.key == pygame.K_r:
+                    resetBoard(mainBoard)
+                    if LIVES > 0:
+                        LIVES -= 1
+                    else:
+                        restart_flag = not restart_flag
+                        pygame.mixer.music.stop()
+                        return showGameOverScreen(mainBoard)
+                elif event.key == pygame.K_t:
+                    if time.time() - STARTTIME - 30 > 0:
+                        STARTTIME += 30
+                    else:
+                        STARTTIME += time.time() - STARTTIME
+                    if LIVES > 0:
+                        LIVES -= 1
+                    else:
+                        restart_flag = not restart_flag
+                        pygame.mixer.music.stop()
+                        return showGameOverScreen(mainBoard)
+                    
         print(boxx, boxy)
         # Nếu Settings bị đóng, xóa các sự kiện chuột dư thừa
         if not settings.visible and mouseClicked:
@@ -1189,6 +1207,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
 def save_game_state(email, mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTIME, BG, gen, device, size, map_name):
     """Lưu trạng thái hiện tại của trò chơi vào tệp JSON cho tài khoản cụ thể."""
     if not map_name:
+        savemenu.back = 'back'
         savemenu.page = 1
         savemenu.appear()
         while True:
@@ -1223,16 +1242,16 @@ def save_game_state(email, mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTI
         settings.saved = True
 
 def drawInfo(name, device, gen, level, size):
-    fonts = pygame.font.Font('font_pixel.otf', 15)
-    name_render = pygame.font.Font('font_pixel.otf', 20).render(name if name else 'NO NAME MAP', True, BLUE if name else RED)
-    DISPLAYSURF.blit(name_render, (500 - name_render.get_width() / 2,40))
-    DISPLAYSURF.blit(fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED), (20, 535))
+    fonts = pygame.font.Font('font_pixel.otf', 30)
+    name_render = pygame.font.Font('font_pixel.otf', 40).render(name if name else 'NO NAME MAP', True, BLUE if name else RED)
+    DISPLAYSURF.blit(name_render, (WINDOWWIDTH//2 - name_render.get_width() // 2, 70))
+    DISPLAYSURF.blit(fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED), (20, WINDOWHEIGHT - 50))
     delta_x = fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED).get_width()
-    DISPLAYSURF.blit(fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED), (20 + delta_x + 20, 535))
+    DISPLAYSURF.blit(fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED), (20 + delta_x + 20, WINDOWHEIGHT - 50))
     delta_x += fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED).get_width() + 20
-    DISPLAYSURF.blit(fonts.render(f'Gen: {gen}', True, RED), (20 + delta_x + 20, 535))
+    DISPLAYSURF.blit(fonts.render(f'Gen: {gen}', True, RED), (20 + delta_x + 20, WINDOWHEIGHT - 50))
     delta_x += fonts.render(f'Gen: {gen}', True, RED).get_width() + 20
-    DISPLAYSURF.blit(fonts.render(f'Level: {level}', True, RED), (20 + delta_x + 20, 535))
+    DISPLAYSURF.blit(fonts.render(f'Level: {level}', True, RED), (20 + delta_x + 20, WINDOWHEIGHT - 50))
 
 def getRandomizedBoard():
     k_max = (BOARDHEIGHT - 2)*(BOARDWIDTH - 2)
@@ -1276,7 +1295,7 @@ def drawBoard(board, clickedBoxes=[]):
         for boxy in range(len(board)):
             left, top = leftTopCoordsOfBox(boxx, boxy)
             if board[boxy][boxx] != 0:  # Nếu ô không trống
-                DISPLAYSURF.blit(HEROES_DICT[board[boxy][boxx]], (left, top))
+                DISPLAYSURF.blit(POKES_DICT[board[boxy][boxx]], (left, top))
                 
                 # Áp dụng hiệu ứng nhạt màu nếu ô nằm trong clickedBoxes
                 if (boxx, boxy) in clickedBoxes:
@@ -1297,7 +1316,7 @@ def drawClickedBox(board, clickedBoxes):
     for boxx, boxy in clickedBoxes:
         left, top = leftTopCoordsOfBox(boxx, boxy)
         boxRect = pygame.Rect(left, top, BOXSIZEX, BOXSIZEY)
-        image = HEROES_DICT[board[boxy][boxx]].copy()
+        image = POKES_DICT[board[boxy][boxx]].copy()
 
         # Kiểm tra xem ảnh có alpha channel không, nếu chưa có thì thêm
         if image.get_alpha() is None:  
@@ -1381,6 +1400,8 @@ def drawPath(board, path):
     pygame.time.wait(300)
 
 def drawTimeBar():
+    barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, 20)
+    barSize = (TIMEBAR_LENGTH, TIMEBAR_WIDTH)
     progress = 1 - ((time.time() - STARTTIME - TIMEBONUS) / GAMETIME)
 
     pygame.draw.rect(DISPLAYSURF, borderColor, (barPos, barSize), 1)
@@ -1394,11 +1415,11 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
     mainBoard = getRandomizedBoard()
     result = isGameComplete(board)
     imageBack = pygame.image.load("images/image_button/no.png")
-    imageBack = pygame.transform.scale(imageBack, (150, 82))
-    imageBackRect = imageBack.get_rect(topleft = (300, 400))
+    imageBack = pygame.transform.scale(imageBack, (300, 164))
+    imageBackRect = imageBack.get_rect(topleft = (600,800))
     imagePlay = pygame.image.load("images/image_button/yes.png")
-    imagePlay = pygame.transform.scale(imagePlay, (150, 82))
-    imagePlayRect = imagePlay.get_rect(topleft = (550, 400))
+    imagePlay = pygame.transform.scale(imagePlay, (300, 164))
+    imagePlayRect = imagePlay.get_rect(topleft = (1100, 800))
     running = True
     
     if result:
@@ -1443,16 +1464,16 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
         if SettingGame.muteSFX:
             pygame.mixer.music.play()
         imageWin = pygame.image.load("images/end_game/win.png")
-        imageWin = pygame.transform.scale(imageWin, (400, 206))
+        imageWin = pygame.transform.scale(imageWin, (800, 412))
         imagePlayAgain = pygame.image.load("images/end_game/playagain.png")
-        imagePlayAgain = pygame.transform.scale(imagePlayAgain, (300, 126))
+        imagePlayAgain = pygame.transform.scale(imagePlayAgain, (600, 252))
         
         while running:
             DISPLAYSURF.blit(Background, (0, 0))
-            DISPLAYSURF.blit(imageWin, (300, 30))
-            DISPLAYSURF.blit(imagePlayAgain, (350, 250))
-            DISPLAYSURF.blit(imageBack, (300, 400))
-            DISPLAYSURF.blit(imagePlay, (550, 400))
+            DISPLAYSURF.blit(imageWin, (600, 60))
+            DISPLAYSURF.blit(imagePlayAgain, (700, 500))
+            DISPLAYSURF.blit(imageBack, (600, 800))
+            DISPLAYSURF.blit(imagePlay, (1100, 800))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1487,17 +1508,17 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
         if SettingGame.muteSFX:
             pygame.mixer.music.play()
         imageTryAgain = pygame.image.load("images/end_game/tryagain.png").convert_alpha()
-        imageTryAgain = pygame.transform.scale(imageTryAgain, (300, 168))
+        imageTryAgain = pygame.transform.scale(imageTryAgain, (600, 336))
         imageTryAgain.set_colorkey((255, 0, 255))
         imageLose = pygame.image.load("images/end_game/gameover.png")
-        imageLose = pygame.transform.scale(imageLose, (350, 208))
+        imageLose = pygame.transform.scale(imageLose, (700, 416))
         
         while running:
             DISPLAYSURF.blit(Background, (0, 0))
-            DISPLAYSURF.blit(imageBack, (300, 400))
-            DISPLAYSURF.blit(imagePlay, (550, 400))
-            DISPLAYSURF.blit(imageTryAgain, (350, 250))
-            DISPLAYSURF.blit(imageLose, (325, 30))
+            DISPLAYSURF.blit(imageBack, (600, 800))
+            DISPLAYSURF.blit(imagePlay, (1100, 800))
+            DISPLAYSURF.blit(imageTryAgain, (700, 500))
+            DISPLAYSURF.blit(imageLose, (650, 60))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1652,7 +1673,10 @@ class SaveMenu:
         self.screen = screen
         self.height = WINDOWHEIGHT
         self.width = WINDOWWIDTH
-        self.memory_rects = ((50 , 100, 250, 142), (375 , 100, 250, 142), (700 , 100, 250, 142), (50 , 300, 250, 142), (375 , 300, 250, 142), (700 , 300, 250, 142))
+        delta_w = (WINDOWWIDTH - 1500) // 4
+        delta_h = (WINDOWHEIGHT - 562 - 130) // 3
+        
+        self.memory_rects = ((delta_w , 130 + delta_h, 500, 284), (delta_w*2 + 500 , 130 + delta_h, 500, 284), (delta_w*3 + 1000 , 130 + delta_h, 500, 284), (delta_w , 130 + delta_h*2 + 284, 500, 284), (delta_w*2 + 500 , 130 + delta_h*2 + 284, 500, 284), (delta_w*3 + 1000, 130 + delta_h*2 + 284, 500, 284))
         self.maxpage = 3
         self.page = 1
         self.memories = [None for _ in range(6 * self.maxpage)]
@@ -1665,16 +1689,17 @@ class SaveMenu:
         self.email = email
         self.is_delete = False
         pygame.font.init()
-        self.font = pygame.font.Font('font_pixel.otf', 25)
-        self.fonts = pygame.font.Font('font_pixel.otf', 20)
+        self.font = pygame.font.Font('font_pixel.otf', 50)
+        self.fonts = pygame.font.Font('font_pixel.otf', 40)
         self.next_page = pygame.image.load('images/save_menu/next_page.png')
-        self.next_page = pygame.transform.scale(self.next_page, (50,50))
-        self.next_page_rect = pygame.Rect(600, 505,50,50)
+        self.next_page = pygame.transform.scale(self.next_page, (100,100))
+        self.next_page_rect = pygame.Rect(WINDOWWIDTH // 2 + 120, WINDOWHEIGHT - 110, 100, 100)
         self.prev_page = pygame.image.load('images/save_menu/previous_page.png')
-        self.prev_page = pygame.transform.scale(self.prev_page, (50,50))
-        self.prev_page_rect = pygame.Rect(350, 505, 50, 50)
+        self.prev_page = pygame.transform.scale(self.prev_page, (100,100))
+        self.prev_page_rect = pygame.Rect(WINDOWWIDTH // 2 - 120, WINDOWHEIGHT - 110, 100, 100)
         self.is_drawed = False
         self.cur_rect = None
+        self.back = 'home'
     def appear(self):
         self.visible = True
         self.BG = pygame.image.load('images/save_menu/savemenu.png')
@@ -1689,37 +1714,39 @@ class SaveMenu:
             x,y,w,h = self.memory_rects[i]
             pygame.draw.rect(self.screen, GRAY, pygame.Rect(x,y,w,h), border_radius=1)
         delete_icon = pygame.image.load('images/save_menu/delete.png')
-        delete_icon = pygame.transform.scale(delete_icon, (50,50))
+        delete_icon = pygame.transform.scale(delete_icon, (100,100))
         self.delete_rects = [None for _ in range(6)]
         for i in range(6 * (self.page - 1), 6 * self.page):
             if self.memories[i]:
                 image = pygame.image.load(self.memories[i])
-                image = pygame.transform.scale(image, (248,140))
+                image = pygame.transform.scale(image, (498,282))
                 self.screen.blit(image, (self.memory_rects[i % 6][0] + 1, self.memory_rects[i % 6][1] + 1))
                 delete_icon_rect = delete_icon.get_rect()
                 delete_icon_rect.topleft = (self.memory_rects[i % 6][0], self.memory_rects[i % 6][1])
                 self.screen.blit(delete_icon, delete_icon_rect)
                 self.delete_rects[i % 6] = delete_icon_rect
                 map_name = self.font.render(saved_game[str(i)]['name'], True, BLACK)
-                self.screen.blit(map_name, (self.memory_rects[i % 6][0] + 125 - map_name.get_width()/2, self.memory_rects[i % 6][1] + 140))
+                self.screen.blit(map_name, (self.memory_rects[i % 6][0] + 250 - map_name.get_width()/2, self.memory_rects[i % 6][1] + 280))
         for i in range(6 * (self.page - 1), 6 * self.page):
             if self.memories[i]:
                 color = RED
             else:
                 color = BLACK
             number = self.font.render(str(i + 1), True, color)
-            self.screen.blit(number, (self.memory_rects[i % 6][0] + 110, self.memory_rects[i % 6][1] + 50))
+            self.screen.blit(number, (self.memory_rects[i % 6][0] + 250 - number.get_width()//2, self.memory_rects[i % 6][1] + 142 - number.get_height()//2))
         if self.page > 1:
-            self.screen.blit(self.prev_page, (350, 505))
+            self.screen.blit(self.prev_page, tuple(self.prev_page_rect))
         if self.page < self.maxpage:
-            self.screen.blit(self.next_page, (600, 505))
+            self.screen.blit(self.next_page, tuple(self.next_page_rect))
                 
-        self.out = pygame.Rect(880,500,100,50)
-        pygame.draw.rect(self.screen, BLUE, pygame.Rect(880,500,100,50))
-        self.screen.blit(self.fonts.render('Home', True, BLACK), (900, 505))
+        self.out = pygame.Rect(WINDOWWIDTH - 180, WINDOWHEIGHT - 100, 150, 75)
+        pygame.draw.rect(self.screen, BLUE, pygame.Rect(WINDOWWIDTH - 180, WINDOWHEIGHT - 100, 150, 75))
+        back_word = self.fonts.render('HOME' if self.back == 'home' else 'BACK', True, BLACK)
+        self.screen.blit(back_word, (WINDOWWIDTH - 105 - back_word.get_width()//2, WINDOWHEIGHT - 100))
         pygame.display.flip()
     
     def save_game(self, event, mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTIME, BG, gen, device, size, map_name):
+        self.back = 'back'
         temp_image = pygame.image.load('saves/save_game/temporary.png')
         # Đảm bảo thư mục lưu trữ game tồn tại
         save_folder = "saves/save_game"
@@ -1738,7 +1765,7 @@ class SaveMenu:
                     self.delete(i + (self.page - 1) * 6)
                     
                 elif box and box.collidepoint(mouse_pos):
-                    enter_map_name = EnterMapName(250, 160, 500, 250, DISPLAYSURF, self.email)
+                    enter_map_name = EnterMapName(WINDOWWIDTH // 2 - 500, WINDOWHEIGHT // 2 - 250, 1000, 500, DISPLAYSURF, self.email)
                     map_name = None
                     while not map_name:
                         map_name = enter_map_name.appear()
@@ -1862,6 +1889,7 @@ class SaveMenu:
         self.appear()
                     
     def load(self, event):
+        self.back = 'home'
         if event.type == pygame.MOUSEMOTION:
             self.mouse_on(event)
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -1908,7 +1936,7 @@ class EnterMapName:
         self.Rect = pygame.Rect(x,y,w,h)
         self.screen = screen
         pygame.font.init()
-        self.font = pygame.font.Font(None, 32)
+        self.font = pygame.font.Font(None, 64)
         self.visible = True
         self.email = email
         self.closeable = closeable
@@ -1918,14 +1946,15 @@ class EnterMapName:
             enter_map_name = pygame.image.load('images/save_menu/enter_map_name.png')
         else:
             enter_map_name = pygame.image.load('images/save_menu/enter_map_name_2.png')
+        enter_map_name = pygame.transform.scale(enter_map_name, (self.w, self.h))
         self.screen.blit(enter_map_name, (self.x, self.y))
         if self.closeable == True:
-            close_button = pygame.transform.scale(pygame.image.load('images/save_menu/close_button.png'), (50,50))
-            self.screen.blit(close_button, (self.x + 8, self.y + 8))
-            close_button_rect = pygame.Rect(self.x + 8, self.y + 8, 50, 50)
+            close_button = pygame.transform.scale(pygame.image.load('images/save_menu/close_button.png'), (100, 100))
+            self.screen.blit(close_button, (self.x + 16, self.y + 16))
+            close_button_rect = pygame.Rect(self.x + 16, self.y + 16, 100, 100)
         
         # Ô nhập dữ liệu
-        input_box = pygame.Rect(self.x + 100, self.y + 120, 300, 40)
+        input_box = pygame.Rect(self.x + self.w // 2 - 300, self.y + 240, 600, 80)
         color_inactive = GRAY
         color_active = BLUE
         color = color_inactive
@@ -1933,8 +1962,9 @@ class EnterMapName:
         text = ''
 
         enter_button = pygame.image.load('images/save_menu/enter_button.png')
-        self.screen.blit(enter_button, (self.x + 175, self.y + 185))
-        enter_rect = pygame.Rect(self.x + 175, self.y + 185, 150,35)
+        enter_button = pygame.transform.scale(enter_button, (300, 70))
+        self.screen.blit(enter_button, (self.x + self.w // 2 - 150, self.y + 370))
+        enter_rect = pygame.Rect(self.x + self.w // 2 - 150, self.y + 370, 300, 70)
         
         # Vòng lặp chính
         running = True
@@ -1983,20 +2013,20 @@ class EnterMapName:
                             text += event.unicode
                             error = None
             if error != None:
-                self.screen.blit(error, (self.x + 250 - error.get_width() / 2, self.y + 70))
+                self.screen.blit(error, (self.x + 500 - error.get_width() // 2, self.y + 140))
                 error_on = True
             elif error_on == True:
                 if self.closeable == True:
                     enter_map_name = pygame.image.load('images/save_menu/enter_map_name.png')
                 else:
                     enter_map_name = pygame.image.load('images/save_menu/enter_map_name_2.png')
+                enter_map_name = pygame.transform.scale(enter_map_name, (self.w, self.h))
                 self.screen.blit(enter_map_name, (self.x, self.y))
                 if self.closeable == True:
-                    close_button = pygame.transform.scale(pygame.image.load('images/save_menu/close_button.png'), (50,50))
-                    self.screen.blit(close_button, (self.x + 8, self.y + 8))
-                    close_button_rect = pygame.Rect(self.x + 8, self.y + 8, 50, 50)
-                enter_button = pygame.image.load('images/save_menu/enter_button.png')
-                self.screen.blit(enter_button, (self.x + 175, self.y + 185))
+                    close_button = pygame.transform.scale(pygame.image.load('images/save_menu/close_button.png'), (100, 100))
+                    self.screen.blit(close_button, (self.x + 16, self.y + 16))
+                    close_button_rect = pygame.Rect(self.x + 16, self.y + 16, 100, 100)
+                self.screen.blit(enter_button, tuple(enter_rect))
                 error_on = False
             # Vẽ ô nhập dữ liệu
             pygame.draw.rect(self.screen, WHITE, input_box)
@@ -2004,11 +2034,11 @@ class EnterMapName:
             
             # Render văn bản
             txt_surface = self.font.render(text, True, BLACK)
-            if txt_surface.get_width() > 300:
-                l = 300 // txt_surface.get_width() * len(text)
+            if txt_surface.get_width() > 600:
+                l = 600 // txt_surface.get_width() * len(text)
                 txt_surface = self.font.render(text[-l:], True, BLACK)
             # Vẽ văn bản
-            self.screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+            self.screen.blit(txt_surface, (input_box.x + 10, input_box.y + 40 - txt_surface.get_height()//2))
 
             # Cập nhật màn hình
             pygame.display.flip()
