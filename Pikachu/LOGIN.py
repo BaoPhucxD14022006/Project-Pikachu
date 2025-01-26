@@ -103,7 +103,7 @@ class LoginUI(QWidget):
         # === Captcha Code ===
         self.captcha_code = self.generate_captcha()
         self.lbl_captcha = QLabel(self.captcha_code)
-        self.lbl_captcha.setFont(QFont("Times New Roman", int(20 * self.scale_y), QFont.Bold))
+        self.lbl_captcha.setFont(QFont("Times New Roman", int(20), QFont.Bold))
         self.lbl_captcha.setStyleSheet("color: blue; background-color: lightgray;")
         self.lbl_captcha.setAlignment(Qt.AlignCenter)
 
@@ -182,7 +182,7 @@ class LoginUI(QWidget):
             """)
         else:
             input_field = QLineEdit(parent)
-            input_field.setFont(QFont("Times New Roman", int(15 * self.scale_y)))
+            input_field.setFont(QFont("Times New Roman", int(15)))
             input_field.setStyleSheet(f"""
                 QLineEdit {{
                     border-image: url(./images/login_images/border_input_login.png) 0 0 0 0 stretch stretch;
