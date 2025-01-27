@@ -8,6 +8,7 @@ from tkinter import *
 import time
 from PIL import Image
 import pygame.locals
+import re
 
 PATH = os.path.dirname(os.path.abspath(__file__))
 os.chdir(PATH)
@@ -51,6 +52,42 @@ barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, YMARGIN // 2 - TIMEBAR_WIDTH /
 barSize = (TIMEBAR_LENGTH, TIMEBAR_WIDTH)
 borderColor = WHITE
 barColor = BOLDGREEN
+
+# Make a dict to store scaled images
+LISTPOKES = os.listdir(PATH + '/images/images_icon/Gen1/')
+NUMPOKES = len(LISTPOKES)
+POKES_DICT = {}
+
+# Thêm danh sách lưu trữ các cặp đã được thông báo
+notified_pairs = set()
+
+# Hàng đợi lưu thông báo
+notifications = []
+
+def add_notification(message, duration=3):
+    """Thêm thông báo mới vào hàng đợi."""
+    global notifications
+    # Mỗi thông báo sẽ ghi lại nội dung và thời gian hết hạn
+    notifications.append({"message": message, "end_time": time.time() + duration})
+
+def draw_notifications(screen):
+    """Hiển thị thông báo hiện tại."""
+    global notifications
+    if notifications:
+        # Lấy thông báo đầu tiên trong hàng đợi
+        current_notification = notifications[0]
+        if time.time() > current_notification["end_time"]:
+            notifications.pop(0)  # Xóa thông báo nếu đã hết thời gian hiển thị
+        else:
+            # Vẽ thông báo lên màn hình
+            font = pygame.font.Font('font_pixel.otf', 36)
+            text_surface = font.render(current_notification["message"], True, WHITE)
+            text_rect = text_surface.get_rect()
+            text_rect.bottomleft = (10, WINDOWHEIGHT - text_surface.get_height() - 5)  # Góc dưới bên trái màn hình
+            screen.blit(text_surface, text_rect)
+
+for i in range(len(LISTPOKES)):
+    POKES_DICT[i + 1] = pygame.transform.scale(pygame.image.load('images/images_icon/Gen1/' + LISTPOKES[i]), (BOXSIZEX, BOXSIZEY))
 
 def Mouse_on_button(surface, rect):
     x,y,w,h = rect
@@ -193,7 +230,6 @@ class LoadGif:
         except EOFError:
             pass  # Kết thúc GIF
         return frames, gif.info["duration"]  # Trả về các khung hình và thời gian giữa các khung
-
     
     def playGif(self, posX=None, posY=None):
         # Xác định vị trí mặc định nếu không cung cấp
@@ -235,7 +271,7 @@ class SettingMenu:
         self.handle_x_sound = 0
         self.handle_y_sound = 0
         self.flag = False
-     
+
     def WriteMsg(self, text = "text", color = WHITE, posY = 130):
         msg = self.font.render(text, True, color)
         screen_width = self.screen.get_size()[0]
@@ -423,7 +459,9 @@ startScreenSound = pygame.mixer.Sound('sound_effect/music_background/introductio
 listMusicBG = [f"sound_effect/music_background/music_{i}.mp3" for i in range(1, 5)]
 
 def main(email):
-    global WINDOWHEIGHT, WINDOWWIDTH, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN
+    global WINDOWHEIGHT, WINDOWWIDTH, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, unlocked_pokemon
+    with open(f'{PATH}/saves/save_game/{email}_saved_collection.json', 'r') as file:
+        unlocked_pokemon = json.load(file)
 
     # Khởi tạo Pygame và các tài nguyên cơ bản
     pygame.init()
@@ -784,17 +822,23 @@ def showStartScreen(email):
     log_out_button = pygame.transform.scale(log_out_button, (300, 120))
     quit_game_button = pygame.image.load(f'{button_folder}/quit_game_button.png')
     quit_game_button = pygame.transform.scale(quit_game_button, (300, 120))
-    buttons = [new_game_button, load_game_button, rank_button, setting_button, log_out_button, quit_game_button]
+    collections_button = pygame.image.load(f'{button_folder}/collections_button.png')
+    collections_button = pygame.transform.scale(collections_button, (400, 120))
+    buttons = [new_game_button, load_game_button, rank_button, setting_button, collections_button, log_out_button, quit_game_button]
     buttons_rect = []
     y = 30
     for i in range(4):
         buttons_rect.append((358,y,buttons[i].get_width(), buttons[i].get_height()))
         y += buttons[i].get_height() + 40
-    buttons_rect.append((WINDOWWIDTH - (buttons[4].get_width() + 30), 180, buttons[4].get_width(), buttons[4].get_height()))
-    buttons_rect.append((358, WINDOWHEIGHT - 200, buttons[5].get_width(), buttons[5].get_height()))
+
+    # Định vị nút Collections
+    buttons_rect.append((358, WINDOWHEIGHT - 150, collections_button.get_width(), collections_button.get_height()))
+
+    buttons_rect.append((WINDOWWIDTH - (buttons[5].get_width() + 30), 180, buttons[5].get_width(), buttons[5].get_height()))
+    buttons_rect.append((WINDOWWIDTH - (buttons[6].get_width() + 30), WINDOWHEIGHT - 150, buttons[6].get_width(), buttons[6].get_height()))
     buttons_Rect = tuple(pygame.Rect(i[0], i[1], i[2], i[3]) for i in buttons_rect)
     DISPLAYSURF.blit(startBG, (0, 0))
-    for i in range(6):
+    for i in range(7):
         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
     DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (180 + pixel_font.render('Welcome:', True, BLACK).get_width()//2), 1))
     email_render = pixel_font.render(username, True, RED)
@@ -822,7 +866,7 @@ def showStartScreen(email):
                 if is_drawed == False:
                     DISPLAYSURF.blit(startBG, (0, 0))
                     cur_rect = None
-                    for i in range(6):
+                    for i in range(7):
                         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
                     DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (180 + pixel_font.render('Welcome:', True, BLACK).get_width()//2), 1))
                     DISPLAYSURF.blit(email_render, (email_render_x, 70))
@@ -839,11 +883,15 @@ def showStartScreen(email):
                             print("Rank selected")
                             import RANKSCREEN
                             RANKSCREEN.main(WINDOWWIDTH, WINDOWHEIGHT, DISPLAYSURF)
-                        elif i == 3:  # OPTION
-                            SettingGame.Option()
-                        elif i == 4:  # LOG OUT
+                        elif i == 3:# OPTION
+                            return "OPTION"
+                        elif i == 4:  # COLLECTIONS
+                            showCollectionsMenu()  # Chuyển đến màn hình Collections
+                            continue  # Sau khi thoát, quay lại vòng lặp menu chính
+
+                        elif i == 5:  # LOG OUT
                             return "LOG OUT"
-                        elif i == 5:  # QUIT
+                        elif i == 6:  # QUIT
                             pygame.quit()
                             sys.exit()
 
@@ -936,11 +984,23 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                 else:  # Lần click thứ hai
                     path = bfs(mainBoard, firstSelection[1], firstSelection[0], boxy, boxx)
                     if path:  # Nếu tìm được đường nối
+                        # Lấy chỉ số Pokémon từ mainBoard tại các ô đã chọn
+                        pokemon_index = mainBoard[firstSelection[1]][firstSelection[0]]
+
+                        # Kiểm tra xem cặp này đã có hay chưa và lưu lại
+                        if LISTPOKES[pokemon_index - 1] not in unlocked_pokemon:
+                            unlocked_pokemon.append(LISTPOKES[pokemon_index - 1])
+                            with open(f'{PATH}/saves/save_game/{email}_saved_collection.json', 'w') as file:
+                                json.dump(unlocked_pokemon, file)
+
+                            # Thêm thông báo vào hàng đợi
+                            message = f"New Pokémon collected!"
+                            add_notification(message)
+
                         if SettingGame.muteSFX:
                             getPointSound.play()
                         mainBoard[firstSelection[1]][firstSelection[0]] = 0
                         mainBoard[boxy][boxx] = 0
-                        
                         drawPath(mainBoard, path)
                         TIMEBONUS += 1
                         lastTimeGetPoint = time.time()
@@ -965,7 +1025,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
         BOXSIZEX = int(BOXSIZEY // 1.25)
     XMARGIN = (WINDOWWIDTH - (BOXSIZEX * BOARDWIDTH)) // 2
     YMARGIN = (WINDOWHEIGHT - (BOXSIZEY * BOARDHEIGHT)) // 2 + 17
-    
+
     if saved_state:
         name = saved_state["name"]
         mainBoard = saved_state["board"]
@@ -1037,6 +1097,10 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
         drawClickedBox(mainBoard, clickedBoxes)
         drawTimeBar()
         drawInfo(name, device, gen, level, size)
+
+        # Kiểm tra và vẽ thông báo (nếu có)
+        draw_notifications(DISPLAYSURF)
+
         DISPLAYSURF.blit(imageHint, (30, 120))
         DISPLAYSURF.blit(imageSwap, (30, 210))
         DISPLAYSURF.blit(imageClock, (30, 300))
@@ -1254,25 +1318,26 @@ def drawInfo(name, device, gen, level, size):
     DISPLAYSURF.blit(fonts.render(f'Level: {level}', True, RED), (20 + delta_x + 20, WINDOWHEIGHT - 50))
 
 def getRandomizedBoard():
-    k_max = (BOARDHEIGHT - 2)*(BOARDWIDTH - 2)
+    """Để đảm bảo bàn chơi không bị shuffle lại quá nhiều lần, hàm tạo bảng random sẽ ưu tiên vào số lượng Pokemon trùng lặp
+    thay vì số lượng loại Pokemon xuất hiện trên bàn chơi."""
+    pokes_on_board = (BOARDHEIGHT - 2)*(BOARDWIDTH - 2)
+    pokes_index = list(range(1, 37)) #Vì mỗi gen có 36 pokemon
+    random.shuffle(pokes_index) #Xáo để tạo sự ngẫu nhiên khi lấy Pokemon
     list_pokemons = []
-    index = 1
-    temp = 2
-    if k_max >= 64:
-        for temp in range(4,k_max + 1,2):
-            if k_max // temp <= 36:
+    repeat = 2
+    if pokes_on_board >= 64: #Bảng có từ 64 Pokemon trở lên thì số trùng lặp của mỗi Pokemon là từ 4 trở lên
+        for repeat in range(4, pokes_on_board + 1, 2):
+            if pokes_on_board // repeat <= 36: #Kiểm soát biến số repeat để số loại Pokemon xuất hiện phải nhỏ hơn hoặc bằng 36
                 break
-    repeat = temp
-    for i in range(k_max // 2):
-        list_pokemons.extend([index] * repeat)
-        index += 1
-        if index > 36:
-            index = 1
-    list_pokemons = list_pokemons[:k_max]
-    random.shuffle(list_pokemons)
+    for i in pokes_index:
+        list_pokemons.extend([i] * repeat) #Tạo ListPokemon ngẫu nhiêu lần 1 - Lấy các pokemon ngẫu nhiên
+        if len(list_pokemons) >= pokes_on_board:
+            break #Dừng sớm để bớt tốn bộ nhớ
+    list_pokemons = list_pokemons[:pokes_on_board] #Vì có thể bị dư số lượng Pokemon <= repeat nên sẽ lượt bỏ vài lần trùng lặp của Pokemon cuối
+    random.shuffle(list_pokemons) #Tạo list ngẫu nhiên lần 2 - Trộn vị trí
 
     board = [[0 for _ in range(BOARDWIDTH)] for _ in range(BOARDHEIGHT)]
-    # We create a board of images surrounded by 4 arrays of zeroes
+    # Tạo bảng với viền 0 xung quanh
     k = 0
     for i in range(1, BOARDHEIGHT - 1):
         for j in range(1, BOARDWIDTH - 1):
@@ -1892,7 +1957,7 @@ class SaveMenu:
         self.back = 'home'
         if event.type == pygame.MOUSEMOTION:
             self.mouse_on(event)
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        elif event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = event.pos 
             for i, box in enumerate(self.memory_boxes):
                  
@@ -2189,5 +2254,397 @@ class Settings:
                     text = fonts.render(button["text"], True, WHITE)
                     w = text.get_width()
                     self.screen.blit(text, (button["rect"].x + button["rect"].w / 2 - w / 2, button["rect"].y + 7))
-                    
 
+class Collections:
+    def __init__(self, screen, unlocked_pokemons):
+        self.screen = screen
+
+        self.unlocked_pokemons = set()
+        self.current_page = 1  # Trang hiện tại (bắt đầu từ 1)
+        self.pokemon_per_page = 15  # Số Pokémon hiển thị mỗi trang
+
+        self.font = pygame.font.Font('font_pixel.otf', 75)  # Font chữ
+        self.gen_rects = []  # Lưu danh sách các nút Gen (vùng chữ nhật)
+
+        # Nút Back (ảnh)
+        self.back_button_image = pygame.image.load('images/image_button/back.png')
+        self.back_button_image = pygame.transform.scale(self.back_button_image, (250, 100))  # Kích thước mới
+        self.back_button_rect = self.back_button_image.get_rect(topright=(WINDOWWIDTH - 30, 30))  # Vị trí nút Back
+
+        # Nút Next Page (ảnh)
+        self.next_page_image = pygame.image.load('images/save_menu/next_page.png')
+        self.next_page_image = pygame.transform.scale(self.next_page_image, (100, 100))  # Kích thước mới
+        self.next_page_rect = self.next_page_image.get_rect(midbottom=(WINDOWWIDTH // 2 + 85, WINDOWHEIGHT - 15))
+
+        # Nút Previous Page (ảnh)
+        self.prev_page_image = pygame.image.load('images/save_menu/previous_page.png')
+        self.prev_page_image = pygame.transform.scale(self.prev_page_image, (100, 100))  # Kích thước mới
+        self.prev_page_rect = self.prev_page_image.get_rect(midbottom=(WINDOWWIDTH // 2 - 85, WINDOWHEIGHT - 15))
+
+    def draw_collections_menu(self):
+        """Hiển thị menu chọn Gen với căn chỉnh đều và chữ nằm giữa khung."""
+        self.screen.fill((245, 245, 220))  # Màu nền be
+
+        # Tiêu đề
+        title = self.font.render("Select Generation", True, RED)
+        self.screen.blit(title, (WINDOWWIDTH // 2 - title.get_width() // 2, 90))  # Tiêu đề nằm giữa màn hình
+
+        # Số lượng nút Gen
+        num_buttons = 4  # Tổng số nút Gen
+        num_cols = 2  # Số cột
+        num_rows = 2  # Số hàng
+
+        # Tìm kích thước chữ lớn nhất để căn chỉnh khung nút
+        max_text_width = 0
+        max_text_height = 0
+        for i in range(num_buttons):
+            gen_text = self.font.render(f"GEN {i + 1}", True, BLACK)
+            max_text_width = max(max_text_width, gen_text.get_width())
+            max_text_height = max(max_text_height, gen_text.get_height())
+
+        # Kích thước nút dựa trên kích thước chữ + padding
+        button_width = max_text_width + 40  # Padding ngang 40px
+        button_height = max_text_height + 30  # Padding dọc 30px
+
+        # Tính toán khoảng cách giữa các nút
+        button_spacing_x = 50  # Khoảng cách ngang giữa các nút
+        button_spacing_y = 40  # Khoảng cách dọc giữa các nút
+
+        # Tổng chiều rộng và chiều cao của khu vực chứa nút
+        total_width = num_cols * button_width + (num_cols - 1) * button_spacing_x
+        total_height = num_rows * button_height + (num_rows - 1) * button_spacing_y
+
+        # Vị trí bắt đầu để căn giữa toàn bộ cụm nút
+        x_start = (WINDOWWIDTH - total_width) // 2
+        y_start = (WINDOWHEIGHT - total_height) // 2
+
+        # Xóa danh sách nút cũ
+        self.gen_rects.clear()
+
+        # Vẽ các nút Gen
+        for row in range(num_rows):
+            for col in range(num_cols):
+                index = row * num_cols + col
+                if index >= num_buttons:
+                    break
+
+                # Tính toán vị trí của từng nút
+                x = x_start + col * (button_width + button_spacing_x)
+                y = y_start + row * (button_height + button_spacing_y)
+
+                # Kiểm tra nút đã mở khóa hay chưa
+                color = BLUE if index + 1 in self.unlocked_pokemons else BLACK
+
+                # Vẽ khung nút
+                pygame.draw.rect(self.screen, color, (x, y, button_width, button_height), 2)
+                self.gen_rects.append(pygame.Rect(x, y, button_width, button_height))  # Lưu vùng chữ nhật của nút
+
+                # Vẽ chữ "GEN X" vào giữa nút
+                gen_text = self.font.render(f"GEN {index + 1}", True, BLACK)
+                text_x = x + (button_width - gen_text.get_width()) // 2
+                text_y = y + (button_height - gen_text.get_height()) // 2
+                self.screen.blit(gen_text, (text_x, text_y))
+
+        # Vẽ nút Back
+        self.screen.blit(self.back_button_image, self.back_button_rect.topleft)
+
+        pygame.display.flip()  # Cập nhật màn hình
+
+    def handle_menu_event(self):
+        """Xử lý sự kiện trong menu chọn Gen."""
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Kiểm tra nút Back
+                if self.back_button_rect.collidepoint(event.pos):
+                    return "BACK"
+
+                # Kiểm tra các nút Gen
+                for i, rect in enumerate(self.gen_rects):  # Kiểm tra từng nút Gen
+                    if rect.collidepoint(event.pos):
+                        return i + 1  # Trả về Gen được chọn (1, 2, 3, hoặc 4)
+
+            elif event.type == pygame.QUIT:  # Thoát game
+                pygame.quit()
+                sys.exit()
+
+        return None  # Không có sự kiện nào được xử lý
+
+    def handle_pokemon_event(self, pokemon_list, pokemon_rects):
+        """Xử lý sự kiện khi chọn Pokémon."""
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Kiểm tra nút Back
+                if self.back_button_rect.collidepoint(event.pos):
+                    return "BACK"
+
+                # Kiểm tra các nút Pokémon
+                for i, rect in enumerate(pokemon_rects):
+                    if rect.collidepoint(event.pos):
+                        if pokemon_list[i] not in self.unlocked_pokemons:
+                            print("Pokémon này chưa được mở khóa!")  # Thông báo
+                            return None  # Không cho phép chọn
+                        return pokemon_list[i]  # Trả về tên Pokémon được chọn
+
+            elif event.type == pygame.QUIT:  # Thoát game
+                pygame.quit()
+                sys.exit()
+
+        return None
+
+    def draw_pokemon_details(self, pokemon_name):
+        """Hiển thị thông tin chi tiết của một Pokémon với phông chữ pixel tùy chỉnh và hỗ trợ xuống dòng."""
+        import os
+        import random
+
+        # Thêm hình nền ngẫu nhiên
+        background_folder = "images/image_background_in4"  # Thư mục chứa hình nền
+        try:
+            background_files = os.listdir(background_folder)
+            background_files = [f for f in background_files if f.lower().endswith((".png", ".jpg", ".jpeg"))]
+            if background_files:
+                background_path = os.path.join(background_folder, random.choice(background_files))
+                background_img = pygame.image.load(background_path)
+                background_img = pygame.transform.scale(background_img, (WINDOWWIDTH, WINDOWHEIGHT))
+                self.screen.blit(background_img, (0, 0))
+            else:
+                print(f"Thư mục {background_folder} không chứa file ảnh nào.")
+        except FileNotFoundError:
+            print(f"Không tìm thấy thư mục {background_folder}.")
+
+        # Xác định Gen của Pokémon
+        gen = None
+        for i in range(1, 5):
+            try:
+                with open(f'images/pokemon_in4/gen{i}.json', 'r', encoding='utf_8') as file:
+                    pokemon_data = json.load(file)
+                    if pokemon_name in pokemon_data:
+                        gen = i
+                        pokemon_info = pokemon_data[pokemon_name]
+                        break
+            except FileNotFoundError:
+                continue
+
+        if not gen:
+            print(f"Không tìm thấy thông tin cho Pokémon {pokemon_name}")
+            return
+
+        # Hiển thị hình ảnh Pokémon
+        image_path = f'images/image_pokemon/gen{gen}/{pokemon_name}'
+        try:
+            img = pygame.image.load(image_path)
+
+            # Lấy kích thước gốc của ảnh
+            original_width, original_height = img.get_size()
+
+            # Tính tỷ lệ để giữ nguyên tỷ lệ gốc và vừa với không gian hiển thị
+            max_width, max_height = 650, 650  # Kích thước tối đa cho hình ảnh
+            scale = min(max_width / original_width, max_height / original_height)
+            new_width = int(original_width * scale)
+            new_height = int(original_height * scale)
+
+            # Scale ảnh với kích thước đã tính
+            img = pygame.transform.scale(img, (new_width, new_height))
+
+            # Căn giữa ảnh
+            x_centered = WINDOWWIDTH // 2 - new_width // 2
+            y_position = 80  # Vị trí phía trên dành cho hình ảnh
+            self.screen.blit(img, (x_centered, y_position))  # Vẽ ảnh trên màn hình
+        except FileNotFoundError:
+            print(f"Không tìm thấy hình ảnh {image_path}")
+            return
+
+        # Sử dụng phông chữ pixel tùy chỉnh
+        self.fonts = pygame.font.Font('font_pixel.otf', 50)  # Kích thước font phù hợp với màn hình
+        text_x = 60  # Văn bản cách lề trái
+        y_offset = 700  # Dòng chữ đầu tiên phía dưới hình ảnh
+        max_line_width = WINDOWWIDTH - text_x - 60  # Giới hạn chiều rộng dòng chữ
+
+        # Hiển thị thông tin chi tiết
+        for key, value in pokemon_info.items():
+            if key.lower() == "description":
+                full_text = f"Description: {value}"
+                description_lines = self.split_text(full_text, max_line_width)
+                for line in description_lines:
+                    text_surface = self.fonts.render(line, True, BLACK)
+                    self.screen.blit(text_surface, (text_x, y_offset))
+                    y_offset += 60
+            else:
+                text = f"{key.capitalize()}: {value}"
+                text_surface = self.fonts.render(text, True, BLACK)
+                self.screen.blit(text_surface, (text_x, y_offset))
+                y_offset += 70
+
+        # Hiển thị nút Back
+        self.screen.blit(self.back_button_image, self.back_button_rect.topleft)
+        pygame.display.flip()
+
+        # Xử lý sự kiện
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.back_button_rect.collidepoint(event.pos):
+                        running = False  # Quay lại màn hình trước
+                elif event.type == pygame.QUIT:
+                    pygame.quit()
+
+    def split_text(self, text, max_width):
+        """Chia đoạn văn bản thành các dòng ngắn dựa trên chiều rộng tối đa."""
+        words = text.split(" ")
+        lines = []
+        current_line = ""
+
+        for word in words:
+            test_line = f"{current_line} {word}".strip()
+            text_width, _ = self.fonts.size(test_line)  # Tính chiều rộng của dòng chữ
+            if text_width <= max_width:
+                current_line = test_line
+            else:
+                lines.append(current_line)  # Thêm dòng hoàn chỉnh vào danh sách
+                current_line = word  # Bắt đầu dòng mới với từ hiện tại
+
+        if current_line:
+            lines.append(current_line)  # Thêm dòng cuối cùng
+
+        return lines
+
+    def drawCollectionsScreen(self, gen, unlocked_pokemon):
+        """Vẽ màn hình hiển thị danh sách Pokémon theo Gen và trang hiện tại."""
+        self.screen.fill((245, 245, 220))  # Màu nền
+        title = self.font.render(f"Pokémon in Gen {gen} - Page {self.current_page}", True, BLACK)
+        self.screen.blit(title, (WINDOWWIDTH // 2 - title.get_width() // 2, 70))  # Tiêu đề
+
+        # Vẽ danh sách Pokémon
+        pokemon_list = os.listdir(f'images/images_icon/Gen{gen}/')
+        start_index = (self.current_page - 1) * self.pokemon_per_page
+        end_index = start_index + self.pokemon_per_page
+        displayed_pokemon = pokemon_list[start_index:end_index]
+
+        pokemon_rects = []
+
+        # Thiết lập kích thước Pokémon và lưới hiển thị
+        pokemon_size = 170  # Kích thước mới của Pokémon
+        margin = 80  # Khoảng cách giữa các Pokémon (dãn ra thêm)
+        cols = 5  # Số Pokémon mỗi hàng
+        rows = (len(displayed_pokemon) + cols - 1) // cols  # Số hàng cần thiết
+
+        # Tính toán vị trí bắt đầu để căn giữa màn hình
+        total_width = cols * pokemon_size + (cols - 1) * margin
+        total_height = rows * pokemon_size + (rows - 1) * margin
+        x_start = (WINDOWWIDTH - total_width) // 2
+        y_start = (WINDOWHEIGHT - total_height) // 2 + 50
+
+        x, y = x_start, y_start
+
+        for i, pokemon in enumerate(displayed_pokemon):
+            img = pygame.image.load(f'images/images_icon/Gen{gen}/{pokemon}')
+            img = pygame.transform.scale(img, (pokemon_size, pokemon_size))
+
+            if pokemon not in unlocked_pokemon:
+                # Tạo hiệu ứng tối màu cho Pokémon bị khóa
+                dark_overlay = pygame.Surface(img.get_size(), pygame.SRCALPHA)
+                dark_overlay.fill((0, 0, 0, 150))  # Lớp phủ màu đen với độ trong suốt
+                img.blit(dark_overlay, (0, 0))  # Phủ lớp tối lên ảnh
+
+            self.screen.blit(img, (x, y))
+            pokemon_rects.append(pygame.Rect(x, y, pokemon_size, pokemon_size))
+
+            x += pokemon_size + margin
+            if (i + 1) % cols == 0:  # Xuống dòng sau mỗi `cols` Pokémon
+                x = x_start
+                y += pokemon_size + margin
+
+        # Vẽ nút Back và các nút chuyển trang
+        self.screen.blit(self.back_button_image, self.back_button_rect.topleft)
+        if start_index > 0:  # Nút Previous Page
+            self.screen.blit(self.prev_page_image, self.prev_page_rect.topleft)
+        if end_index < len(pokemon_list):  # Nút Next Page
+            self.screen.blit(self.next_page_image, self.next_page_rect.topleft)
+
+        pygame.display.flip()  # Cập nhật màn hình
+        return pokemon_list, pokemon_rects
+
+def extract_gen_from_name(pokemon_name):
+    match = re.search(r'gen(\d+)_', pokemon_name, re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+    print(f"Không thể xác định Gen từ tên Pokémon: {pokemon_name}")
+    return None
+
+def showCollectionsMenu():
+    global unlocked_pokemon
+    collections = Collections(DISPLAYSURF, unlocked_pokemon)  # Khởi tạo menu Collections
+    running = True
+
+    while running:
+        collections.draw_collections_menu()  # Vẽ menu Collections
+        gen_selected = collections.handle_menu_event()  # Kiểm tra sự kiện từ người dùng
+
+        if gen_selected == "BACK":  # Nếu nhấn nút Back
+            running = False  # Thoát vòng lặp và quay lại menu chính
+            return
+
+        if gen_selected:  # Nếu chọn một Gen
+            showCollectionsScreen(gen_selected, collections, unlocked_pokemon)  # Truyền Gen được chọn vào màn hình hiển thị Pokémon
+            continue
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # Thoát game
+                pygame.quit()
+                sys.exit()
+
+def showCollectionsScreen(gen, collections, unlocked_pokemon):
+    """Hiển thị màn hình danh sách Pokémon và xử lý sự kiện."""
+    running = True
+    while running:
+        # Vẽ màn hình và lấy danh sách Pokémon hiển thị, cùng các vùng nhấp chuột
+        pokemon_list, pokemon_rects = collections.drawCollectionsScreen(gen, unlocked_pokemon)
+
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # Kiểm tra nếu nhấn nút Back
+                if collections.back_button_rect.collidepoint(event.pos):
+                    running = False  # Thoát khỏi vòng lặp để quay lại menu Collections
+
+                # Xử lý nút chuyển trang
+                elif collections.prev_page_rect.collidepoint(event.pos) and collections.current_page > 1:
+                    collections.current_page -= 1  # Lùi về trang trước
+                elif collections.next_page_rect.collidepoint(
+                        event.pos) and collections.current_page * collections.pokemon_per_page < len(
+                        os.listdir(f'images/images_icon/Gen{gen}/')):
+                    collections.current_page += 1  # Tới trang sau
+
+                # Kiểm tra nếu nhấn vào một Pokémon
+                else:
+                    for i, rect in enumerate(pokemon_rects):
+                        if rect.collidepoint(event.pos):
+                            selected_pokemon = pokemon_list[
+                                i + (collections.current_page - 1) * collections.pokemon_per_page]
+
+                            # Kiểm tra trạng thái mở khóa
+                            if selected_pokemon not in unlocked_pokemon:
+                                print(f"Pokémon '{selected_pokemon}' chưa được mở khóa!")  # In tên Pokémon chưa mở khóa
+                                break  # Bỏ qua hành động nếu Pokémon bị khóa
+
+                            # Hiển thị chi tiết Pokémon nếu được mở khóa
+                            collections.draw_pokemon_details(selected_pokemon)
+                            break
+
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+
+def split_text(text, font, max_width):
+    words = text.split(' ')
+    lines = []
+    current_line = words[0]
+
+    for word in words[1:]:
+        if font.size(current_line + ' ' + word)[0] <= max_width:
+            current_line += ' ' + word
+        else:
+            lines.append(current_line)
+            current_line = word
+    lines.append(current_line)
+    return lines

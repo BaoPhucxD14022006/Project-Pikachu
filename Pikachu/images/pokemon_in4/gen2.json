@@ -1,0 +1,182 @@
+{
+    "gen2_pokemon_1.png": {
+        "name": "Aipom",
+        "type": "Normal",
+        "description": "Aipom lives high in the trees and uses its tail to swing from branch to branch with great agility."
+    },
+    "gen2_pokemon_2.png": {
+        "name": "Bellossom",
+        "type": "Grass",
+        "description": "Bellossom dances in fields full of flowers, releasing a soothing and fragrant aroma."
+    },
+    "gen2_pokemon_3.png": {
+        "name": "Blissey",
+        "type": "Normal",
+        "description": "Blissey brings happiness with its kind heart and shares its egg with those in need."
+    },
+    "gen2_pokemon_4.png": {
+        "name": "Chikorita",
+        "type": "Grass",
+        "description": "Chikorita uses the leaf on its head to sense the warmth and humidity of its surroundings."
+    },
+    "gen2_pokemon_5.png": {
+        "name": "Corsola",
+        "type": "Water, Rock",
+        "description": "Corsola lives in clean seas and forms coral reefs by shedding its branches."
+    },
+    "gen2_pokemon_6.png": {
+        "name": "Cyndaquil",
+        "type": "Fire",
+        "description": "Cyndaquil protects itself by igniting flames on its back, creating intense heat."
+    },
+    "gen2_pokemon_7.png": {
+        "name": "Dunsparce",
+        "type": "Normal",
+        "description": "Dunsparce digs into the ground using its tail and hides itself when threatened."
+    },
+    "gen2_pokemon_8.png": {
+        "name": "Elekid",
+        "type": "Electric",
+        "description": "Elekid generates electricity by spinning its arms. It often causes blackouts in houses."
+    },
+    "gen2_pokemon_9.png": {
+        "name": "Heracross",
+        "type": "Bug, Fighting",
+        "description": "Heracross uses its immense strength to throw foes and enjoys feasting on tree sap."
+    },
+    "gen2_pokemon_10.png": {
+        "name": "Hoothoot",
+        "type": "Normal, Flying",
+        "description": "Hoothoot always keeps time perfectly, using its internal organs as a clock."
+    },
+    "gen2_pokemon_11.png": {
+        "name": "Houndour",
+        "type": "Dark, Fire",
+        "description": "Houndour hunts in packs and communicates with others using various howls."
+    },
+    "gen2_pokemon_12.png": {
+        "name": "Kingdra",
+        "type": "Water, Dragon",
+        "description": "Kingdra lives in the depths of the ocean, creating whirlpools to trap prey."
+    },
+    "gen2_pokemon_13.png": {
+        "name": "Larvitar",
+        "type": "Rock, Ground",
+        "description": "Larvitar eats mountains and gains strength to prepare for evolution."
+    },
+    "gen2_pokemon_14.png": {
+        "name": "Ledyba",
+        "type": "Bug, Flying",
+        "description": "Ledyba is a social Pokémon that gathers in groups to share warmth and shelter."
+    },
+    "gen2_pokemon_15.png": {
+        "name": "Mantine",
+        "type": "Water, Flying",
+        "description": "Mantine glides smoothly through the sea and is often seen swimming with Remoraid."
+    },
+    "gen2_pokemon_16.png": {
+        "name": "Mareep",
+        "type": "Electric",
+        "description": "Mareep stores static electricity in its wool and releases it in shocks."
+    },
+    "gen2_pokemon_17.png": {
+        "name": "Marill",
+        "type": "Water, Fairy",
+        "description": "Marill uses the oil-filled ball on its tail to float and swim across rivers."
+    },
+    "gen2_pokemon_18.png": {
+        "name": "Misdreavus",
+        "type": "Ghost",
+        "description": "Misdreavus frightens people with its wails and feeds on their fear."
+    },
+    "gen2_pokemon_19.png": {
+        "name": "Murkrow",
+        "type": "Dark, Flying",
+        "description": "Murkrow is often seen as a bad omen, but it is clever and quick-witted."
+    },
+    "gen2_pokemon_20.png": {
+        "name": "Natu",
+        "type": "Psychic, Flying",
+        "description": "Natu picks at food on the ground and is known for its ability to foresee the future."
+    },
+    "gen2_pokemon_21.png": {
+        "name": "Octillery",
+        "type": "Water",
+        "description": "Octillery uses its suction cups to cling to surfaces and shoots ink to escape foes."
+    },
+    "gen2_pokemon_22.png": {
+        "name": "Phanpy",
+        "type": "Ground",
+        "description": "Phanpy is strong despite its small size and loves playing by rolling around."
+    },
+    "gen2_pokemon_23.png": {
+        "name": "Pichu",
+        "type": "Electric",
+        "description": "Pichu charges itself by playing and often releases jolts of electricity by accident."
+    },
+    "gen2_pokemon_24.png": {
+        "name": "Pineco",
+        "type": "Bug",
+        "description": "Pineco hangs from trees and explodes to protect itself when disturbed."
+    },
+    "gen2_pokemon_25.png": {
+        "name": "Qwilfish",
+        "type": "Water, Poison",
+        "description": "Qwilfish inflates its body to appear larger and fires sharp spines at enemies."
+    },
+    "gen2_pokemon_26.png": {
+        "name": "Skarmory",
+        "type": "Steel, Flying",
+        "description": "Skarmory's steel body is both lightweight and durable, making it an excellent flier."
+    },
+    "gen2_pokemon_27.png": {
+        "name": "Slugma",
+        "type": "Fire",
+        "description": "Slugma's body is made of molten lava, and it needs to stay warm to survive."
+    },
+    "gen2_pokemon_28.png": {
+        "name": "Snubbull",
+        "type": "Fairy",
+        "description": "Snubbull may look gruff, but it is surprisingly playful and affectionate."
+    },
+    "gen2_pokemon_29.png": {
+        "name": "Sudowoodo",
+        "type": "Rock",
+        "description": "Sudowoodo disguises itself as a tree to avoid predators and mimic its surroundings."
+    },
+    "gen2_pokemon_30.png": {
+        "name": "Sunflora",
+        "type": "Grass",
+        "description": "Sunflora converts sunlight into energy and becomes active during bright sunny days."
+    },
+    "gen2_pokemon_31.png": {
+        "name": "Swinub",
+        "type": "Ice, Ground",
+        "description": "Swinub uses its sensitive nose to sniff out food buried beneath the snow."
+    },
+    "gen2_pokemon_32.png": {
+        "name": "Teddiursa",
+        "type": "Normal",
+        "description": "Teddiursa licks its paws, which are soaked with honey collected from beehives."
+    },
+    "gen2_pokemon_33.png": {
+        "name": "Togepi",
+        "type": "Fairy",
+        "description": "Togepi stores happiness in its shell and shares it with kind-hearted people."
+    },
+    "gen2_pokemon_34.png": {
+        "name": "Totodile",
+        "type": "Water",
+        "description": "Totodile has strong jaws that can crush anything, but it sometimes bites playfully."
+    },
+    "gen2_pokemon_35.png": {
+        "name": "Wobbuffet",
+        "type": "Psychic",
+        "description": "Wobbuffet endures attacks with patience and counterattacks with great force."
+    },
+    "gen2_pokemon_36.png": {
+        "name": "Wooper",
+        "type": "Water, Ground",
+        "description": "Wooper lives in cold water and covers its body with a slimy film to stay hydrated."
+    }
+}

@@ -223,5 +223,23 @@
         "gen": "3",
         "device": "Mouse",
         "score": 770
+    },
+    {
+        "namegame": "123",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": "1",
+        "device": "Mouse",
+        "score": 1520
+    },
+    {
+        "namegame": "outtrinh",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": "2",
+        "device": "Mouse",
+        "score": 2530
     }
 ]

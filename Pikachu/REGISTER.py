@@ -306,6 +306,8 @@ class RegisterLogic(RegisterUI):
         save_file_path = os.path.join(save_folder, f"{username}_saved_game.json")
         with open(save_file_path, "w") as save_file:
             json.dump(game_state, save_file)
+        with open(os.path.join(save_folder, f"{username}_saved_collection.json"), 'w') as file:
+            json.dump([], file)
         print(f"Game file created for {username}")
 
 

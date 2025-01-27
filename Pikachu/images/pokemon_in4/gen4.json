@@ -1,0 +1,183 @@
+{
+    "gen4_pokemon_12.png": {
+        "name": "Drifloon",
+        "type": "Ghost, Flying",
+        "description": "Drifloon is a balloon-like Pokémon that drifts along, often seen carrying small objects."
+    },
+    "gen4_pokemon_1.png": {
+        "name": "Bidoof",
+        "type": "Normal",
+        "description": "Bidoof is a hardworking Pokémon with large front teeth for gnawing on wood."
+    },
+    "gen4_pokemon_2.png": {
+        "name": "Bonsly",
+        "type": "Rock",
+        "description": "Bonsly mimics a tree to avoid predators and prefers dry environments."
+    },
+    "gen4_pokemon_3.png": {
+        "name": "Bronzor",
+        "type": "Steel, Psychic",
+        "description": "Bronzor is a mysterious Pokémon often found in ruins, reflecting images on its metallic body."
+    },
+    "gen4_pokemon_4.png": {
+        "name": "Buizel",
+        "type": "Water",
+        "description": "Buizel uses the floatation sac around its neck to stay buoyant in water."
+    },
+    "gen4_pokemon_5.png": {
+        "name": "Buneary",
+        "type": "Normal",
+        "description": "Buneary's ears are powerful enough to deliver fierce punches when threatened."
+    },
+    "gen4_pokemon_6.png": {
+        "name": "Chatot",
+        "type": "Normal, Flying",
+        "description": "Chatot mimics human speech and uses its crest to express emotions."
+    },
+    "gen4_pokemon_7.png": {
+        "name": "Chimchar",
+        "type": "Fire",
+        "description": "Chimchar is a playful Pokémon with a tail flame that never goes out."
+    },
+    "gen4_pokemon_8.png": {
+        "name": "Combee",
+        "type": "Bug, Flying",
+        "description": "Combee works diligently to collect nectar and protect its hive."
+    },
+    "gen4_pokemon_9.png": {
+        "name": "Cresselia",
+        "type": "Psychic",
+        "description": "Cresselia is known as the Lunar Pokémon, bringing pleasant dreams to those around it."
+    },
+    "gen4_pokemon_10.png": {
+        "name": "Croagunk",
+        "type": "Poison, Fighting",
+        "description": "Croagunk stores poison in its cheeks and delivers toxic punches to its foes."
+    },
+    "gen4_pokemon_11.png": {
+        "name": "Darkrai",
+        "type": "Dark",
+        "description": "Darkrai is a mythical Pokémon that can induce nightmares in those nearby."
+    },
+    "gen4_pokemon_13.png": {
+        "name": "Finneon",
+        "type": "Water",
+        "description": "Finneon has glowing patterns on its fins, which it uses to attract mates."
+    },
+    "gen4_pokemon_14.png": {
+        "name": "Garchomp",
+        "type": "Dragon, Ground",
+        "description": "Garchomp flies at incredible speeds to hunt its prey with razor-sharp claws."
+    },
+    "gen4_pokemon_15.png": {
+        "name": "Glameow",
+        "type": "Normal",
+        "description": "Glameow is a stylish and sneaky Pokémon, often curling its tail elegantly."
+    },
+    "gen4_pokemon_16.png": {
+        "name": "Lickilicky",
+        "type": "Normal",
+        "description": "Lickilicky's long tongue is both a weapon and a tool for grabbing objects."
+    },
+    "gen4_pokemon_17.png": {
+        "name": "Lucario",
+        "type": "Fighting, Steel",
+        "description": "Lucario can sense and manipulate aura to predict its opponents' moves."
+    },
+    "gen4_pokemon_18.png": {
+        "name": "Mamoswine",
+        "type": "Ice, Ground",
+        "description": "Mamoswine is a prehistoric Pokémon with thick fur and enormous tusks."
+    },
+    "gen4_pokemon_19.png": {
+        "name": "Mismagius",
+        "type": "Ghost",
+        "description": "Mismagius chants spells that can bring happiness or harm to its targets."
+    },
+    "gen4_pokemon_20.png": {
+        "name": "Munchlax",
+        "type": "Normal",
+        "description": "Munchlax loves to eat and can consume its own weight in food daily."
+    },
+    "gen4_pokemon_21.png": {
+        "name": "Pachirisu",
+        "type": "Electric",
+        "description": "Pachirisu stores electricity in its cheeks, releasing jolts when startled."
+    },
+    "gen4_pokemon_22.png": {
+        "name": "Phione",
+        "type": "Water",
+        "description": "Phione drifts with the ocean currents, searching for warm seas."
+    },
+    "gen4_pokemon_23.png": {
+        "name": "Piplup",
+        "type": "Water",
+        "description": "Piplup is a proud Pokémon that dislikes accepting help from others."
+    },
+    "gen4_pokemon_24.png": {
+        "name": "Rampardos",
+        "type": "Rock",
+        "description": "Rampardos uses its incredibly hard head to smash through obstacles."
+    },
+    "gen4_pokemon_25.png": {
+        "name": "Roserade",
+        "type": "Grass, Poison",
+        "description": "Roserade uses its fragrant bouquet to lure prey before delivering toxic attacks."
+    },
+    "gen4_pokemon_26.png": {
+        "name": "Rotom",
+        "type": "Electric, Ghost",
+        "description": "Rotom can inhabit electrical appliances, altering its form and abilities."
+    },
+    "gen4_pokemon_27.png": {
+        "name": "Shaymin",
+        "type": "Grass",
+        "description": "Shaymin purifies polluted areas, blooming flowers wherever it goes."
+    },
+    "gen4_pokemon_28.png": {
+        "name": "Shellos",
+        "type": "Water",
+        "description": "Shellos's appearance changes depending on the seas it inhabits."
+    },
+    "gen4_pokemon_29.png": {
+        "name": "Shieldon",
+        "type": "Rock, Steel",
+        "description": "Shieldon uses its hard, shield-like face to protect itself from attacks."
+    },
+    "gen4_pokemon_30.png": {
+        "name": "Shinx",
+        "type": "Electric",
+        "description": "Shinx's body glows when it generates electricity, intimidating foes."
+    },
+    "gen4_pokemon_31.png": {
+        "name": "Snover",
+        "type": "Grass, Ice",
+        "description": "Snover thrives in snowy mountains, blending in with the icy landscape."
+    },
+    "gen4_pokemon_32.png": {
+        "name": "Starly",
+        "type": "Normal, Flying",
+        "description": "Starly lives in flocks and communicates with its melodious chirps."
+    },
+    "gen4_pokemon_33.png": {
+        "name": "Tangrowth",
+        "type": "Grass",
+        "description": "Tangrowth extends its vine-like arms to grab prey or defend itself."
+    },
+    "gen4_pokemon_34.png": {
+        "name": "Togekiss",
+        "type": "Fairy, Flying",
+        "description": "Togekiss brings blessings and spreads happiness wherever it flies."
+    },
+    "gen4_pokemon_35.png": {
+        "name": "Turtwig",
+        "type": "Grass",
+        "description": "Turtwig nourishes itself through photosynthesis using the leaf on its head."
+    },
+    "gen4_pokemon_36.png": {
+        "name": "Weavile",
+        "type": "Dark, Ice",
+        "description": "Weavile is a cunning Pokémon that uses teamwork to hunt its prey."
+    }
+}
+

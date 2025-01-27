@@ -1,0 +1,182 @@
+{
+    "gen1_pokemon_1.png": {
+        "name": "Abra",
+        "type": "Psychic",
+        "description": "Abra uses its psychic powers to teleport away from danger while asleep."
+    },
+    "gen1_pokemon_2.png": {
+        "name": "Bulbasaur",
+        "type": "Grass, Poison",
+        "description": "Bulbasaur's bulb absorbs sunlight to grow, storing energy for evolution."
+    },
+    "gen1_pokemon_3.png": {
+        "name": "Caterpie",
+        "type": "Bug",
+        "description": "Caterpie releases a horrible stench from its antennae to repel predators."
+    },
+    "gen1_pokemon_4.png": {
+        "name": "Charmander",
+        "type": "Fire",
+        "description": "Charmander's tail flame burns brighter when it is excited or angry."
+    },
+    "gen1_pokemon_5.png": {
+        "name": "Clefairy",
+        "type": "Fairy",
+        "description": "Clefairy dances under the moonlight, gathering energy from the stars."
+    },
+    "gen1_pokemon_6.png": {
+        "name": "Diglett",
+        "type": "Ground",
+        "description": "Diglett burrows through the earth, loosening soil for farmers."
+    },
+    "gen1_pokemon_7.png": {
+        "name": "Ditto",
+        "type": "Normal",
+        "description": "Ditto can transform into any Pokémon it sees, copying their abilities."
+    },
+    "gen1_pokemon_8.png": {
+        "name": "Dratini",
+        "type": "Dragon",
+        "description": "Dratini is a rare Pokémon that sheds its skin as it grows."
+    },
+    "gen1_pokemon_9.png": {
+        "name": "Ekans",
+        "type": "Poison",
+        "description": "Ekans silently slithers through grass, attacking with its deadly bite."
+    },
+    "gen1_pokemon_10.png": {
+        "name": "Gastly",
+        "type": "Ghost, Poison",
+        "description": "Gastly is a gaseous Pokémon that can envelop and suffocate foes."
+    },
+    "gen1_pokemon_11.png": {
+        "name": "Growlithe",
+        "type": "Fire",
+        "description": "Growlithe is loyal and protective, often seen guarding its territory."
+    },
+    "gen1_pokemon_12.png": {
+        "name": "Horsea",
+        "type": "Water",
+        "description": "Horsea shoots ink to escape predators and uses its fins to swim gracefully."
+    },
+    "gen1_pokemon_13.png": {
+        "name": "Jigglypuff",
+        "type": "Normal, Fairy",
+        "description": "Jigglypuff's song can lull even the most stubborn Pokémon to sleep."
+    },
+    "gen1_pokemon_14.png": {
+        "name": "Machop",
+        "type": "Fighting",
+        "description": "Machop builds strength by lifting large rocks and practicing its punches."
+    },
+    "gen1_pokemon_15.png": {
+        "name": "Magnemite",
+        "type": "Electric, Steel",
+        "description": "Magnemite uses magnetic fields to float and disrupt electronic devices."
+    },
+    "gen1_pokemon_16.png": {
+        "name": "Meowth",
+        "type": "Normal",
+        "description": "Meowth loves shiny objects and often collects coins in its spare time."
+    },
+    "gen1_pokemon_17.png": {
+        "name": "Mew",
+        "type": "Psychic",
+        "description": "Mew is said to contain the DNA of every Pokémon, making it incredibly versatile."
+    },
+    "gen1_pokemon_18.png": {
+        "name": "Oddish",
+        "type": "Grass, Poison",
+        "description": "Oddish buries itself during the day and absorbs moonlight at night."
+    },
+    "gen1_pokemon_19.png": {
+        "name": "Parasect",
+        "type": "Bug, Grass",
+        "description": "Parasect controls its host's body with the mushroom on its back."
+    },
+    "gen1_pokemon_20.png": {
+        "name": "Pidgey",
+        "type": "Normal, Flying",
+        "description": "Pidgey flaps its wings with great speed, kicking up dust to escape predators."
+    },
+    "gen1_pokemon_21.png": {
+        "name": "Pikachu",
+        "type": "Electric",
+        "description": "Pikachu stores electricity in its cheeks, ready to release powerful shocks."
+    },
+    "gen1_pokemon_22.png": {
+        "name": "Poliwag",
+        "type": "Water",
+        "description": "Poliwag's thin, transparent skin shows its spiral innards."
+    },
+    "gen1_pokemon_23.png": {
+        "name": "Ponyta",
+        "type": "Fire",
+        "description": "Ponyta's mane burns hotter as it gains confidence in battle."
+    },
+    "gen1_pokemon_24.png": {
+        "name": "Psyduck",
+        "type": "Water",
+        "description": "Psyduck often suffers from headaches, which unleash its psychic powers."
+    },
+    "gen1_pokemon_25.png": {
+        "name": "Rattata",
+        "type": "Normal",
+        "description": "Rattata gnaws on anything in its path to keep its teeth sharp."
+    },
+    "gen1_pokemon_26.png": {
+        "name": "Sandshrew",
+        "type": "Ground",
+        "description": "Sandshrew curls into a ball to defend itself from attackers."
+    },
+    "gen1_pokemon_27.png": {
+        "name": "Seel",
+        "type": "Water",
+        "description": "Seel swims gracefully and uses its horn to break through ice."
+    },
+    "gen1_pokemon_28.png": {
+        "name": "Shellder",
+        "type": "Water",
+        "description": "Shellder's shell is incredibly hard, providing excellent defense."
+    },
+    "gen1_pokemon_29.png": {
+        "name": "Slowpoke",
+        "type": "Water, Psychic",
+        "description": "Slowpoke takes life at its own pace, fishing with its tail."
+    },
+    "gen1_pokemon_30.png": {
+        "name": "Squirtle",
+        "type": "Water",
+        "description": "Squirtle withdraws into its shell for protection and sprays water at enemies."
+    },
+    "gen1_pokemon_31.png": {
+        "name": "Staryu",
+        "type": "Water",
+        "description": "Staryu regenerates its body from its core when damaged."
+    },
+    "gen1_pokemon_32.png": {
+        "name": "Voltorb",
+        "type": "Electric",
+        "description": "Voltorb resembles a Poké Ball and explodes when disturbed."
+    },
+    "gen1_pokemon_33.png": {
+        "name": "Vulpix",
+        "type": "Fire",
+        "description": "Vulpix's six tails grow hotter and more beautiful as it matures."
+    },
+    "gen1_pokemon_34.png": {
+        "name": "Weedle",
+        "type": "Bug, Poison",
+        "description": "Weedle's sharp stinger is coated with a venom that deters predators."
+    },
+    "gen1_pokemon_35.png": {
+        "name": "Weepinbell",
+        "type": "Grass, Poison",
+        "description": "Weepinbell uses its pitcher-like body to trap and digest prey."
+    },
+    "gen1_pokemon_36.png": {
+        "name": "Zubat",
+        "type": "Poison, Flying",
+        "description": "Zubat flits through caves, using echolocation to navigate in darkness."
+    }
+}

@@ -1,0 +1,182 @@
+{
+    "gen3_pokemon_1.png": {
+        "name": "Absol",
+        "type": "Dark",
+        "description": "Absol appears in areas where disasters are about to happen, warning people in advance."
+    },
+    "gen3_pokemon_2.png": {
+        "name": "Altaria",
+        "type": "Dragon, Flying",
+        "description": "Altaria dances elegantly in the sky, singing melodies that soothe the soul."
+    },
+    "gen3_pokemon_3.png": {
+        "name": "Azurill",
+        "type": "Normal, Fairy",
+        "description": "Azurill bounces on its tail like a ball, spreading joy wherever it goes."
+    },
+    "gen3_pokemon_4.png": {
+        "name": "Breloom",
+        "type": "Grass, Fighting",
+        "description": "Breloom's punches are as fast as bullets, and its spores can put enemies to sleep."
+    },
+    "gen3_pokemon_5.png": {
+        "name": "Carvanha",
+        "type": "Water, Dark",
+        "description": "Carvanha has a savage temperament, attacking anything that enters its territory."
+    },
+    "gen3_pokemon_6.png": {
+        "name": "Clamperl",
+        "type": "Water",
+        "description": "Clamperl's shell is incredibly strong, protecting it from predators."
+    },
+    "gen3_pokemon_7.png": {
+        "name": "Claydol",
+        "type": "Ground, Psychic",
+        "description": "Claydol is an ancient Pokémon said to have been created from clay idols."
+    },
+    "gen3_pokemon_8.png": {
+        "name": "Corphish",
+        "type": "Water",
+        "description": "Corphish is a hardy Pokémon that thrives in polluted waters where others cannot."
+    },
+    "gen3_pokemon_9.png": {
+        "name": "Duskclops",
+        "type": "Ghost",
+        "description": "Duskclops' body is a black hole that absorbs anything that gets too close."
+    },
+    "gen3_pokemon_10.png": {
+        "name": "Flygon",
+        "type": "Ground, Dragon",
+        "description": "Flygon creates sandstorms by flapping its wings, earning it the title 'Desert Spirit.'"
+    },
+    "gen3_pokemon_11.png": {
+        "name": "Gardevoir",
+        "type": "Psychic, Fairy",
+        "description": "Gardevoir has the ability to sense its Trainer's emotions and protect them with its life."
+    },
+    "gen3_pokemon_12.png": {
+        "name": "Latias",
+        "type": "Dragon, Psychic",
+        "description": "Latias is highly intelligent and can communicate telepathically with humans."
+    },
+    "gen3_pokemon_13.png": {
+        "name": "Latios",
+        "type": "Dragon, Psychic",
+        "description": "Latios can fly faster than a jet and is known for its protective nature."
+    },
+    "gen3_pokemon_14.png": {
+        "name": "Ludicolo",
+        "type": "Water, Grass",
+        "description": "Ludicolo becomes more energetic and playful when it hears festive music."
+    },
+    "gen3_pokemon_15.png": {
+        "name": "Lunatone",
+        "type": "Rock, Psychic",
+        "description": "Lunatone absorbs energy from the moon, glowing faintly under its light."
+    },
+    "gen3_pokemon_16.png": {
+        "name": "Makuhita",
+        "type": "Fighting",
+        "description": "Makuhita trains tirelessly to build its strength, never giving up no matter the odds."
+    },
+    "gen3_pokemon_17.png": {
+        "name": "Mawile",
+        "type": "Steel, Fairy",
+        "description": "Mawile uses its huge jaws as a weapon to intimidate and trap its foes."
+    },
+    "gen3_pokemon_18.png": {
+        "name": "Milotic",
+        "type": "Water",
+        "description": "Milotic is said to be the most beautiful Pokémon, calming conflicts with its aura."
+    },
+    "gen3_pokemon_19.png": {
+        "name": "Minun",
+        "type": "Electric",
+        "description": "Minun cheers on its teammates with spark-filled enthusiasm, boosting their morale."
+    },
+    "gen3_pokemon_20.png": {
+        "name": "Mudkip",
+        "type": "Water",
+        "description": "Mudkip can move boulders larger than itself using its powerful tail."
+    },
+    "gen3_pokemon_21.png": {
+        "name": "Ninjask",
+        "type": "Bug, Flying",
+        "description": "Ninjask moves so quickly it becomes almost invisible to the human eye."
+    },
+    "gen3_pokemon_22.png": {
+        "name": "Numel",
+        "type": "Fire, Ground",
+        "description": "Numel stores magma in its body, using it to fuel its attacks."
+    },
+    "gen3_pokemon_23.png": {
+        "name": "Plusle",
+        "type": "Electric",
+        "description": "Plusle's positive energy boosts its partners during battle, making it a great team player."
+    },
+    "gen3_pokemon_24.png": {
+        "name": "Poochyena",
+        "type": "Dark",
+        "description": "Poochyena's strong sense of smell allows it to track its prey over great distances."
+    },
+    "gen3_pokemon_25.png": {
+        "name": "Roselia",
+        "type": "Grass, Poison",
+        "description": "Roselia's flowers have a pleasant aroma, but their thorns are highly toxic."
+    },
+    "gen3_pokemon_26.png": {
+        "name": "Sableye",
+        "type": "Dark, Ghost",
+        "description": "Sableye lurks in caves, eating gems and scaring intruders with its glowing eyes."
+    },
+    "gen3_pokemon_27.png": {
+        "name": "Shiftry",
+        "type": "Grass, Dark",
+        "description": "Shiftry controls the wind with its leafy fans, often appearing in forest legends."
+    },
+    "gen3_pokemon_28.png": {
+        "name": "Skitty",
+        "type": "Normal",
+        "description": "Skitty is curious and playful, often chasing its own tail."
+    },
+    "gen3_pokemon_29.png": {
+        "name": "Slakoth",
+        "type": "Normal",
+        "description": "Slakoth spends most of its time sleeping, conserving energy for rare bursts of activity."
+    },
+    "gen3_pokemon_30.png": {
+        "name": "Solrock",
+        "type": "Rock, Psychic",
+        "description": "Solrock's body glows with sunlight, which it uses as a source of power."
+    },
+    "gen3_pokemon_31.png": {
+        "name": "Spoink",
+        "type": "Psychic",
+        "description": "Spoink bounces on its tail to keep its heart beating, never stopping for long."
+    },
+    "gen3_pokemon_32.png": {
+        "name": "Taillow",
+        "type": "Normal, Flying",
+        "description": "Taillow is brave and will stand up to powerful opponents without backing down."
+    },
+    "gen3_pokemon_33.png": {
+        "name": "Torchic",
+        "type": "Fire",
+        "description": "Torchic's flames keep it warm, and it loves to be close to its Trainer."
+    },
+    "gen3_pokemon_34.png": {
+        "name": "Torkoal",
+        "type": "Fire",
+        "description": "Torkoal burns coal inside its shell, releasing thick black smoke when attacked."
+    },
+    "gen3_pokemon_35.png": {
+        "name": "Treecko",
+        "type": "Grass",
+        "description": "Treecko is cool and calm, scaling walls with ease to protect its territory."
+    },
+    "gen3_pokemon_36.png": {
+        "name": "Wurmple",
+        "type": "Bug",
+        "description": "Wurmple loves eating leaves and will evolve depending on its diet."
+    }
+}
