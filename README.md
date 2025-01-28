@@ -19,16 +19,16 @@ Game Pikachu là phiên bản hiện đại của trò chơi nối thú kinh đi
 - ### 🛠️ Cài đặt các thư viện cần thiết:
   Các thư viện cài đặt trên command hoặc terminal IDE:
   - #### Thư viện PyQt5:
-    Mục đích: Tạo giao diện đồ họa (GUI).
+    Mục đích: Tạo giao diện đồ họa (GUI).  
     Cài đặt: pip install PyQt5
   - #### Thư viện pygame:
-    Mục đích: Phát triển trò chơi 2D.
+    Mục đích: Phát triển trò chơi 2D.  
     Cài đặt: pip install pygame
   - #### Thư viện Pillow:
-    Mục đích: Xử lý hình ảnh.
+    Mục đích: Xử lý hình ảnh.  
     Cài đặt: pip install pillow
   - #### Thư viện pandas:
-    Mục đích: Phân tích và xử lí dữ liệu.
+    Mục đích: Phân tích và xử lí dữ liệu.  
     Cài đặt: pip install pandas
 - ### 🚀 Bắt đầu trò chơi:
   - #### Mở toàn bộ folder Pikachu.
