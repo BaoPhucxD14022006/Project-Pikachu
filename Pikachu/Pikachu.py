@@ -1653,8 +1653,6 @@ def resetBoard(board):
     if len(repeatedList) <= 1:
         return board
     referencedList = pokesOnBoard[:]
-    if len(referencedList) == 2:
-        return board
     while referencedList == pokesOnBoard:
         random.shuffle(pokesOnBoard)
 
