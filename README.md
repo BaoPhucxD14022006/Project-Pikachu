@@ -46,7 +46,7 @@ Game Pikachu là phiên bản hiện đại của trò chơi nối thú kinh đi
     Chế độ 2 (Ấn 1 lần nút Shift - Khuyến khích dùng): Khi di chuyển sẽ không bỏ qua các ô đã collect 📈.
 - ### ⚙️ Tính năng phụ:
   - #### Hint: Cung cấp gợi ý để giúp người chơi tìm kiếm các biểu tượng cần thiết 💡.
-  - #### Random: Tạo ngẫu nhiên các biểu tượng trên bàn chơi để tăng tính đa dạng 🎲.
+  - #### Random: Tạo lại ngẫu nhiên các biểu tượng trên bàn chơi để tăng tính đa dạng 🎲.
   - #### Timer: cộng thêm thời gian để người chơi có thêm thời gian để hoàn thành màn chơi ⏳.
 
 ## 🤝 Đóng góp
