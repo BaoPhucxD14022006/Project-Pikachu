@@ -570,16 +570,24 @@ def MainGame(email):
                 pygame.time.Clock().tick(30)  # Giới hạn FPS
             continue
             
-
+        result = 'PLAY_AGAIN'
         # Vòng lặp chơi game
+        while result == 'PLAY_AGAIN':
+            if not saved_state:
+                result = runGame(email, saved_state, new_game_option.level_choose, new_game_option.gen_choose, new_game_option.device_choose, size, listBG[0])
+                temp = (new_game_option.level_choose, new_game_option.gen_choose, new_game_option.device_choose, size, listBG[0])
+            else:
+                result = runGame(email, saved_state, None, None, None, None, None)
+                temp = (saved_state["level"], saved_state["gen"], saved_state["device"], tuple(saved_state["size"]), saved_state["bg"])
+            if result == "MAIN_MENU":  # Nếu quay về StartScreen
+                pygame.event.clear()
+                pygame.event.clear(pygame.MOUSEBUTTONUP)
+                break
+            elif result == 'PLAY_AGAIN':
+                saved_state = None
+                new_game_option.level_choose, new_game_option.gen_choose, new_game_option.device_choose, size, listBG[0] = temp
 
-        if not saved_state:
-            result = runGame(email, saved_state, new_game_option.level_choose, new_game_option.gen_choose, new_game_option.device_choose, size, listBG[0])
-        else:
-            result = runGame(email, saved_state, None, None, None, None, None)
-        if result == "MAIN_MENU":  # Nếu quay về StartScreen
-            pygame.event.clear()
-            pygame.event.clear(pygame.MOUSEBUTTONUP)
+            
 
         # Kiểm tra nếu quay lại màn hình chính
         pygame.event.clear(pygame.MOUSEBUTTONUP)
@@ -1623,7 +1631,7 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = event.pos
                     if imagePlayRect.collidepoint(mousePos):
-                        return
+                        return "PLAY_AGAIN"
                     if imageBackRect.collidepoint(mousePos):
                         running = False
                         pygame.event.clear()
@@ -1668,7 +1676,7 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mousePos = event.pos
                     if imagePlayRect.collidepoint(mousePos):
-                        return
+                        return "PLAY_AGAIN"
                     if imageBackRect.collidepoint(mousePos):
                         running = False
                         pygame.event.clear()
