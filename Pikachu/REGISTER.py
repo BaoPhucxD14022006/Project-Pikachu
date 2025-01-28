@@ -9,6 +9,7 @@ from PyQt5.QtGui import QPixmap, QFont, QMovie
 from PyQt5.QtCore import Qt, QTimer, QUrl
 from PyQt5.QtMultimedia import QSoundEffect
 PATH = os.path.dirname(os.path.abspath(__file__))
+os.chdir(PATH)
 class RegisterUI(QMainWindow):
     def __init__(self):
         super().__init__()
