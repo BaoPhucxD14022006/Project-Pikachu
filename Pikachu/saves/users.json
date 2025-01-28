@@ -4,5 +4,11 @@
         "email": "2",
         "password": "2",
         "pin": "123456"
+    },
+    {
+        "username": "Guest",
+        "email": "12",
+        "password": "1",
+        "pin": "123456"
     }
 ]

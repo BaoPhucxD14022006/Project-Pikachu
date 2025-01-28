@@ -1,4 +1,3 @@
-# INSTRUCTION: Just need to change this path and can run game
 import pygame, sys, random, copy, time, collections, os
 from pygame.locals import *
 import json 
@@ -32,7 +31,7 @@ LIVES = 3
 GAMETIME = 240
 GETHINTTIME = 20
 
-# set up the colors
+# Set up cho màu
 GRAY = (100, 100, 100)
 NAVYBLUE = ( 60, 60, 100)
 WHITE = (255, 255, 255)
@@ -49,16 +48,15 @@ BGCOLOR = NAVYBLUE
 HIGHLIGHTCOLOR = BLUE
 BORDERCOLOR = RED
 
-# TIMEBAR setup
+# Setup cho TIMEBAR
 barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, YMARGIN // 2 - TIMEBAR_WIDTH // 2)
 barSize = (TIMEBAR_LENGTH, TIMEBAR_WIDTH)
 borderColor = WHITE
 barColor = BOLDGREEN
 
-# Make a dict to store scaled images
+# Tạo danh sách lưu trữ địa chỉ Pokemon
 LISTPOKES = os.listdir(PATH + '/images/images_icon/Gen1/')
-NUMPOKES = len(LISTPOKES)
-POKES_DICT = {}
+POKES_DICT = dict()
 
 # Thêm danh sách lưu trữ các cặp đã được thông báo
 notified_pairs = set()
@@ -447,10 +445,9 @@ class SettingMenu:
             pygame.display.flip()
 
 # Load background
-
 listBG = ['images/image_background/image_game_{}.jpg'.format(i) for i in range(1, 5)]
 
-# Load sound and music
+# Load âm thanh
 pygame.mixer.pre_init()
 pygame.mixer.init()
 clickSound = pygame.mixer.Sound('sound_effect/beep4.ogg')
@@ -536,19 +533,53 @@ def MainGame(email):
             if not saved_state:
                 pygame.event.clear(pygame.MOUSEBUTTONUP)  # Xóa sự kiện chuột nếu không có trạng thái lưu
                 continue  # Nếu không có trạng thái lưu, quay lại màn hình chính
+        
+        elif action == 'INSTRUCTIONS':
+            scroll_offset = -200
+            back_home = pygame.image.load('./images/image_button/buttonbackhome.png')
+            back_home = pygame.transform.scale(back_home, (int(170*x_scale), int(100*y_scale)))
+            back_home_rect = pygame.Rect(0,0,int(170*x_scale), int(100*y_scale))
+            with open('./saves/instructions.txt', 'r', encoding='utf_8') as file:
+                text_lines = file.readlines()
+            back_to_home = False
+            while not back_to_home:
+                max_scroll = max(0, len(text_lines) * int(50*y_scale) - int(600*y_scale))
+                for event in pygame.event.get():
+                        
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        mouse_pos = event.pos
+                        if back_home_rect.collidepoint(mouse_pos):
+                            back_to_home = True
+                            break
+                        elif event.button == 4:  # Con lăn lên
+                            scroll_offset = max(-200, scroll_offset - int(50*y_scale))
+                        elif event.button == 5:  # Con lăn xuống
+                            scroll_offset = min(max_scroll, scroll_offset + int(50*y_scale))
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_UP:
+                            scroll_offset = max(-200, scroll_offset - int(50*y_scale))
+                        elif event.key == pygame.K_DOWN:
+                            scroll_offset = min(max_scroll, scroll_offset + int(50*y_scale))
+                        elif event.key == pygame.K_SPACE:
+                            scroll_offset = min(max_scroll, scroll_offset + int(500*y_scale))
+                if back_to_home:
+                    break
+                display_text(DISPLAYSURF, pygame.font.Font('./font_pixel.otf', int(50*x_scale)), text_lines, scroll_offset, int(150*y_scale), WINDOWHEIGHT - int(200*y_scale))
+                DISPLAYSURF.blit(back_home, (0,0))
+                pygame.display.flip()
+                pygame.time.Clock().tick(30)  # Giới hạn FPS
+            continue
+            
 
         # Vòng lặp chơi game
-        while LEVEL <= LEVELMAX:
-            if not saved_state:
-                result = runGame(email, saved_state, new_game_option.level_choose, new_game_option.gen_choose, new_game_option.device_choose, size, listBG[0])
-            else:
-                result = runGame(email, saved_state, None, None, None, None, None)
-            if result == "MAIN_MENU":  # Nếu quay về StartScreen
-                pygame.event.clear()
-                pygame.event.clear(pygame.MOUSEBUTTONUP)
-                break
-            LEVEL += 1
-            pygame.time.wait(1000)
+
+        if not saved_state:
+            result = runGame(email, saved_state, new_game_option.level_choose, new_game_option.gen_choose, new_game_option.device_choose, size, listBG[0])
+        else:
+            result = runGame(email, saved_state, None, None, None, None, None)
+        if result == "MAIN_MENU":  # Nếu quay về StartScreen
+            pygame.event.clear()
+            pygame.event.clear(pygame.MOUSEBUTTONUP)
 
         # Kiểm tra nếu quay lại màn hình chính
         pygame.event.clear(pygame.MOUSEBUTTONUP)
@@ -828,7 +859,9 @@ def showStartScreen(email):
     quit_game_button = pygame.transform.scale(quit_game_button, (int(300 * x_scale), int(120 * y_scale)))
     collections_button = pygame.image.load(f'{button_folder}/collections_button.png')
     collections_button = pygame.transform.scale(collections_button, (int(400 * x_scale), int(120 * y_scale)))
-    buttons = [new_game_button, load_game_button, rank_button, setting_button, collections_button, log_out_button, quit_game_button]
+    instructions_button = pygame.image.load(f'{button_folder}/instructions_button.png')
+    instructions_button = pygame.transform.scale(instructions_button, (int(300 * x_scale), int(120 * y_scale)))
+    buttons = [new_game_button, load_game_button, rank_button, setting_button, collections_button, log_out_button, instructions_button, quit_game_button]
     buttons_rect = []
     y = int(30 * y_scale)
     for i in range(4):
@@ -839,10 +872,11 @@ def showStartScreen(email):
     buttons_rect.append((int(358*x_scale), WINDOWHEIGHT - int(150*y_scale), collections_button.get_width(), collections_button.get_height()))
 
     buttons_rect.append((WINDOWWIDTH - (buttons[5].get_width() + int(30*x_scale)), int(180*y_scale), buttons[5].get_width(), buttons[5].get_height()))
-    buttons_rect.append((WINDOWWIDTH - (buttons[6].get_width() + int(30*x_scale)), WINDOWHEIGHT - int(150*y_scale), buttons[6].get_width(), buttons[6].get_height()))
+    buttons_rect.append((WINDOWWIDTH - (buttons[6].get_width() + int(30*x_scale)), WINDOWHEIGHT - int(350*y_scale), buttons[6].get_width(), buttons[6].get_height()))
+    buttons_rect.append((WINDOWWIDTH - (buttons[7].get_width() + int(30*x_scale)), WINDOWHEIGHT - int(150*y_scale), buttons[7].get_width(), buttons[7].get_height()))
     buttons_Rect = tuple(pygame.Rect(i[0], i[1], i[2], i[3]) for i in buttons_rect)
     DISPLAYSURF.blit(startBG, (0, 0))
-    for i in range(7):
+    for i in range(8):
         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
     DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (int(180*x_scale) + pixel_font.render('Welcome:', True, BLACK).get_width()//2), int(y_scale)))
     email_render = pixel_font.render(username, True, RED)
@@ -870,7 +904,7 @@ def showStartScreen(email):
                 if is_drawed == False:
                     DISPLAYSURF.blit(startBG, (0, 0))
                     cur_rect = None
-                    for i in range(7):
+                    for i in range(8):
                         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
                     DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (int(180*x_scale) + pixel_font.render('Welcome:', True, BLACK).get_width()//2), int(y_scale)))
                     DISPLAYSURF.blit(email_render, (email_render_x, int(70*y_scale)))
@@ -898,12 +932,37 @@ def showStartScreen(email):
 
                         elif i == 5:  # LOG OUT
                             return "LOG OUT"
-                        elif i == 6:  # QUIT
+                        elif i == 6: #instructions
+                            return "INSTRUCTIONS"
+                        elif i == 7:  # QUIT
                             pygame.quit()
                             sys.exit()
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
+
+def display_text(screen, font, text_lines, scroll_offset, y_min, y_max):
+    BG = pygame.image.load('./images/button/instruction_back.png')
+    BG = pygame.transform.scale(BG, (WINDOWWIDTH, WINDOWHEIGHT))
+    screen.blit(BG, (0,0))
+    y = -scroll_offset  # Bắt đầu từ vị trí cuộn
+    for line in text_lines:
+        if len(line)>=1 and y > y_min and y < y_max:  # Chỉ hiển thị các dòng trong khung nhìn
+            extra = ''
+            if line[:2] == '**':
+                COLOR = RED
+            elif line[0].isdigit():
+                COLOR = BLUE
+                extra = ' '*3
+            elif line[:4] == '- **':
+                COLOR = BLUE
+                extra = ' '*3
+            else:
+                COLOR = BLACK
+                extra = ' '*6
+            rendered_text = font.render(extra + line.strip(), True, COLOR)
+            screen.blit(rendered_text, (int(120*x_scale), y))
+        y += int(50*y_scale)  # Khoảng cách giữa các dòng
 
 def load_poke_images(gen_folder):
     """Tải danh sách ảnh từ thư mục tương ứng với Gen."""
@@ -1151,7 +1210,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     else:
                         restart_flag = not restart_flag
                         pygame.mixer.music.stop()
-                        return showGameOverScreen(mainBoard)
+                        return showGameOverScreen(mainBoard, gamename=name, email=email)
                     
                 if imageSwapRect.collidepoint(mousePos):
                     resetBoard(mainBoard)
@@ -1160,7 +1219,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     else:
                         restart_flag = not restart_flag
                         pygame.mixer.music.stop()
-                        return showGameOverScreen(mainBoard)
+                        return showGameOverScreen(mainBoard, gamename=name, email=email)
                 if imageClockRect.collidepoint(mousePos):
                     if time.time() - STARTTIME - 30 > 0:
                         STARTTIME += 30
@@ -1171,7 +1230,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     else:
                         restart_flag = not restart_flag
                         pygame.mixer.music.stop()
-                        return showGameOverScreen(mainBoard)
+                        return showGameOverScreen(mainBoard, gamename=name, email=email)
             # Chuyển sự kiện tới Settings
             settings.handle_event(event)
 
@@ -1211,7 +1270,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     else:
                         restart_flag = not restart_flag
                         pygame.mixer.music.stop()
-                        return showGameOverScreen(mainBoard)
+                        return showGameOverScreen(mainBoard, gamename=name, email=email)
                 elif event.key == pygame.K_r:
                     resetBoard(mainBoard)
                     if LIVES > 0:
@@ -1219,7 +1278,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     else:
                         restart_flag = not restart_flag
                         pygame.mixer.music.stop()
-                        return showGameOverScreen(mainBoard)
+                        return showGameOverScreen(mainBoard, gamename=name, email=email)
                 elif event.key == pygame.K_t:
                     if time.time() - STARTTIME - 30 > 0:
                         STARTTIME += 30
@@ -1230,7 +1289,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     else:
                         restart_flag = not restart_flag
                         pygame.mixer.music.stop()
-                        return showGameOverScreen(mainBoard)
+                        return showGameOverScreen(mainBoard, gamename=name, email=email)
                     
         print(boxx, boxy)
         # Nếu Settings bị đóng, xóa các sự kiện chuột dư thừa
@@ -1247,8 +1306,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
             settings.draw()
             ###
             if time.time() - STARTTIME > GAMETIME + TIMEBONUS:
-                LEVEL = LEVELMAX + 1
-                return
+                return showGameOverScreen(mainBoard, gamename=name, email=email)
             if time.time() - lastTimeGetPoint >= GETHINTTIME:
                 drawHint(hint)
             if device == 0:
@@ -1493,8 +1551,7 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
     imagePlay = pygame.transform.scale(imagePlay, (int(300*x_scale), int(164*y_scale)))
     imagePlayRect = imagePlay.get_rect(topleft = (int(1100*x_scale), int(800*y_scale)))
     running = True
-    
-    if result:
+    if email:
         with open(os.path.join("saves/save_game", f"{email}_saved_game.json"), 'r') as save_file:
             saved_game = json.load(save_file)
             for j in saved_game:
@@ -1508,8 +1565,8 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
                 pass
         with open(os.path.join("saves/save_game", f"{email}_saved_game.json"), 'w') as save_file:
             json.dump(saved_game, save_file, indent=4)
+    if result:
         if list(size) in ([8,8], [16,9], [20,12]):
-            print('aaa')
             strsize = f'{size[0]}x{size[1]}'
             with open(f"{PATH}/saves/rank.json", 'r') as file:
                 data = json.load(file)

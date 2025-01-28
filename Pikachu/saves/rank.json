@@ -259,5 +259,14 @@
         "gen": "3",
         "device": "Keyboard",
         "score": 610
+    },
+    {
+        "namegame": "123456",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": "1",
+        "device": "Mouse",
+        "score": 1350
     }
 ]

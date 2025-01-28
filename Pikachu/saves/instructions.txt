@@ -1,0 +1,109 @@
+**Pikachu Game Guide**
+
+---
+
+**Objective**
+The goal is to match pairs of Pokémon on the board until
+all pairs are cleared.
+
+---
+
+**How to Play**
+
+**Main Menu Options**
+1. **New Game**
+   - Choose board size (from traditional sizes or to your
+own liking), Pokémon generation, and difficulty level. 
+   - Select control device: mouse or keyboard.
+
+2. **Load Game**
+   - Resume a previously saved game.
+   - There are 18 saved slots in total.
+
+3. **Settings**
+   - Adjust game settings, including sound and SFX volume.
+
+4. **Collections**
+   - View collected Pokémon from the matches you’ve made in
+the game.
+
+5. **Rank**
+   - Check player rankings.
+
+6. **Log Out**
+   - Sign out of the current session.
+
+7. **Quit Game**
+   - Exit the game.
+
+---
+
+**Game Controls**
+1. **Mouse**:
+   - Click on a Pokémon to select it.
+   - Click on a matching Pokémon to form a pair.
+
+2. **Keyboard**:
+   - Use `W`, `A`, `S`, `D` to move the selector.
+   - Press `Enter` to select a Pokémon.
+   - Use `Shift` to toggle movement mode (skip or not skip
+blank spaces).
+
+3. **Others**:
+   - Click on "Hint" button or press "H" to use hint.
+   - Click on "Shuffle" button or press "R" to use shuffle.
+   - Click on "Time" button or press "T" to add Time.
+
+---
+
+**Game Rules**
+- **Matching**:
+  - Connect two matching Pokémon with up to three straight
+lines.
+  - If the connection path is valid, the pair will disappear
+(adding 1 second to overall time).
+
+- **Hints**:
+  - Use the "Hint" button (one that looks like a coin) to
+highlight a possible match.
+  - Each hint costs a life point.
+
+- **Shuffle Board**:
+  - Use the "Shuffle" button (one that looks like an UNO
+card) to reset the board.
+  - This costs a life point.
+
+- **Add Time**:
+  - Use the "Add Time" button (one that looks like a clock)
+to extend the timer by 30 seconds.
+  - This costs a life point.
+
+---
+
+**Game Elements**
+1. **Lives**:
+   - Start with three lives. You lose lives for using hints or
+reshuffles.
+
+2. **Time**:
+   - Finish the game within the given time limit, displayed as a
+time bar.
+
+3. **Score Multiplier**:
+   - Gain bonus points for consecutive matches.
+   - Higher combos provide higher multipliers (e.g., x2, x5,
+x10).
+
+4. **Notifications**:
+   - Alerts appear for collecting new Pokémon or achieving
+milestones.
+
+---
+
+**Tips for Winning**
+- Plan your moves to minimize path complexity.
+- Use hints sparingly to conserve lives.
+- Pay attention to the timer and consider using "Add Time"
+if necessary.
+- Leverage the shuffle function when no matches are
+possible.
