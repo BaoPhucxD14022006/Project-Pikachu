@@ -1,6 +1,6 @@
 <h1 align="center">Project Pikachu</h1>
 Chào mừng đến với project game của chúng mình.
-![Game Pikachu]()
+![Game Pikachu](./Pikachu/images/button/menu.jpg)
 Đây là phiên bản game Pikachu do các thành viên nhóm phối hợp tạo nên. Các tính năng cũng như giao diện được thiết kế chỉnh chu và toàn diện.
 
 ## 📖 Giới thiệu
@@ -31,12 +31,12 @@ Game Pikachu là phiên bản hiện đại của trò chơi nối thú kinh đi
     Mục đích: Phân tích và xử lí dữ liệu.  
     Cài đặt: pip install pandas
 - ### 🚀 Bắt đầu trò chơi:
-  - #### Mở toàn bộ folder Pikachu.
-  - #### Chạy file LOGIN.py.
+  - #### Truy cập vào file Pikachu vừa tải xuống.
+  - #### Click chuột vào file LOGIN.py hoặc REGISTER.py để vào giao diện đăng nhập hoặc đăng ký.
   - #### Hoàn thành các bước đăng ký, đăng nhập và bắt đầu vào game.
 
 ## 🤝 Đóng góp
-Vì đây là mã nguồn mở, chúng tôi luôn chào đón sự đóng góp từ cộng đồng. Để đóng góp, vui lòng:
+Vì đây là mã nguồn mở, chúng mình luôn chào đón sự đóng góp từ cộng đồng. Để đóng góp, vui lòng:
 1. Fork repo này.
 2. Tạo nhánh mới: `git checkout -b feature/tinh-nang-moi`.
 3. Commit thay đổi của bạn: `git commit -m "Thêm tính năng mới"`.
