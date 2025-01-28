@@ -535,7 +535,7 @@ def MainGame(email):
                 continue  # Nếu không có trạng thái lưu, quay lại màn hình chính
         
         elif action == 'INSTRUCTIONS':
-            scroll_offset = -200
+            scroll_offset = -int(200*y_scale)
             back_home = pygame.image.load('./images/image_button/buttonbackhome.png')
             back_home = pygame.transform.scale(back_home, (int(170*x_scale), int(100*y_scale)))
             back_home_rect = pygame.Rect(0,0,int(170*x_scale), int(100*y_scale))
@@ -552,7 +552,7 @@ def MainGame(email):
                             back_to_home = True
                             break
                         elif event.button == 4:  # Con lăn lên
-                            scroll_offset = max(-200, scroll_offset - int(50*y_scale))
+                            scroll_offset = max(-int(200*y_scale), scroll_offset - int(50*y_scale))
                         elif event.button == 5:  # Con lăn xuống
                             scroll_offset = min(max_scroll, scroll_offset + int(50*y_scale))
                     elif event.type == pygame.KEYDOWN:
