@@ -241,5 +241,23 @@
         "gen": "2",
         "device": "Mouse",
         "score": 2530
+    },
+    {
+        "namegame": "quamanh",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "4",
+        "gen": "4",
+        "device": "Mouse",
+        "score": 1090
+    },
+    {
+        "namegame": "banphim",
+        "user": "2",
+        "size": "8x8",
+        "gamemode": "1",
+        "gen": "3",
+        "device": "Keyboard",
+        "score": 610
     }
 ]

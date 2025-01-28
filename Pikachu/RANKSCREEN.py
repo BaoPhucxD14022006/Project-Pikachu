@@ -11,11 +11,13 @@ FONT_PATH = current_dir
 current_dir += '/images/RankScreen'
 
 class OptionButton:
-    def __init__(self, screen, x, y, w, h, text):
+    def __init__(self, screen, x, y, w, h, text, x_scale, y_scale):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.x_scale = x_scale
+        self.y_scale = y_scale
         self.screen = screen
         self.options = []
         self.text = text
@@ -41,7 +43,7 @@ class OptionButton:
         pygame.draw.rect(self.screen, fill_color, inner_rect)
 
         font_path = current_dir + '/font_pixel.otf'
-        font = pygame.font.Font(font_path, 24)
+        font = pygame.font.Font(font_path, int(24*self.x_scale))
         content = self.text + ' : ' + self.result if self.result else self.text
         text = font.render(content, True, (0, 0, 0))
         text_rect = text.get_rect(center=self.rect.center)
@@ -52,8 +54,11 @@ class OptionButton:
             for option in self.options:
                 option_rect = pygame.Rect(self.x, option_y, self.w, self.h)
                 pygame.draw.rect(self.screen, (255, 255, 255), option_rect)
+                border = pygame.Surface((self.w, self.h), pygame.SRCALPHA)
+                pygame.draw.rect(border, (100, 100, 100, 100), (0,0,self.w, self.h), width=3)
+                self.screen.blit(border, (self.x, option_y))
                 option_text = font.render(option, True, (0, 0, 0))  
-                self.screen.blit(option_text, (self.x + 10, option_y + 10)) 
+                self.screen.blit(option_text, (int(self.x + self.w/2 - option_text.get_width()/2) , option_y + int(10*self.y_scale))) 
                 option_y += self.h 
 
     def handle_event(self, event):
@@ -76,10 +81,10 @@ class OptionButton:
                     self.is_open = False
     
 class Button:
-    def __init__(self, screen, x, y, path):
+    def __init__(self, screen, x, y, path, x_scale, y_scale):
         self.path = path
         self.button = pygame.image.load(current_dir + '/' + self.path)
-        self.button = pygame.transform.scale(self.button, (self.button.get_width()*2, self.button.get_height()*2))
+        self.button = pygame.transform.scale(self.button, (int(self.button.get_width()*2*x_scale), int(self.button.get_height()*2*y_scale)))
         self.screen = screen
         self.rect = pygame.Rect(x, y, self.button.get_width(), self.button.get_height())
         
@@ -87,7 +92,7 @@ class Button:
         self.screen.blit(self.button, self.rect)
         
 class RankScreen:
-    def __init__(self, w, h, screen):
+    def __init__(self, w, h, screen, x_scale, y_scale):
 
         self.w_screen = w
         self.h_screen = h
@@ -97,29 +102,29 @@ class RankScreen:
         self.running = True
         
         self.filter = {}
-        self.option_size = OptionButton(self.screen, x=190, y=340, w=180, h=60, text='Size')
+        self.option_size = OptionButton(self.screen, x=int(190*x_scale), y=int(340*y_scale), w=int(180*x_scale), h=int(60*y_scale), text='Size', x_scale=x_scale, y_scale=y_scale)
         self.option_size.add_option(['8x8', '9x16', '12x30'])
         self.filter['size'] = self.option_size.result
-        self.option_gen = OptionButton(self.screen, x=440, y=340, w=180, h=60, text='Gen')
+        self.option_gen = OptionButton(self.screen, x=int(440*x_scale), y=int(340*y_scale), w=int(180*x_scale), h=int(60*y_scale), text='Gen', x_scale=x_scale, y_scale=y_scale)
         self.option_gen.add_option(['1', '2', '3', '4'])
         self.filter['gen'] = self.option_gen.result
-        self.option_level = OptionButton(self.screen, x=690, y=340, w=280, h=60, text='Game Mode')
+        self.option_level = OptionButton(self.screen, x=int(690*x_scale), y=int(340*y_scale), w=int(280*x_scale), h=int(60*y_scale), text='Game Mode', x_scale=x_scale, y_scale=y_scale)
         self.option_level.add_option(['1', '2', '3', '4', '5'])
         self.filter['gamemode'] = self.option_level.result
-        self.option_device = OptionButton(self.screen, x=1040, y=340, w=260, h=60, text='Device')
-        self.option_device.add_option(['Mouse', 'KeyBoard'])
+        self.option_device = OptionButton(self.screen, x=int(1040*x_scale), y=int(340*y_scale), w=int(260*x_scale), h=int(60*y_scale), text='Device', x_scale=x_scale, y_scale=y_scale)
+        self.option_device.add_option(['Mouse', 'Keyboard'])
         self.filter['device'] = self.option_device.result
         self.options_button = [self.option_size,
                                self.option_gen,
                                self.option_level,
                                self.option_device]
 
-        self.button_confirm = Button(self.screen, x=1390, y=325, path='button_confirm.png')
-        self.button_home = Button(self.screen, x=20, y=20, path='button_home.png')
+        self.button_confirm = Button(self.screen, x=int(1390*x_scale), y=int(325*y_scale), path='button_confirm.png', x_scale=x_scale, y_scale=y_scale)
+        self.button_home = Button(self.screen, x=int(20*x_scale), y=int(20*y_scale), path='button_home.png', x_scale=x_scale, y_scale=y_scale)
         self.buttons = [self.button_confirm, self.button_home]
-        self.table = Table(x_center= w // 2, y_center= h // 2 + 160, filter=self.filter, screen=self.screen)
+        self.table = Table(x_center= w // 2, y_center= h // 2 + int(160*y_scale), filter=self.filter, screen=self.screen, x_scale=x_scale, y_scale=y_scale)
         self.show_table = False
-        self.page = Pagination(self.screen, self.table.max_page, (w // 2 - 70, h - 45), (w // 2 + 70, h - 45), 40)
+        self.page = Pagination(self.screen, self.table.max_page, (w // 2 - int(70*x_scale), h - int(45*y_scale)), (w // 2 + int(70*x_scale), h - int(45*y_scale)), int(40*x_scale), x_scale)
         
     def update_filter(self):
         self.filter['size'] = self.option_size.result
@@ -187,12 +192,14 @@ class RankScreen:
             
             
 class Table:
-    def __init__(self, x_center, y_center, filter, screen):
+    def __init__(self, x_center, y_center, filter, screen, x_scale, y_scale):
         self.x_center = x_center
         self.y_center = y_center
+        self.x_scale = x_scale
+        self.y_scale = y_scale
         self.filter = filter
         self.screen = screen
-        self.h_row = 55
+        self.h_row = int(55*y_scale)
         self.max_row = 10
         self.data, self.max_page = self.get_data()
         
@@ -242,7 +249,7 @@ class Table:
 
     def draw(self, page=1):
         font_path = FONT_PATH + '/font_pixel.otf'
-        font = pygame.font.Font(font_path, 30)
+        font = pygame.font.Font(font_path, int(30*self.x_scale))
         df = self.data[(page-1)*self.max_row:]
         if len(df) > self.max_row:
             df = df[:self.max_row]
@@ -279,12 +286,12 @@ class Table:
         for col in df.columns:
             max_len = max(df[col].apply(lambda x: len(str(x))).max(), len(col))  
             max_len = max(max_len, len(col))
-            column_widths.append(max_len * 30)  
-        column_widths = [w + 5 for w in column_widths]
+            column_widths.append(max_len * int(30*self.x_scale))  
+        column_widths = [w + int(5*self.x_scale) for w in column_widths]
         return column_widths
     
 class Pagination:
-    def __init__(self, screen, total_pages, prev_button_pos, next_button_pos, size):
+    def __init__(self, screen, total_pages, prev_button_pos, next_button_pos, size, x_scale):
         self.current_page = 1
         self.total_pages = total_pages
         self.prev_button_pos = prev_button_pos
@@ -295,7 +302,7 @@ class Pagination:
         self.color = (0, 0, 255)
         self.text_color = (0, 0, 0)
         font_path = FONT_PATH + '/font_pixel.otf'
-        self.font = pygame.font.Font(font_path, 30)
+        self.font = pygame.font.Font(font_path, int(30*x_scale))
         self.screen = screen
 
     def next_page(self):
@@ -320,7 +327,7 @@ class Pagination:
         text_rect = text_surface.get_rect(center=((self.next_button_pos[0] - self.prev_button_pos[0] - self.size)//2 + self.prev_button_pos[0] + self.size,
                                 self.next_button_pos[1] + self.size//2))
         self.screen.blit(text_surface, text_rect )
-def main(w, h, screen):
+def main(w, h, screen, x_scale, y_scale):
     pygame.init()
-    rank = RankScreen(w, h, screen)
+    rank = RankScreen(w, h, screen, x_scale, y_scale)
     rank.run()

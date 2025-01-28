@@ -13,8 +13,10 @@ import re
 PATH = os.path.dirname(os.path.abspath(__file__))
 os.chdir(PATH)
 FPS = 144
-WINDOWWIDTH = 1000
-WINDOWHEIGHT = 570
+BASE_WINDOWWIDTH = 1920
+BASE_WINDOWHEIGHT = 1080
+WINDOWWIDTH = 1920
+WINDOWHEIGHT = 1080
 BOXSIZEX = 40
 BOXSIZEY = 50
 BOARDWIDTH = 14
@@ -80,10 +82,10 @@ def draw_notifications(screen):
             notifications.pop(0)  # Xóa thông báo nếu đã hết thời gian hiển thị
         else:
             # Vẽ thông báo lên màn hình
-            font = pygame.font.Font('font_pixel.otf', 36)
+            font = pygame.font.Font('font_pixel.otf', int(36*x_scale))
             text_surface = font.render(current_notification["message"], True, WHITE)
             text_rect = text_surface.get_rect()
-            text_rect.bottomleft = (10, WINDOWHEIGHT - text_surface.get_height() - 5)  # Góc dưới bên trái màn hình
+            text_rect.bottomleft = (int(10*x_scale), WINDOWHEIGHT - text_surface.get_height() - int(5*y_scale))  # Góc dưới bên trái màn hình
             screen.blit(text_surface, text_rect)
 
 for i in range(len(LISTPOKES)):
@@ -100,7 +102,7 @@ class Score:
     def __init__(self, font, path, initial_score=0):
         self.score = initial_score
         self.font = font
-        self.position = (WINDOWWIDTH - 150, 10)
+        self.position = (WINDOWWIDTH - int(150*x_scale), int(10*y_scale))
         self.last_action_time = time.time()  # Thời gian nối Pokémon gần nhất
         self.multiplier = 1  # Hệ số nhân mặc định
         self.combo_count = 0  # Số lần kết nối đúng liên tiếp
@@ -146,7 +148,7 @@ class Score:
             # Nếu có ảnh, tải và gán
             if image_path:
                 self.multiplier_image = pygame.image.load(image_path)
-                self.multiplier_image = pygame.transform.scale(self.multiplier_image, (100, 100))
+                self.multiplier_image = pygame.transform.scale(self.multiplier_image, (int(100*x_scale), int(100*y_scale)))
                 self.image_display_time = time.time()  # Đặt lại thời gian hiển thị
             else:
                 self.multiplier_image = None
@@ -187,13 +189,13 @@ class Score:
         score_text = f"Score: {self.score}"
         score_surf = self.font.render(score_text, True, WHITE)
         score_rect = score_surf.get_rect()
-        score_rect.topright = (WINDOWWIDTH - 10, 10)  # Căn phải ở góc trên
+        score_rect.topright = (WINDOWWIDTH - int(10*x_scale), int(10*y_scale))  # Căn phải ở góc trên
         screen.blit(score_surf, score_rect)
 
         # Hiển thị ảnh hệ số nhân (nếu có và trong vòng 5 giây)
         if self.multiplier_image and time.time() - self.image_display_time <= 5:
             image_rect = self.multiplier_image.get_rect()
-            image_rect.topright = (WINDOWWIDTH - 10, 75)  # Vị trí dưới ô điểm score
+            image_rect.topright = (WINDOWWIDTH - int(10*x_scale), int(75*y_scale))  # Vị trí dưới ô điểm score
             screen.blit(self.multiplier_image, image_rect)
         elif self.multiplier_image and time.time() - self.image_display_time > 5:
             self.multiplier_image = None  # Xóa ảnh sau 5 giây
@@ -264,8 +266,8 @@ class SettingMenu:
         self.draggingSFX = dragging
         self.screen = screen
         self.actived = False
-        self.font = pygame.font.Font('font_pixel.otf', 25)
-        self.gif = LoadGif(screen, w, h, 400, 356)
+        self.font = pygame.font.Font('font_pixel.otf', int(25*x_scale))
+        self.gif = LoadGif(screen, w, h, int(400*x_scale), int(356*y_scale))
         self.handle_x_sfx = 0
         self.handle_y_sfx = 0
         self.handle_x_sound = 0
@@ -277,7 +279,7 @@ class SettingMenu:
         screen_width = self.screen.get_size()[0]
         text_width = msg.get_width()
         centerX = (screen_width - text_width) / 2
-        self.screen.blit(msg, (centerX + 5, posY))
+        self.screen.blit(msg, (centerX + int(5*x_scale), int(posY*y_scale)))
     
     def loadImages(self, linkImage,  posX = 0, posY = 0, W = WINDOWWIDTH, H = WINDOWHEIGHT):
         image = pygame.image.load(linkImage)
@@ -291,22 +293,22 @@ class SettingMenu:
     def Option(self):
         
         # Kích thước thanh trượt của âm thanh
-        slider_x_sound = 1200
-        slider_y_sound = 460  
-        slider_width_sound = 400
-        slider_height_sound = 20
-        handle_radius_sound = 30
+        slider_x_sound = int(1200*x_scale)
+        slider_y_sound = int(460*x_scale)
+        slider_width_sound = int(400*x_scale)
+        slider_height_sound = int(20*y_scale)
+        handle_radius_sound = int(30*x_scale)
 
         # Vị trí nút điều chỉnh của âm thanh
         handle_x_sound = slider_x_sound + int(slider_width_sound * 0.3)
         handle_y_sound = slider_y_sound + slider_height_sound // 2
         
         # Kích thước thanh trượt của SFX
-        slider_x_sfx = 1200
-        slider_y_sfx = 660 
-        slider_width_sfx = 400
-        slider_height_sfx = 20
-        handle_radius_sfx = 30
+        slider_x_sfx = int(1200*x_scale)
+        slider_y_sfx = int(660*x_scale) 
+        slider_width_sfx = int(400*x_scale)
+        slider_height_sfx = int(20*x_scale)
+        handle_radius_sfx = int(30*x_scale)
 
         # Vị trí nút điều chỉnh của SFX
         handle_x_sfx = slider_x_sfx + slider_width_sfx
@@ -317,12 +319,11 @@ class SettingMenu:
         Gif = self.gif
         
         image_background = self.loadImages("images/image_background/backgroundSetting.jpg", 0, 0, self.w, self.h)
-        # image_menu = self.loadImages("image_background/menudachinhsua1.jpg", 200, 86, 50, 520)
-        image_sound_on = self.loadImages("images/image_button/on.png", 1640, 370, 200, 200)
-        image_sound_off = self.loadImages("images/image_button/off.png", 1640, 370, 200, 200)
-        image_sfx_on = self.loadImages("images/image_button/on.png", 1640, 570, 200, 200)
-        image_sfx_off = self.loadImages("images/image_button/off.png", 1640, 570, 200, 200)
-        image_back_home = self.loadImages("images/image_button/buttonbackhome.png", 50, self.h - 200, 240, 160)
+        image_sound_on = self.loadImages("images/image_button/on.png", int(1640*x_scale), int(370*y_scale), int(200*x_scale), int(200*y_scale))
+        image_sound_off = self.loadImages("images/image_button/off.png", int(1640*x_scale), int(370*y_scale), int(200*x_scale), int(200*y_scale))
+        image_sfx_on = self.loadImages("images/image_button/on.png", int(1640*x_scale), int(570*y_scale), int(200*x_scale), int(200*y_scale))
+        image_sfx_off = self.loadImages("images/image_button/off.png", int(1640*x_scale), int(570*y_scale), int(200*x_scale), int(200*y_scale))
+        image_back_home = self.loadImages("images/image_button/buttonbackhome.png", int(50*x_scale), self.h - int(200*y_scale), int(240*x_scale), int(160*y_scale))
         
         # Vẽ hình các nút bấm
         button_image_sound_rect = image_sound_on[1]
@@ -438,8 +439,8 @@ class SettingMenu:
             # Hiển thị giá trị âm lượng
             volume_text_sound = self.font.render(f"SOUND: {int(self.volumeSound * 100)}%", True, WHITE)
             volume_text_sfx = self.font.render(f"SFX:       {int(self.volumeSFX * 100)}%", True, WHITE)
-            self.screen.blit(volume_text_sound, (slider_x_sound, slider_y_sound - 50))
-            self.screen.blit(volume_text_sfx, (slider_x_sfx, slider_y_sfx - 50))
+            self.screen.blit(volume_text_sound, (slider_x_sound, slider_y_sound - int(50*y_scale)))
+            self.screen.blit(volume_text_sfx, (slider_x_sfx, slider_y_sfx - int(50*y_scale)))
             
             Gif.playGif()
             # Cập nhật màn hình
@@ -459,23 +460,26 @@ startScreenSound = pygame.mixer.Sound('sound_effect/music_background/introductio
 listMusicBG = [f"sound_effect/music_background/music_{i}.mp3" for i in range(1, 5)]
 
 def main(email):
-    global WINDOWHEIGHT, WINDOWWIDTH, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, unlocked_pokemon
+    global WINDOWHEIGHT, WINDOWWIDTH, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, unlocked_pokemon, x_scale, y_scale
     with open(f'{PATH}/saves/save_game/{email}_saved_collection.json', 'r') as file:
         unlocked_pokemon = json.load(file)
 
     # Khởi tạo Pygame và các tài nguyên cơ bản
     pygame.init()
     pygame.font.init()
-    WINDOWWIDTH = pygame.display.Info().current_w
-    WINDOWHEIGHT = pygame.display.Info().current_h
-    print(WINDOWWIDTH, WINDOWHEIGHT)
+
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     WINDOWWIDTH = pygame.display.Info().current_w
     WINDOWHEIGHT = pygame.display.Info().current_h
+    x_scale = WINDOWWIDTH / BASE_WINDOWWIDTH
+    y_scale = WINDOWHEIGHT / BASE_WINDOWHEIGHT
+
+    print(WINDOWWIDTH, WINDOWHEIGHT)
+    
     pygame.display.set_caption('Pikachu')
     BASICFONT = pygame.font.SysFont('comicsansms', 70)
-    LIVESFONT = pygame.font.SysFont('comicsansms', 45)
+    LIVESFONT = pygame.font.SysFont('comicsansms', int(45*x_scale))
 
     pygame.event.clear(pygame.MOUSEBUTTONUP)
 
@@ -621,8 +625,8 @@ class RunningBox:
 
 class NewGameOption:
     def __init__(self, screen):
-        self.font = pygame.font.Font('font_pixel.otf', 50)
-        self.fonts = pygame.font.Font('font_pixel.otf', 40)
+        self.font = pygame.font.Font('font_pixel.otf', int(50*x_scale))
+        self.fonts = pygame.font.Font('font_pixel.otf', int(40*x_scale))
         self.visible = False
         self.screen = screen
         self.is_draw = False
@@ -660,67 +664,67 @@ class NewGameOption:
         nen = pygame.transform.scale(nen, (WINDOWWIDTH, WINDOWHEIGHT))
         self.screen.blit(nen, (0, 0))
         size = ('8x8', '9x16', '12x20')
-        x, y = 200, 130
-        self.screen.blit(self.font.render('SIZE', True, RED), (x + 80, y))
+        x, y = int(200*x_scale), int(130*y_scale)
+        self.screen.blit(self.font.render('SIZE', True, RED), (x + int(80*x_scale), y))
         for i in range(3):
-            y += 140
+            y += int(140*y_scale)
             if i == self.size_choose:
                 color = BLUE
             else:
                 color = BLACK
-            pygame.draw.rect(self.screen, color, (x, y, 300, 120), 4)
-            self.size_rects.append(pygame.Rect(x, y, 300, 120))
-            self.screen.blit(self.font.render(size[i], True, BLACK), (x + 150 - self.font.render(size[i], True, BLACK).get_width()/2, y + 14)) 
-        x, y = 800, 130
-        self.screen.blit(self.font.render('GEN', True, RED), (x + 1400, y))
+            pygame.draw.rect(self.screen, color, (x, y, int(300*x_scale), int(120*y_scale)), int(4*x_scale))
+            self.size_rects.append(pygame.Rect(x, y, int(300*x_scale), int(120*y_scale)))
+            self.screen.blit(self.font.render(size[i], True, BLACK), (x + int(150*x_scale) - self.font.render(size[i], True, BLACK).get_width()/2, y + int(14*y_scale))) 
+        x, y = int(800*x_scale), int(130*y_scale)
+        self.screen.blit(self.font.render('GEN', True, RED), (x + int(140*x_scale), y))
         for i in range(2):
-            y += 160
-            x = 680
+            y += int(160*y_scale)
+            x = int(680*x_scale)
             for j in range(2):
-                pygame.draw.rect(self.screen, BLUE if self.gen_choose == 2 * i + j else BLACK, (x, y, 300, 120), 4)
-                self.gen_rects.append(pygame.Rect(x, y, 300, 120))
-                self.screen.blit(self.font.render(f'GEN{i*2 + j + 1}', True, BLACK), (x + 150 - self.font.render(f'GEN{i*2 + j + 1}', True, BLACK).get_width()/2, y + 14))
-                x += 340
-        x, y = 1550, 130
-        self.screen.blit(self.font.render('LEVEL', True, RED), (x + 50, y))
+                pygame.draw.rect(self.screen, BLUE if self.gen_choose == 2 * i + j else BLACK, (x, y, int(300*x_scale), int(120*y_scale)), int(4*x_scale))
+                self.gen_rects.append(pygame.Rect(x, y, int(300*x_scale), int(120*y_scale)))
+                self.screen.blit(self.font.render(f'GEN{i*2 + j + 1}', True, BLACK), (x + int(150*x_scale) - self.font.render(f'GEN{i*2 + j + 1}', True, BLACK).get_width()/2, y + int(14*y_scale)))
+                x += int(340*x_scale)
+        x, y = int(1550*x_scale), int(130*y_scale)
+        self.screen.blit(self.font.render('GAME MODE', True, RED), (x + int(120*x_scale) - self.font.render('GAME MODE', True, RED).get_width()//2, y))
         for i in range(5):
-            y += 110
+            y += int(110*y_scale)
             color = BLUE if i == self.level_choose else BLACK
-            pygame.draw.rect(self.screen, color, (x, y, 240, 80), 4)
-            self.level_rects.append(pygame.Rect(x, y, 240, 80))
-            self.screen.blit(self.font.render(f'{i + 1}', True, BLACK), (x + 130 - self.font.render(f'{i + 1}', True, BLACK).get_width()/2, y - 4))
+            pygame.draw.rect(self.screen, color, (x, y, int(240*x_scale), int(80*y_scale)), int(4*x_scale))
+            self.level_rects.append(pygame.Rect(x, y, int(240*x_scale), int(80*y_scale)))
+            self.screen.blit(self.font.render(f'{i + 1}', True, BLACK), (x + int(120*x_scale) - self.font.render(f'{i + 1}', True, BLACK).get_width()/2, y - int(4*x_scale)))
         
-        self.screen.blit(self.font.render('DEVICE:', True, RED), (1460, 770))
+        self.screen.blit(self.font.render('DEVICE:', True, RED), (int(1460*x_scale), int(770*y_scale)))
         device = ('MOUSE', 'KEYBOARD')
-        x, y = 940, 870
+        x, y = int(940*x_scale), int(870*y_scale)
         for i in range(2):
-            x += 310
+            x += int(310*x_scale)
             color = BLUE if i == self.device_choose else BLACK
-            pygame.draw.rect(self.screen, color, (x, y, 300, 100), 4)
-            self.device_rects.append(pygame.Rect(x, y, 300, 100))
-            self.screen.blit(self.font.render(device[i], True, BLACK), (x + 150 - self.font.render(device[i], True, BLACK).get_width()/2, y + 10))
-        x, y = 140, 770
+            pygame.draw.rect(self.screen, color, (x, y, int(300*x_scale), int(100*y_scale)), int(4*x_scale))
+            self.device_rects.append(pygame.Rect(x, y, int(300*x_scale), int(100*y_scale)))
+            self.screen.blit(self.font.render(device[i], True, BLACK), (x + int(150*x_scale) - self.font.render(device[i], True, BLACK).get_width()/2, y + int(0*y_scale)))
+        x, y = int(140*x_scale), int(770*y_scale)
         
-        pygame.draw.rect(self.screen, BLUE if self.size_choose == 3 else BLACK, (x, y, 400, 200), 4)
-        self.screen.blit(self.fonts.render('COL', True, RED), (x + 20, y + 20))
-        pygame.draw.rect(self.screen, BLUE if self.col_active else GRAY, (x + 120, y + 30, 240, 60), 4)
-        self.col_rect = pygame.Rect(x + 120, y + 30, 240, 60)
-        self.screen.blit(self.fonts.render('ROW', True, RED), (x + 20, y + 100))
-        pygame.draw.rect(self.screen, BLUE if self.row_active else GRAY, (x + 120, y + 110, 240, 60), 4)
-        self.row_rect = pygame.Rect(x + 120, y + 110, 240, 60)
-        self.size_rects.append(pygame.Rect(x, y, 400, 200))
-        self.screen.blit(self.fonts.render(self.col_text, True, BLACK), (x + 180, y + 26))
-        self.screen.blit(self.fonts.render(self.row_text, True, BLACK), (x + 180, y + 106))
+        pygame.draw.rect(self.screen, BLUE if self.size_choose == 3 else BLACK, (x, y, int(400*x_scale), int(200*y_scale)), int(4*x_scale))
+        self.screen.blit(self.fonts.render('COL', True, RED), (x + int(20*x_scale), y + int(20*y_scale)))
+        pygame.draw.rect(self.screen, BLUE if self.col_active else GRAY, (x + int(120*x_scale), y + int(30*y_scale), int(240*x_scale), int(60*y_scale)), int(4*x_scale))
+        self.col_rect = pygame.Rect(x + int(120*x_scale), y + int(30*y_scale), int(240*x_scale), int(60*y_scale))
+        self.screen.blit(self.fonts.render('ROW', True, RED), (x + int(20*x_scale), y + int(100*y_scale)))
+        pygame.draw.rect(self.screen, BLUE if self.row_active else GRAY, (x + int(120*x_scale), y + int(110*y_scale), int(240*x_scale), int(60*y_scale)), int(4*x_scale))
+        self.row_rect = pygame.Rect(x + int(120*x_scale), y + int(110*y_scale), int(240*x_scale), int(60*y_scale))
+        self.size_rects.append(pygame.Rect(x, y, int(400*x_scale), int(200*y_scale)))
+        self.screen.blit(self.fonts.render(self.col_text, True, BLACK), (x + int(180*x_scale), y + int(26*y_scale)))
+        self.screen.blit(self.fonts.render(self.row_text, True, BLACK), (x + int(180*x_scale), y + int(106*y_scale)))
         
         home_button = pygame.image.load('images/new_game/home_button.png')
-        home_button = pygame.transform.scale(home_button, (100, 100))
-        self.home_button_rect = (pygame.Rect(WINDOWWIDTH - 110, 10, 100, 100),)
-        self.screen.blit(home_button, (WINDOWWIDTH - 110, 10, 100, 100))
+        home_button = pygame.transform.scale(home_button, (int(100*x_scale), int(100*y_scale)))
+        self.home_button_rect = (pygame.Rect(WINDOWWIDTH - int(110*x_scale), int(10*y_scale), int(100*x_scale), int(100*y_scale)),)
+        self.screen.blit(home_button, (WINDOWWIDTH - int(110*x_scale), int(10*y_scale), int(100*x_scale), int(100*y_scale)))
         
-        pygame.draw.rect(self.screen, GRAY, (WINDOWWIDTH // 2 - 80, WINDOWHEIGHT - 130, 160, 80), 4)
-        self.play_button_rect = (pygame.Rect(WINDOWWIDTH // 2 - 80, WINDOWHEIGHT - 130, 160, 80),)
+        pygame.draw.rect(self.screen, GRAY, (WINDOWWIDTH // 2 - int(80*x_scale), WINDOWHEIGHT - int(130*y_scale), int(160*x_scale), int(80*y_scale)), 4)
+        self.play_button_rect = (pygame.Rect(WINDOWWIDTH // 2 - int(80*x_scale), WINDOWHEIGHT - int(130*y_scale), int(160*x_scale), int(80*y_scale)),)
         play_word = self.font.render('PLAY', True, RED if self.playable() else GRAY)
-        self.screen.blit(play_word, (WINDOWWIDTH // 2 - play_word.get_width()//2, WINDOWHEIGHT - 130))
+        self.screen.blit(play_word, (WINDOWWIDTH // 2 - play_word.get_width()//2, WINDOWHEIGHT - int(135*y_scale)))
         pygame.display.update()
     
     def handle_event(self):
@@ -804,50 +808,50 @@ def showStartScreen(email):
             if user["email"] == email:
                 username = user["username"]
     cur_rect = None
-    pixel_font = pygame.font.Font('font_pixel.otf', 60)
+    pixel_font = pygame.font.Font('font_pixel.otf', int(60 * x_scale))
     startScreenSound.set_volume(SettingGame.volumeSFX)
     if SettingGame.muteSFX:
         startScreenSound.play()
     pygame.event.clear()
     button_folder = 'images/button'
     new_game_button = pygame.image.load(f'{button_folder}/new_game_button.png')
-    new_game_button = pygame.transform.scale(new_game_button, (400, 120))
+    new_game_button = pygame.transform.scale(new_game_button, (int(400 * x_scale), int(120 * y_scale)))
     load_game_button = pygame.image.load(f'{button_folder}/load_game_button.png')
-    load_game_button = pygame.transform.scale(load_game_button, (400, 120))
+    load_game_button = pygame.transform.scale(load_game_button, (int(400 * x_scale), int(120 * y_scale)))
     rank_button = pygame.image.load(f'{button_folder}/rank_button.png')
-    rank_button = pygame.transform.scale(rank_button, (400, 120))
+    rank_button = pygame.transform.scale(rank_button, (int(400 * x_scale), int(120 * y_scale)))
     setting_button = pygame.image.load(f'{button_folder}/setting_button.png')
-    setting_button = pygame.transform.scale(setting_button, (400, 120))
+    setting_button = pygame.transform.scale(setting_button, (int(400 * x_scale), int(120 * y_scale)))
     log_out_button = pygame.image.load(f'{button_folder}/log_out_button.png')
-    log_out_button = pygame.transform.scale(log_out_button, (300, 120))
+    log_out_button = pygame.transform.scale(log_out_button, (int(300 * x_scale), int(120 * y_scale)))
     quit_game_button = pygame.image.load(f'{button_folder}/quit_game_button.png')
-    quit_game_button = pygame.transform.scale(quit_game_button, (300, 120))
+    quit_game_button = pygame.transform.scale(quit_game_button, (int(300 * x_scale), int(120 * y_scale)))
     collections_button = pygame.image.load(f'{button_folder}/collections_button.png')
-    collections_button = pygame.transform.scale(collections_button, (400, 120))
+    collections_button = pygame.transform.scale(collections_button, (int(400 * x_scale), int(120 * y_scale)))
     buttons = [new_game_button, load_game_button, rank_button, setting_button, collections_button, log_out_button, quit_game_button]
     buttons_rect = []
-    y = 30
+    y = int(30 * y_scale)
     for i in range(4):
-        buttons_rect.append((358,y,buttons[i].get_width(), buttons[i].get_height()))
-        y += buttons[i].get_height() + 40
+        buttons_rect.append((int(358*x_scale), y, buttons[i].get_width(), buttons[i].get_height()))
+        y += buttons[i].get_height() + int(40*y_scale)
 
     # Định vị nút Collections
-    buttons_rect.append((358, WINDOWHEIGHT - 150, collections_button.get_width(), collections_button.get_height()))
+    buttons_rect.append((int(358*x_scale), WINDOWHEIGHT - int(150*y_scale), collections_button.get_width(), collections_button.get_height()))
 
-    buttons_rect.append((WINDOWWIDTH - (buttons[5].get_width() + 30), 180, buttons[5].get_width(), buttons[5].get_height()))
-    buttons_rect.append((WINDOWWIDTH - (buttons[6].get_width() + 30), WINDOWHEIGHT - 150, buttons[6].get_width(), buttons[6].get_height()))
+    buttons_rect.append((WINDOWWIDTH - (buttons[5].get_width() + int(30*x_scale)), int(180*y_scale), buttons[5].get_width(), buttons[5].get_height()))
+    buttons_rect.append((WINDOWWIDTH - (buttons[6].get_width() + int(30*x_scale)), WINDOWHEIGHT - int(150*y_scale), buttons[6].get_width(), buttons[6].get_height()))
     buttons_Rect = tuple(pygame.Rect(i[0], i[1], i[2], i[3]) for i in buttons_rect)
     DISPLAYSURF.blit(startBG, (0, 0))
     for i in range(7):
         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
-    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (180 + pixel_font.render('Welcome:', True, BLACK).get_width()//2), 1))
+    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (int(180*x_scale) + pixel_font.render('Welcome:', True, BLACK).get_width()//2), int(y_scale)))
     email_render = pixel_font.render(username, True, RED)
-    email_render_x = WINDOWWIDTH - 180
-    if email_render.get_width() // 2 <= 180:
+    email_render_x = WINDOWWIDTH - int(180*x_scale)
+    if email_render.get_width() // 2 <= int(180*x_scale):
         email_render_x = email_render_x - email_render.get_width() // 2
     else:
         email_render_x = WINDOWWIDTH - email_render.get_width()
-    DISPLAYSURF.blit(email_render, (email_render_x, 70))
+    DISPLAYSURF.blit(email_render, (email_render_x, int(70*y_scale)))
     while True:
         for event in pygame.event.get():
             is_drawed = False
@@ -868,8 +872,8 @@ def showStartScreen(email):
                     cur_rect = None
                     for i in range(7):
                         DISPLAYSURF.blit(buttons[i], (buttons_rect[i][0], buttons_rect[i][1]))
-                    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (180 + pixel_font.render('Welcome:', True, BLACK).get_width()//2), 1))
-                    DISPLAYSURF.blit(email_render, (email_render_x, 70))
+                    DISPLAYSURF.blit(pixel_font.render('Welcome:', True, BLACK), (WINDOWWIDTH - (int(180*x_scale) + pixel_font.render('Welcome:', True, BLACK).get_width()//2), int(y_scale)))
+                    DISPLAYSURF.blit(email_render, (email_render_x, int(70*y_scale)))
             elif event.type == MOUSEBUTTONUP:
                 pygame.event.clear(pygame.MOUSEBUTTONUP)  # Xóa sự kiện chuột còn lại trước khi xử lý
                 mousex, mousey = event.pos
@@ -882,11 +886,14 @@ def showStartScreen(email):
                         elif i == 2:  # RANK
                             print("Rank selected")
                             import RANKSCREEN
-                            RANKSCREEN.main(WINDOWWIDTH, WINDOWHEIGHT, DISPLAYSURF)
+                            RANKSCREEN.main(WINDOWWIDTH, WINDOWHEIGHT, DISPLAYSURF, x_scale, y_scale)
                         elif i == 3:# OPTION
                             return "OPTION"
                         elif i == 4:  # COLLECTIONS
                             showCollectionsMenu()  # Chuyển đến màn hình Collections
+                            startScreenSound.set_volume(SettingGame.volumeSFX)
+                            if SettingGame.muteSFX:
+                                startScreenSound.play()
                             continue  # Sau khi thoát, quay lại vòng lặp menu chính
 
                         elif i == 5:  # LOG OUT
@@ -924,7 +931,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
     wrongSound.set_volume(SettingGame.volumeSFX)
     
     global font
-    font = pygame.font.Font('font_pixel.otf', 30)
+    font = pygame.font.Font('font_pixel.otf', int(30*x_scale))
 
     # Tải trạng thái hoặc khởi tạo mặc định
     # saved_state = load_game_state(email)
@@ -936,14 +943,14 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
 
     # Button Swap, Hint and add Time
     imageHint = pygame.image.load("images/swap_and_hint/hint.png")
-    imageHint = pygame.transform.scale(imageHint, (70, 70))
+    imageHint = pygame.transform.scale(imageHint, (int(70*x_scale), int(70*y_scale)))
     imageSwap = pygame.image.load("images/swap_and_hint/swap.png")
-    imageSwap = pygame.transform.scale(imageSwap, (70, 70))
+    imageSwap = pygame.transform.scale(imageSwap, (int(70*x_scale), int(70*y_scale)))
     imageClock = pygame.image.load("images/swap_and_hint/clock.png")
-    imageClock = pygame.transform.scale(imageClock, (70, 70))
-    imageHintRect = imageHint.get_rect(topleft = (30, 120))
-    imageSwapRect = imageSwap.get_rect(topleft = (30, 210))
-    imageClockRect = imageClock.get_rect(topleft = (30, 300))
+    imageClock = pygame.transform.scale(imageClock, (int(70*x_scale), int(70*y_scale)))
+    imageHintRect = imageHint.get_rect(topleft = (int(30*x_scale), int(120*y_scale)))
+    imageSwapRect = imageSwap.get_rect(topleft = (int(30*x_scale), int(210*y_scale)))
+    imageClockRect = imageClock.get_rect(topleft = (int(30*x_scale), int(300*y_scale)))
     hintPressed = False
     
     # Thêm cờ để báo hiệu quay về StartScreen
@@ -1018,13 +1025,13 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
     global BOARDHEIGHT, BOARDWIDTH, XMARGIN, YMARGIN, BOXSIZEX, BOXSIZEY
     size = saved_state["size"] if saved_state else size
     BOARDWIDTH, BOARDHEIGHT = size[0] + 2, size[1] + 2
-    BOXSIZEX, BOXSIZEY = 1700 // BOARDWIDTH, 1000 // BOARDHEIGHT
+    BOXSIZEX, BOXSIZEY = int(1700*x_scale) // BOARDWIDTH, int(1000*y_scale) // BOARDHEIGHT
     if BOXSIZEX * 1.25 < BOXSIZEY:
         BOXSIZEY = int(BOXSIZEX * 1.25)
     else:
         BOXSIZEX = int(BOXSIZEY // 1.25)
     XMARGIN = (WINDOWWIDTH - (BOXSIZEX * BOARDWIDTH)) // 2
-    YMARGIN = (WINDOWHEIGHT - (BOXSIZEY * BOARDHEIGHT)) // 2 + 17
+    YMARGIN = (WINDOWHEIGHT - (BOXSIZEY * BOARDHEIGHT)) // 2 + int(40*y_scale)
 
     if saved_state:
         name = saved_state["name"]
@@ -1074,7 +1081,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
             pygame.mixer.music.stop()
             if name == None:
                 if list(size) in ([8,8], [16,9], [20,12]):
-                    new_map_name = EnterMapName(WINDOWWIDTH // 2 - 500, WINDOWHEIGHT // 2 - 250, 1000, 500, DISPLAYSURF, email, False)
+                    new_map_name = EnterMapName(WINDOWWIDTH // 2 - int(500*x_scale), WINDOWHEIGHT // 2 - int(250*y_scale), int(1000*x_scale), int(500*y_scale), DISPLAYSURF, email, False)
                     while True:
                         name = new_map_name.appear()
                         if name:
@@ -1091,19 +1098,19 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
             update_map_name = None
         DISPLAYSURF.blit(Background, (0, 0))
         imageLiveGame = pygame.image.load(f"images/swap_and_hint/image_heart/heart_{LIVES}.png")
-        imageLiveGame = pygame.transform.scale(imageLiveGame, (100, 33))
-        DISPLAYSURF.blit(imageLiveGame, (20, 70))
+        imageLiveGame = pygame.transform.scale(imageLiveGame, (int(100*x_scale), int(33*y_scale)))
+        DISPLAYSURF.blit(imageLiveGame, (int(20*x_scale), int(70*y_scale)))
         drawBoard(mainBoard)
         drawClickedBox(mainBoard, clickedBoxes)
         drawTimeBar()
-        drawInfo(name, device, gen, level, size)
+        drawInfo(name, device, gen, LEVEL, size)
 
         # Kiểm tra và vẽ thông báo (nếu có)
         draw_notifications(DISPLAYSURF)
 
-        DISPLAYSURF.blit(imageHint, (30, 120))
-        DISPLAYSURF.blit(imageSwap, (30, 210))
-        DISPLAYSURF.blit(imageClock, (30, 300))
+        DISPLAYSURF.blit(imageHint, (int(30*x_scale), int(120*y_scale)))
+        DISPLAYSURF.blit(imageSwap, (int(30*x_scale), int(210*y_scale)))
+        DISPLAYSURF.blit(imageClock, (int(30*x_scale), int(300*y_scale)))
         
         # Kiểm tra và đặt lại hệ số nhân (nếu cần)
         score_manager.reset_multiplier()
@@ -1306,16 +1313,16 @@ def save_game_state(email, mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTI
         settings.saved = True
 
 def drawInfo(name, device, gen, level, size):
-    fonts = pygame.font.Font('font_pixel.otf', 30)
-    name_render = pygame.font.Font('font_pixel.otf', 40).render(name if name else 'NO NAME MAP', True, BLUE if name else RED)
-    DISPLAYSURF.blit(name_render, (WINDOWWIDTH//2 - name_render.get_width() // 2, 70))
-    DISPLAYSURF.blit(fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED), (20, WINDOWHEIGHT - 50))
+    fonts = pygame.font.Font('font_pixel.otf', int(30*x_scale))
+    name_render = pygame.font.Font('font_pixel.otf', int(40*x_scale)).render(name if name else 'NO NAME MAP', True, BLUE if name else RED)
+    DISPLAYSURF.blit(name_render, (WINDOWWIDTH//2 - name_render.get_width() // 2, int(60*y_scale)))
+    DISPLAYSURF.blit(fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED), (int(20*x_scale), WINDOWHEIGHT - int(50*y_scale)))
     delta_x = fonts.render(f'Map size: {size[0]}x{size[1]}', True, RED).get_width()
-    DISPLAYSURF.blit(fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED), (20 + delta_x + 20, WINDOWHEIGHT - 50))
-    delta_x += fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED).get_width() + 20
-    DISPLAYSURF.blit(fonts.render(f'Gen: {gen}', True, RED), (20 + delta_x + 20, WINDOWHEIGHT - 50))
-    delta_x += fonts.render(f'Gen: {gen}', True, RED).get_width() + 20
-    DISPLAYSURF.blit(fonts.render(f'Level: {level}', True, RED), (20 + delta_x + 20, WINDOWHEIGHT - 50))
+    DISPLAYSURF.blit(fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED), (int(40*x_scale) + delta_x, WINDOWHEIGHT - int(50*y_scale)))
+    delta_x += fonts.render(f"Device: {'MOUSE' if device == 0 else 'KEYBOARD'}", True, RED).get_width() + int(20*x_scale)
+    DISPLAYSURF.blit(fonts.render(f'Gen: {int(gen) + 1}', True, RED), (int(40*x_scale) + delta_x, WINDOWHEIGHT - int(50*y_scale)))
+    delta_x += fonts.render(f'Gen: {gen}', True, RED).get_width() + int(20*x_scale)
+    DISPLAYSURF.blit(fonts.render(f'Game Mode: {int(level) + 1}', True, RED), (int(40*x_scale) + delta_x, WINDOWHEIGHT - int(50*y_scale)))
 
 def getRandomizedBoard():
     """Để đảm bảo bàn chơi không bị shuffle lại quá nhiều lần, hàm tạo bảng random sẽ ưu tiên vào số lượng Pokemon trùng lặp
@@ -1465,13 +1472,13 @@ def drawPath(board, path):
     pygame.time.wait(300)
 
 def drawTimeBar():
-    barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, 20)
-    barSize = (TIMEBAR_LENGTH, TIMEBAR_WIDTH)
+    barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, int(8*y_scale))
+    barSize = (int(TIMEBAR_LENGTH*x_scale), int(TIMEBAR_WIDTH*y_scale))
     progress = 1 - ((time.time() - STARTTIME - TIMEBONUS) / GAMETIME)
 
     pygame.draw.rect(DISPLAYSURF, borderColor, (barPos, barSize), 1)
-    innerPos = (barPos[0] + 2, barPos[1] + 2)
-    innerSize = ((barSize[0] - 4) * progress, barSize[1] - 4)
+    innerPos = (barPos[0] + int(2*x_scale), barPos[1] + int(2*y_scale))
+    innerSize = ((barSize[0] - int(4*x_scale)) * progress, barSize[1] - int(4*y_scale))
     pygame.draw.rect(DISPLAYSURF, barColor, (innerPos, innerSize))
 
 def showGameOverScreen(board, gamename = None, email = None, size = None, gamemode = None, gen = None, device = None, score = None):
@@ -1480,11 +1487,11 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
     mainBoard = getRandomizedBoard()
     result = isGameComplete(board)
     imageBack = pygame.image.load("images/image_button/no.png")
-    imageBack = pygame.transform.scale(imageBack, (300, 164))
-    imageBackRect = imageBack.get_rect(topleft = (600,800))
+    imageBack = pygame.transform.scale(imageBack, (int(300*x_scale), int(164*y_scale)))
+    imageBackRect = imageBack.get_rect(topleft = (int(600*x_scale), int(800*y_scale)))
     imagePlay = pygame.image.load("images/image_button/yes.png")
-    imagePlay = pygame.transform.scale(imagePlay, (300, 164))
-    imagePlayRect = imagePlay.get_rect(topleft = (1100, 800))
+    imagePlay = pygame.transform.scale(imagePlay, (int(300*x_scale), int(164*y_scale)))
+    imagePlayRect = imagePlay.get_rect(topleft = (int(1100*x_scale), int(800*y_scale)))
     running = True
     
     if result:
@@ -1529,16 +1536,16 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
         if SettingGame.muteSFX:
             pygame.mixer.music.play()
         imageWin = pygame.image.load("images/end_game/win.png")
-        imageWin = pygame.transform.scale(imageWin, (800, 412))
+        imageWin = pygame.transform.scale(imageWin, (int(800*x_scale), int(412*y_scale)))
         imagePlayAgain = pygame.image.load("images/end_game/playagain.png")
-        imagePlayAgain = pygame.transform.scale(imagePlayAgain, (600, 252))
+        imagePlayAgain = pygame.transform.scale(imagePlayAgain, (int(600*x_scale), int(252*y_scale)))
         
         while running:
             DISPLAYSURF.blit(Background, (0, 0))
-            DISPLAYSURF.blit(imageWin, (600, 60))
-            DISPLAYSURF.blit(imagePlayAgain, (700, 500))
-            DISPLAYSURF.blit(imageBack, (600, 800))
-            DISPLAYSURF.blit(imagePlay, (1100, 800))
+            DISPLAYSURF.blit(imageWin, (int(600*x_scale), int(60*y_scale)))
+            DISPLAYSURF.blit(imagePlayAgain, (int(700*x_scale), int(500*y_scale)))
+            DISPLAYSURF.blit(imageBack, (int(600*x_scale), int(800*y_scale)))
+            DISPLAYSURF.blit(imagePlay, (int(1100*x_scale), int(800*y_scale)))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1573,17 +1580,17 @@ def showGameOverScreen(board, gamename = None, email = None, size = None, gamemo
         if SettingGame.muteSFX:
             pygame.mixer.music.play()
         imageTryAgain = pygame.image.load("images/end_game/tryagain.png").convert_alpha()
-        imageTryAgain = pygame.transform.scale(imageTryAgain, (600, 336))
+        imageTryAgain = pygame.transform.scale(imageTryAgain, (int(600*x_scale), int(336*y_scale)))
         imageTryAgain.set_colorkey((255, 0, 255))
         imageLose = pygame.image.load("images/end_game/gameover.png")
-        imageLose = pygame.transform.scale(imageLose, (700, 416))
+        imageLose = pygame.transform.scale(imageLose, (int(700*x_scale), int(416*y_scale)))
         
         while running:
             DISPLAYSURF.blit(Background, (0, 0))
-            DISPLAYSURF.blit(imageBack, (600, 800))
-            DISPLAYSURF.blit(imagePlay, (1100, 800))
-            DISPLAYSURF.blit(imageTryAgain, (700, 500))
-            DISPLAYSURF.blit(imageLose, (650, 60))
+            DISPLAYSURF.blit(imageBack, (int(600*x_scale), int(800*y_scale)))
+            DISPLAYSURF.blit(imagePlay, (int(1100*x_scale), int(800*y_scale)))
+            DISPLAYSURF.blit(imageTryAgain, (int(700*x_scale), int(500*y_scale)))
+            DISPLAYSURF.blit(imageLose, (int(650*x_scale), int(60*y_scale)))
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1633,15 +1640,21 @@ def getHint(board):
 def drawHint(hint):
     for boxy, boxx in hint:
         left, top = leftTopCoordsOfBox(boxx, boxy)
-        pygame.draw.rect(DISPLAYSURF, GREEN, (left, top, BOXSIZEX, BOXSIZEY), 2)
+        pygame.draw.rect(DISPLAYSURF, GREEN, (left, top, BOXSIZEX, BOXSIZEY), 4)
 
 def resetBoard(board):
     pokesOnBoard = []
+    repeatedList = set()
     for boxy in range(BOARDHEIGHT):
         for boxx in range(BOARDWIDTH):
             if board[boxy][boxx] != 0:
                 pokesOnBoard.append(board[boxy][boxx])
+                repeatedList.add(board[boxy][boxx])
+    if len(repeatedList) <= 1:
+        return board
     referencedList = pokesOnBoard[:]
+    if len(referencedList) == 2:
+        return board
     while referencedList == pokesOnBoard:
         random.shuffle(pokesOnBoard)
 
@@ -1738,10 +1751,10 @@ class SaveMenu:
         self.screen = screen
         self.height = WINDOWHEIGHT
         self.width = WINDOWWIDTH
-        delta_w = (WINDOWWIDTH - 1500) // 4
-        delta_h = (WINDOWHEIGHT - 562 - 130) // 3
+        delta_w = (WINDOWWIDTH - int(1500*x_scale)) // 4
+        delta_h = (WINDOWHEIGHT - int(692*y_scale)) // 3
         
-        self.memory_rects = ((delta_w , 130 + delta_h, 500, 284), (delta_w*2 + 500 , 130 + delta_h, 500, 284), (delta_w*3 + 1000 , 130 + delta_h, 500, 284), (delta_w , 130 + delta_h*2 + 284, 500, 284), (delta_w*2 + 500 , 130 + delta_h*2 + 284, 500, 284), (delta_w*3 + 1000, 130 + delta_h*2 + 284, 500, 284))
+        self.memory_rects = ((delta_w , int(130*x_scale) + delta_h, int(500*x_scale), int(284*y_scale)), (delta_w*2 + int(500*x_scale) , int(130*x_scale) + delta_h, int(500*x_scale), int(284*y_scale)), (delta_w*3 + int(1000*x_scale) , int(130*x_scale) + delta_h, int(500*x_scale), int(284*y_scale)), (delta_w , int(414*y_scale) + delta_h*2, int(500*x_scale), int(284*y_scale)), (delta_w*2 + int(500*x_scale) , int(414*y_scale) + delta_h*2, int(500*x_scale), int(284*y_scale)), (delta_w*3 + int(1000*x_scale), int(414*y_scale) + delta_h*2, int(500*x_scale), int(284*y_scale)))
         self.maxpage = 3
         self.page = 1
         self.memories = [None for _ in range(6 * self.maxpage)]
@@ -1754,14 +1767,14 @@ class SaveMenu:
         self.email = email
         self.is_delete = False
         pygame.font.init()
-        self.font = pygame.font.Font('font_pixel.otf', 50)
-        self.fonts = pygame.font.Font('font_pixel.otf', 40)
+        self.font = pygame.font.Font('font_pixel.otf', int(50*x_scale))
+        self.fonts = pygame.font.Font('font_pixel.otf', int(40*x_scale))
         self.next_page = pygame.image.load('images/save_menu/next_page.png')
-        self.next_page = pygame.transform.scale(self.next_page, (100,100))
-        self.next_page_rect = pygame.Rect(WINDOWWIDTH // 2 + 120, WINDOWHEIGHT - 110, 100, 100)
+        self.next_page = pygame.transform.scale(self.next_page, (int(100*x_scale),int(100*y_scale)))
+        self.next_page_rect = pygame.Rect(WINDOWWIDTH // 2 + int(120*x_scale), WINDOWHEIGHT - int(110*y_scale), int(100*x_scale),int(100*y_scale))
         self.prev_page = pygame.image.load('images/save_menu/previous_page.png')
-        self.prev_page = pygame.transform.scale(self.prev_page, (100,100))
-        self.prev_page_rect = pygame.Rect(WINDOWWIDTH // 2 - 120, WINDOWHEIGHT - 110, 100, 100)
+        self.prev_page = pygame.transform.scale(self.prev_page, (int(100*x_scale),int(100*y_scale)))
+        self.prev_page_rect = pygame.Rect(WINDOWWIDTH // 2 - int(120*x_scale), WINDOWHEIGHT - int(110*y_scale), int(100*x_scale),int(100*y_scale))
         self.is_drawed = False
         self.cur_rect = None
         self.back = 'home'
@@ -1779,35 +1792,35 @@ class SaveMenu:
             x,y,w,h = self.memory_rects[i]
             pygame.draw.rect(self.screen, GRAY, pygame.Rect(x,y,w,h), border_radius=1)
         delete_icon = pygame.image.load('images/save_menu/delete.png')
-        delete_icon = pygame.transform.scale(delete_icon, (100,100))
+        delete_icon = pygame.transform.scale(delete_icon, (int(100*x_scale),int(100*y_scale)))
         self.delete_rects = [None for _ in range(6)]
         for i in range(6 * (self.page - 1), 6 * self.page):
             if self.memories[i]:
                 image = pygame.image.load(self.memories[i])
-                image = pygame.transform.scale(image, (498,282))
+                image = pygame.transform.scale(image, (int(500*x_scale) - 2, int(284*y_scale) - 2))
                 self.screen.blit(image, (self.memory_rects[i % 6][0] + 1, self.memory_rects[i % 6][1] + 1))
                 delete_icon_rect = delete_icon.get_rect()
                 delete_icon_rect.topleft = (self.memory_rects[i % 6][0], self.memory_rects[i % 6][1])
                 self.screen.blit(delete_icon, delete_icon_rect)
                 self.delete_rects[i % 6] = delete_icon_rect
                 map_name = self.font.render(saved_game[str(i)]['name'], True, BLACK)
-                self.screen.blit(map_name, (self.memory_rects[i % 6][0] + 250 - map_name.get_width()/2, self.memory_rects[i % 6][1] + 280))
+                self.screen.blit(map_name, (self.memory_rects[i % 6][0] + int(250*x_scale) - map_name.get_width()/2, self.memory_rects[i % 6][1] + int(280*y_scale)))
         for i in range(6 * (self.page - 1), 6 * self.page):
             if self.memories[i]:
                 color = RED
             else:
                 color = BLACK
             number = self.font.render(str(i + 1), True, color)
-            self.screen.blit(number, (self.memory_rects[i % 6][0] + 250 - number.get_width()//2, self.memory_rects[i % 6][1] + 142 - number.get_height()//2))
+            self.screen.blit(number, (self.memory_rects[i % 6][0] + int(250*x_scale) - number.get_width()//2, self.memory_rects[i % 6][1] + int(142*y_scale) - number.get_height()//2))
         if self.page > 1:
             self.screen.blit(self.prev_page, tuple(self.prev_page_rect))
         if self.page < self.maxpage:
             self.screen.blit(self.next_page, tuple(self.next_page_rect))
                 
-        self.out = pygame.Rect(WINDOWWIDTH - 180, WINDOWHEIGHT - 100, 150, 75)
-        pygame.draw.rect(self.screen, BLUE, pygame.Rect(WINDOWWIDTH - 180, WINDOWHEIGHT - 100, 150, 75))
+        self.out = pygame.Rect(WINDOWWIDTH - int(180*x_scale), WINDOWHEIGHT - int(100*y_scale), int(150*x_scale), int(75*y_scale))
+        pygame.draw.rect(self.screen, BLUE, self.out)
         back_word = self.fonts.render('HOME' if self.back == 'home' else 'BACK', True, BLACK)
-        self.screen.blit(back_word, (WINDOWWIDTH - 105 - back_word.get_width()//2, WINDOWHEIGHT - 100))
+        self.screen.blit(back_word, (WINDOWWIDTH - int(105*x_scale) - back_word.get_width()//2, WINDOWHEIGHT - int(100*y_scale)))
         pygame.display.flip()
     
     def save_game(self, event, mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTIME, BG, gen, device, size, map_name):
@@ -1819,7 +1832,7 @@ class SaveMenu:
             os.makedirs(save_folder)
         
         delete_icon = pygame.image.load('images/save_menu/delete.png')
-        delete_icon = pygame.transform.scale(delete_icon, (50,50))
+        delete_icon = pygame.transform.scale(delete_icon, (int(100*x_scale),int(100*y_scale)))
         if event.type == pygame.MOUSEMOTION:
             self.mouse_on(event)
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -1830,7 +1843,7 @@ class SaveMenu:
                     self.delete(i + (self.page - 1) * 6)
                     
                 elif box and box.collidepoint(mouse_pos):
-                    enter_map_name = EnterMapName(WINDOWWIDTH // 2 - 500, WINDOWHEIGHT // 2 - 250, 1000, 500, DISPLAYSURF, self.email)
+                    enter_map_name = EnterMapName(WINDOWWIDTH // 2 - int(500*x_scale), WINDOWHEIGHT // 2 - int(250*y_scale), int(1000*x_scale), int(500*y_scale), DISPLAYSURF, self.email)
                     map_name = None
                     while not map_name:
                         map_name = enter_map_name.appear()
@@ -1839,16 +1852,7 @@ class SaveMenu:
                             
                     if enter_map_name.visible:
                         pygame.image.save(temp_image, f'saves/save_game/{self.email}_saved{i + (self.page - 1) * 6}.png')
-                        self.memories[i + (self.page - 1) * 6] = f'saves/{self.email}_saved{i + (self.page - 1) * 6}.png'
-                        image = pygame.transform.scale(temp_image, (248,140))
-                        self.screen.blit(image, (self.memory_rects[i][0] + 1, self.memory_rects[i][1] + 1))
-                        delete_icon_rect = delete_icon.get_rect()
-                        delete_icon_rect.topleft = (self.memory_rects[i][0], self.memory_rects[i][1])
-                        self.delete_rects[i] = delete_icon_rect
-                        self.screen.blit(delete_icon, delete_icon_rect)
-                        pygame.display.flip()
-                        
-                        with open(f'saves/save_game/{self.email}_saved_game.json', 'r', encoding='utf_8', ) as file:
+                        with open(f'saves/save_game/{self.email}_saved_game.json', 'r', encoding='utf_8') as file:
                             try:
                                 game_state = json.load(file)
                             except:
@@ -2001,7 +2005,7 @@ class EnterMapName:
         self.Rect = pygame.Rect(x,y,w,h)
         self.screen = screen
         pygame.font.init()
-        self.font = pygame.font.Font(None, 64)
+        self.font = pygame.font.Font(None, int(64*x_scale))
         self.visible = True
         self.email = email
         self.closeable = closeable
@@ -2014,12 +2018,12 @@ class EnterMapName:
         enter_map_name = pygame.transform.scale(enter_map_name, (self.w, self.h))
         self.screen.blit(enter_map_name, (self.x, self.y))
         if self.closeable == True:
-            close_button = pygame.transform.scale(pygame.image.load('images/save_menu/close_button.png'), (100, 100))
-            self.screen.blit(close_button, (self.x + 16, self.y + 16))
-            close_button_rect = pygame.Rect(self.x + 16, self.y + 16, 100, 100)
+            close_button = pygame.transform.scale(pygame.image.load('images/save_menu/close_button.png'), (int(100*x_scale), int(100*y_scale)))
+            self.screen.blit(close_button, (self.x + int(16*x_scale), self.y + int(16*y_scale)))
+            close_button_rect = pygame.Rect(self.x + int(16*x_scale), self.y + int(16*y_scale), int(100*x_scale), int(100*y_scale))
         
         # Ô nhập dữ liệu
-        input_box = pygame.Rect(self.x + self.w // 2 - 300, self.y + 240, 600, 80)
+        input_box = pygame.Rect(self.x + self.w // 2 - int(300*x_scale), self.y + int(240*y_scale), int(600*x_scale), int(80*y_scale))
         color_inactive = GRAY
         color_active = BLUE
         color = color_inactive
@@ -2027,9 +2031,9 @@ class EnterMapName:
         text = ''
 
         enter_button = pygame.image.load('images/save_menu/enter_button.png')
-        enter_button = pygame.transform.scale(enter_button, (300, 70))
-        self.screen.blit(enter_button, (self.x + self.w // 2 - 150, self.y + 370))
-        enter_rect = pygame.Rect(self.x + self.w // 2 - 150, self.y + 370, 300, 70)
+        enter_button = pygame.transform.scale(enter_button, (int(300*x_scale), int(70*y_scale)))
+        self.screen.blit(enter_button, (self.x + self.w // 2 - int(150*x_scale), self.y + int(370*y_scale)))
+        enter_rect = pygame.Rect(self.x + self.w // 2 - int(150*x_scale), self.y + int(370*y_scale), int(300*x_scale), int(70*y_scale))
         
         # Vòng lặp chính
         running = True
@@ -2078,7 +2082,7 @@ class EnterMapName:
                             text += event.unicode
                             error = None
             if error != None:
-                self.screen.blit(error, (self.x + 500 - error.get_width() // 2, self.y + 140))
+                self.screen.blit(error, (self.x + int(500*x_scale) - error.get_width() // 2, self.y + int(140*y_scale)))
                 error_on = True
             elif error_on == True:
                 if self.closeable == True:
@@ -2088,9 +2092,7 @@ class EnterMapName:
                 enter_map_name = pygame.transform.scale(enter_map_name, (self.w, self.h))
                 self.screen.blit(enter_map_name, (self.x, self.y))
                 if self.closeable == True:
-                    close_button = pygame.transform.scale(pygame.image.load('images/save_menu/close_button.png'), (100, 100))
-                    self.screen.blit(close_button, (self.x + 16, self.y + 16))
-                    close_button_rect = pygame.Rect(self.x + 16, self.y + 16, 100, 100)
+                    self.screen.blit(close_button, (self.x + int(16*x_scale), self.y + int(16*y_scale)))
                 self.screen.blit(enter_button, tuple(enter_rect))
                 error_on = False
             # Vẽ ô nhập dữ liệu
@@ -2099,11 +2101,11 @@ class EnterMapName:
             
             # Render văn bản
             txt_surface = self.font.render(text, True, BLACK)
-            if txt_surface.get_width() > 600:
-                l = 600 // txt_surface.get_width() * len(text)
+            if txt_surface.get_width() > int(600*x_scale):
+                l = int(int(600*x_scale) / txt_surface.get_width() * len(text))
                 txt_surface = self.font.render(text[-l:], True, BLACK)
             # Vẽ văn bản
-            self.screen.blit(txt_surface, (input_box.x + 10, input_box.y + 40 - txt_surface.get_height()//2))
+            self.screen.blit(txt_surface, (input_box.x + int(10*x_scale), input_box.y + int(40*y_scale) - txt_surface.get_height()//2))
 
             # Cập nhật màn hình
             pygame.display.flip()
@@ -2115,8 +2117,8 @@ class Settings:
         self.processing_click = False 
         self.last_close_time = 0
         # Box settings
-        self.box_width = 400
-        self.box_height = 400
+        self.box_width = 400*x_scale
+        self.box_height = 400*y_scale
         self.box_color = (50, 50, 50)  # Màu nền box settings
         self.box_border_color = (255, 255, 255)  # Màu viền box settings
         self.box_rect = pygame.Rect(
@@ -2128,11 +2130,11 @@ class Settings:
         self.saved = False
 
         # Nút Settings chính
-        self.settings_button_rect = pygame.Rect(10, 10, 130, 40)  # Vị trí nút "Settings"
+        self.settings_button_rect = pygame.Rect(int(10*x_scale), int(10*y_scale), int(130*x_scale), int(40*y_scale))  # Vị trí nút "Settings"
 
         # Các nút trong box settings (bao gồm nút Close)
-        self.button_width = 200
-        self.button_height = 50
+        self.button_width = 200*x_scale
+        self.button_height = 50*y_scale
         self.buttons = [
             {"text": "Toggle Sound", "action": self.toggle_sound, "rect": None},
             {"text": "Save Game", "action": self.save_game, "rect": None},
@@ -2154,8 +2156,8 @@ class Settings:
     def _update_button_positions(self):
         """Căn chỉnh vị trí các nút nằm trong box settings."""
         start_x = self.box_rect.x + (self.box_width - self.button_width) // 2
-        start_y = self.box_rect.y + 40  # Khoảng cách từ mép trên box đến nút đầu tiên
-        gap = 20  # Khoảng cách giữa các nút
+        start_y = self.box_rect.y + 40*x_scale  # Khoảng cách từ mép trên box đến nút đầu tiên
+        gap = 20*y_scale  # Khoảng cách giữa các nút
 
         for i, button in enumerate(self.buttons):
             button["rect"] = pygame.Rect(
@@ -2226,10 +2228,10 @@ class Settings:
     def draw(self):
         """Draw Settings menu and button."""
         # Nút Settings chính trên giao diện
-        fonts = pygame.font.Font('font_pixel.otf', 20)
+        fonts = pygame.font.Font('font_pixel.otf', int(20*x_scale))
         if not self.visible:
             self.saved = False
-            pygame.draw.rect(self.screen, GREEN, self.settings_button_rect, border_radius=5)
+            pygame.draw.rect(self.screen, GREEN, self.settings_button_rect, border_radius=int(5*x_scale))
             text = fonts.render("Settings", True, BLACK)
             self.screen.blit(text, (self.settings_button_rect.x + self.settings_button_rect.w / 2 - text.get_width() / 2, self.settings_button_rect.y))
         else:
@@ -2248,12 +2250,12 @@ class Settings:
                     pygame.draw.rect(self.screen, GRAY, button["rect"], border_radius=3)
                     text = fonts.render('SAVED', True, WHITE)
                     w = text.get_width()
-                    self.screen.blit(text, (button["rect"].x + button["rect"].w / 2 - w / 2, button["rect"].y + 7))
+                    self.screen.blit(text, (button["rect"].x + button["rect"].w / 2 - w / 2, button["rect"].y + int(7*y_scale)))
                 else:
                     pygame.draw.rect(self.screen, BLUE, button["rect"], border_radius=3)
                     text = fonts.render(button["text"], True, WHITE)
                     w = text.get_width()
-                    self.screen.blit(text, (button["rect"].x + button["rect"].w / 2 - w / 2, button["rect"].y + 7))
+                    self.screen.blit(text, (button["rect"].x + button["rect"].w / 2 - w / 2, button["rect"].y + int(7*y_scale)))
 
 class Collections:
     def __init__(self, screen, unlocked_pokemons):
@@ -2263,31 +2265,32 @@ class Collections:
         self.current_page = 1  # Trang hiện tại (bắt đầu từ 1)
         self.pokemon_per_page = 15  # Số Pokémon hiển thị mỗi trang
 
-        self.font = pygame.font.Font('font_pixel.otf', 75)  # Font chữ
+        self.font = pygame.font.Font('font_pixel.otf', int(75*x_scale))  # Font chữ
         self.gen_rects = []  # Lưu danh sách các nút Gen (vùng chữ nhật)
 
         # Nút Back (ảnh)
         self.back_button_image = pygame.image.load('images/image_button/back.png')
-        self.back_button_image = pygame.transform.scale(self.back_button_image, (250, 100))  # Kích thước mới
-        self.back_button_rect = self.back_button_image.get_rect(topright=(WINDOWWIDTH - 30, 30))  # Vị trí nút Back
+        self.back_button_image = pygame.transform.scale(self.back_button_image, (int(250*x_scale), int(100*y_scale)))  # Kích thước mới
+        self.back_button_rect = self.back_button_image.get_rect(topright=(WINDOWWIDTH - int(30*x_scale), int(30*y_scale)))  # Vị trí nút Back
 
         # Nút Next Page (ảnh)
         self.next_page_image = pygame.image.load('images/save_menu/next_page.png')
-        self.next_page_image = pygame.transform.scale(self.next_page_image, (100, 100))  # Kích thước mới
-        self.next_page_rect = self.next_page_image.get_rect(midbottom=(WINDOWWIDTH // 2 + 85, WINDOWHEIGHT - 15))
+        self.next_page_image = pygame.transform.scale(self.next_page_image, (int(100*x_scale), int(100*y_scale)))  # Kích thước mới
+        self.next_page_rect = self.next_page_image.get_rect(midbottom=(WINDOWWIDTH // 2 + int(85*x_scale), WINDOWHEIGHT - int(15*y_scale)))
 
         # Nút Previous Page (ảnh)
         self.prev_page_image = pygame.image.load('images/save_menu/previous_page.png')
-        self.prev_page_image = pygame.transform.scale(self.prev_page_image, (100, 100))  # Kích thước mới
-        self.prev_page_rect = self.prev_page_image.get_rect(midbottom=(WINDOWWIDTH // 2 - 85, WINDOWHEIGHT - 15))
+        self.prev_page_image = pygame.transform.scale(self.prev_page_image, (int(100*x_scale), int(100*y_scale)))  # Kích thước mới
+        self.prev_page_rect = self.prev_page_image.get_rect(midbottom=(WINDOWWIDTH // 2 - int(85*x_scale), WINDOWHEIGHT - int(15*y_scale)))
 
     def draw_collections_menu(self):
+        self.current_page = 1
         """Hiển thị menu chọn Gen với căn chỉnh đều và chữ nằm giữa khung."""
         self.screen.fill((245, 245, 220))  # Màu nền be
 
         # Tiêu đề
         title = self.font.render("Select Generation", True, RED)
-        self.screen.blit(title, (WINDOWWIDTH // 2 - title.get_width() // 2, 90))  # Tiêu đề nằm giữa màn hình
+        self.screen.blit(title, (WINDOWWIDTH // 2 - title.get_width() // 2, int(90*y_scale)))  # Tiêu đề nằm giữa màn hình
 
         # Số lượng nút Gen
         num_buttons = 4  # Tổng số nút Gen
@@ -2303,12 +2306,12 @@ class Collections:
             max_text_height = max(max_text_height, gen_text.get_height())
 
         # Kích thước nút dựa trên kích thước chữ + padding
-        button_width = max_text_width + 40  # Padding ngang 40px
-        button_height = max_text_height + 30  # Padding dọc 30px
+        button_width = max_text_width + int(40*x_scale)  # Padding ngang 40px
+        button_height = max_text_height + int(30*y_scale)  # Padding dọc 30px
 
         # Tính toán khoảng cách giữa các nút
-        button_spacing_x = 50  # Khoảng cách ngang giữa các nút
-        button_spacing_y = 40  # Khoảng cách dọc giữa các nút
+        button_spacing_x = int(50*x_scale)  # Khoảng cách ngang giữa các nút
+        button_spacing_y = int(40*y_scale)  # Khoảng cách dọc giữa các nút
 
         # Tổng chiều rộng và chiều cao của khu vực chứa nút
         total_width = num_cols * button_width + (num_cols - 1) * button_spacing_x
@@ -2437,7 +2440,7 @@ class Collections:
             original_width, original_height = img.get_size()
 
             # Tính tỷ lệ để giữ nguyên tỷ lệ gốc và vừa với không gian hiển thị
-            max_width, max_height = 650, 650  # Kích thước tối đa cho hình ảnh
+            max_width, max_height = int(650*x_scale), int(650*y_scale)  # Kích thước tối đa cho hình ảnh
             scale = min(max_width / original_width, max_height / original_height)
             new_width = int(original_width * scale)
             new_height = int(original_height * scale)
@@ -2447,7 +2450,7 @@ class Collections:
 
             # Căn giữa ảnh
             x_centered = WINDOWWIDTH // 2 - new_width // 2
-            y_position = 80  # Vị trí phía trên dành cho hình ảnh
+            y_position = int(80*y_scale)  # Vị trí phía trên dành cho hình ảnh
             self.screen.blit(img, (x_centered, y_position))  # Vẽ ảnh trên màn hình
         except FileNotFoundError:
             print(f"Không tìm thấy hình ảnh {image_path}")
@@ -2455,9 +2458,9 @@ class Collections:
 
         # Sử dụng phông chữ pixel tùy chỉnh
         self.fonts = pygame.font.Font('font_pixel.otf', 50)  # Kích thước font phù hợp với màn hình
-        text_x = 60  # Văn bản cách lề trái
-        y_offset = 700  # Dòng chữ đầu tiên phía dưới hình ảnh
-        max_line_width = WINDOWWIDTH - text_x - 60  # Giới hạn chiều rộng dòng chữ
+        text_x = int(60*x_scale)  # Văn bản cách lề trái
+        y_offset = int(700*y_scale)  # Dòng chữ đầu tiên phía dưới hình ảnh
+        max_line_width = WINDOWWIDTH - text_x - int(60*x_scale)  # Giới hạn chiều rộng dòng chữ
 
         # Hiển thị thông tin chi tiết
         for key, value in pokemon_info.items():
@@ -2467,12 +2470,12 @@ class Collections:
                 for line in description_lines:
                     text_surface = self.fonts.render(line, True, BLACK)
                     self.screen.blit(text_surface, (text_x, y_offset))
-                    y_offset += 60
+                    y_offset += int(60*y_scale)
             else:
                 text = f"{key.capitalize()}: {value}"
                 text_surface = self.fonts.render(text, True, BLACK)
                 self.screen.blit(text_surface, (text_x, y_offset))
-                y_offset += 70
+                y_offset += int(70*y_scale)
 
         # Hiển thị nút Back
         self.screen.blit(self.back_button_image, self.back_button_rect.topleft)
@@ -2512,7 +2515,7 @@ class Collections:
         """Vẽ màn hình hiển thị danh sách Pokémon theo Gen và trang hiện tại."""
         self.screen.fill((245, 245, 220))  # Màu nền
         title = self.font.render(f"Pokémon in Gen {gen} - Page {self.current_page}", True, BLACK)
-        self.screen.blit(title, (WINDOWWIDTH // 2 - title.get_width() // 2, 70))  # Tiêu đề
+        self.screen.blit(title, (WINDOWWIDTH // 2 - title.get_width() // 2, int(70*y_scale)))  # Tiêu đề
 
         # Vẽ danh sách Pokémon
         pokemon_list = os.listdir(f'images/images_icon/Gen{gen}/')
@@ -2523,8 +2526,8 @@ class Collections:
         pokemon_rects = []
 
         # Thiết lập kích thước Pokémon và lưới hiển thị
-        pokemon_size = 170  # Kích thước mới của Pokémon
-        margin = 80  # Khoảng cách giữa các Pokémon (dãn ra thêm)
+        pokemon_size = int(170*x_scale)  # Kích thước mới của Pokémon
+        margin = int(80*x_scale)  # Khoảng cách giữa các Pokémon (dãn ra thêm)
         cols = 5  # Số Pokémon mỗi hàng
         rows = (len(displayed_pokemon) + cols - 1) // cols  # Số hàng cần thiết
 
@@ -2532,7 +2535,7 @@ class Collections:
         total_width = cols * pokemon_size + (cols - 1) * margin
         total_height = rows * pokemon_size + (rows - 1) * margin
         x_start = (WINDOWWIDTH - total_width) // 2
-        y_start = (WINDOWHEIGHT - total_height) // 2 + 50
+        y_start = (WINDOWHEIGHT - total_height) // 2 + int(50*y_scale)
 
         x, y = x_start, y_start
 
