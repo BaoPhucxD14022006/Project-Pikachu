@@ -1,6 +1,8 @@
 <h1 align="center">Project Pikachu</h1>
 Chào mừng đến với project game của chúng mình.
-![Game Pikachu](./Pikachu/images/button/menu.jpg)
+
+<h2 align="center"><img src="./Pikachu/images/button/menu.jpg"></h2>
+
 Đây là phiên bản game Pikachu do các thành viên nhóm phối hợp tạo nên. Các tính năng cũng như giao diện được thiết kế chỉnh chu và toàn diện.
 
 ## 📖 Giới thiệu
