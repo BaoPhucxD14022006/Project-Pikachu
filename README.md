@@ -37,6 +37,18 @@ Game Pikachu là phiên bản hiện đại của trò chơi nối thú kinh đi
   - #### Click chuột vào file LOGIN.py hoặc REGISTER.py để vào giao diện đăng nhập hoặc đăng ký.
   - #### Hoàn thành các bước đăng ký, đăng nhập và bắt đầu vào game.
 
+## 🔍 Một số tính năng cần lưu ý trong Game Pikachu:
+- ### 🕹️ Keyboard:
+  - #### Di chuyển qua lại các icon bằng các nút A (trái), W (lên), S (dưới), D (phải), Enter (Chọn) ⌨️.
+  - #### Khi di chuyển sẽ có một hình chữ nhật màu xanh để nhận biết ta đang ở đâu 🔲.
+  - #### Có 2 chế độ di chuyển:
+    Chế độ 1 (Mặc định): Khi di chuyển tự động sẽ bỏ qua các ô ta đã collect trước đó 📈.  
+    Chế độ 2 (Ấn 1 lần nút Shift - Khuyến khích dùng): Khi di chuyển sẽ không bỏ qua các ô đã collect 📈.
+- ### ⚙️ Tính năng phụ:
+  - #### Hint: Cung cấp gợi ý để giúp người chơi tìm kiếm các biểu tượng cần thiết 💡.
+  - #### Random: Tạo ngẫu nhiên các biểu tượng trên bàn chơi để tăng tính đa dạng 🎲.
+  - #### Timer: cộng thêm thời gian để người chơi có thêm thời gian để hoàn thành màn chơi ⏳.
+
 ## 🤝 Đóng góp
 Vì đây là mã nguồn mở, chúng mình luôn chào đón sự đóng góp từ cộng đồng. Để đóng góp, vui lòng:
 1. Fork repo này.
