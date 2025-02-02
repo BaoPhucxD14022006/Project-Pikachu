@@ -1237,7 +1237,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     if time.time() - STARTTIME - 30 - TIMEBONUS> 0:
                         STARTTIME += 30
                     else:
-                        STARTTIME += time.time() - STARTTIME
+                        STARTTIME += time.time() - STARTTIME - TIMEBONUS
                     if GAMETIME - (time.time() - STARTTIME - TIMEBONUS) < 40:
                         TimeOutSound.stop()
                         TimeOutSound.play()
@@ -1299,7 +1299,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                     if time.time() - STARTTIME - 30 - TIMEBONUS> 0:
                         STARTTIME += 30
                     else:
-                        STARTTIME += time.time() - STARTTIME
+                        STARTTIME += time.time() - STARTTIME - TIMEBONUS
                     if GAMETIME - (time.time() - STARTTIME - TIMEBONUS) < 40:
                         TimeOutSound.stop()
                         TimeOutSound.play()
