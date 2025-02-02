@@ -28,7 +28,7 @@ TIMEBAR_LENGTH = 600
 TIMEBAR_WIDTH = 60
 LEVELMAX = 5
 LIVES = 3
-GAMETIME = 240
+GAMETIME = 60
 GETHINTTIME = 20
 
 # Set up cho màu
@@ -454,6 +454,9 @@ clickSound = pygame.mixer.Sound('sound_effect/beep4.ogg')
 getPointSound = pygame.mixer.Sound('sound_effect/beep1.ogg')
 wrongSound = pygame.mixer.Sound('sound_effect/wrong.mp3')
 startScreenSound = pygame.mixer.Sound('sound_effect/music_background/introduction.wav')
+TimeOutSound = pygame.mixer.Sound('sound_effect/ClockTick.mp3')
+less_time = False
+RingRingSound = pygame.mixer.SoundType('sound_effect/ringring.mp3')
 listMusicBG = [f"sound_effect/music_background/music_{i}.mp3" for i in range(1, 5)]
 
 def main(email):
@@ -991,6 +994,7 @@ def load_poke_images(gen_folder):
     print(f"Loaded {NUMPOKES} heroes from {gen_folder}.")
 
 def runGame(email, saved_state, level, gen, device, size, randomBG):
+    
     global update_map_name
     update_map_name = None
     clickSound.set_volume(SettingGame.volumeSFX)
@@ -1002,8 +1006,8 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
 
     # Tải trạng thái hoặc khởi tạo mặc định
     # saved_state = load_game_state(email)
-    global mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTIME, lastTimeGetPoint, hint, mainBoard, firstSelection, clickedBoxes, settings, action
-
+    global mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTIME, lastTimeGetPoint, hint, mainBoard, firstSelection, clickedBoxes, settings, action, less_time
+    
     settings = Settings(DISPLAYSURF)
     
     settings.save_callback = lambda: save_game_state(email, mainBoard, LEVEL, LIVES, GAMETIME, TIMEBONUS, STARTTIME, BG, gen, device, size, name)
@@ -1229,10 +1233,13 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                         pygame.mixer.music.stop()
                         return showGameOverScreen(mainBoard, gamename=name, email=email)
                 if imageClockRect.collidepoint(mousePos):
-                    if time.time() - STARTTIME - 30 > 0:
+                    if time.time() - STARTTIME - 30 - TIMEBONUS> 0:
                         STARTTIME += 30
                     else:
                         STARTTIME += time.time() - STARTTIME
+                    if GAMETIME - (time.time() - STARTTIME - TIMEBONUS) < 40:
+                        TimeOutSound.stop()
+                        TimeOutSound.play()
                     if LIVES > 0:
                         LIVES -= 1
                     else:
@@ -1288,10 +1295,13 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                         pygame.mixer.music.stop()
                         return showGameOverScreen(mainBoard, gamename=name, email=email)
                 elif event.key == pygame.K_t:
-                    if time.time() - STARTTIME - 30 > 0:
+                    if time.time() - STARTTIME - 30 - TIMEBONUS> 0:
                         STARTTIME += 30
                     else:
                         STARTTIME += time.time() - STARTTIME
+                    if GAMETIME - (time.time() - STARTTIME - TIMEBONUS) < 40:
+                        TimeOutSound.stop()
+                        TimeOutSound.play()
                     if LIVES > 0:
                         LIVES -= 1
                     else:
@@ -1314,7 +1324,16 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
             settings.draw()
             ###
             if time.time() - STARTTIME > GAMETIME + TIMEBONUS:
+                RingRingSound.play()
                 return showGameOverScreen(mainBoard, gamename=name, email=email)
+            if GAMETIME - (time.time() - STARTTIME - TIMEBONUS) < 40:
+                if less_time == False and not settings.visible:
+                    TimeOutSound.play()
+                    less_time = True
+            else:
+                if less_time == True:
+                    TimeOutSound.stop()
+                    less_time = False
             if time.time() - lastTimeGetPoint >= GETHINTTIME:
                 drawHint(hint)
             if device == 0:
@@ -1538,6 +1557,8 @@ def drawPath(board, path):
     pygame.time.wait(300)
 
 def drawTimeBar():
+    TIMEBAR_LENGTH = int(TIMEBAR_LENGTH*x_scale)
+    TIMEBAR_WIDTH = int(TIMEBAR_WIDTH*y_scale)
     barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, int(8*y_scale))
     barSize = (int(TIMEBAR_LENGTH*x_scale), int(TIMEBAR_WIDTH*y_scale))
     progress = 1 - ((time.time() - STARTTIME - TIMEBONUS) / GAMETIME)
@@ -1548,6 +1569,7 @@ def drawTimeBar():
     pygame.draw.rect(DISPLAYSURF, barColor, (innerPos, innerSize))
 
 def showGameOverScreen(board, gamename = None, email = None, size = None, gamemode = None, gen = None, device = None, score = None):
+    TimeOutSound.stop()
     global LIVES, DISPLAYSURF, mainBoard
     LIVES = 3
     mainBoard = getRandomizedBoard()
@@ -2301,6 +2323,9 @@ class Settings:
             # Vẽ box settings
             if not self.start_pause:
                 self.start_pause = time.time()
+            global less_time
+            less_time = False
+            TimeOutSound.stop()
             # if not self.appear_again:
             crop_image = DISPLAYSURF.subsurface((XMARGIN + BOXSIZEX, YMARGIN + BOXSIZEY, BOXSIZEX * (BOARDWIDTH - 2), BOXSIZEY * (BOARDHEIGHT - 2)))
             pygame.image.save(crop_image, 'saves/save_game/temporary.png')
