@@ -460,7 +460,7 @@ RingRingSound = pygame.mixer.SoundType('sound_effect/ringring.mp3')
 listMusicBG = [f"sound_effect/music_background/music_{i}.mp3" for i in range(1, 5)]
 
 def main(email):
-    global WINDOWHEIGHT, WINDOWWIDTH, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, unlocked_pokemon, x_scale, y_scale
+    global TIMEBAR_LENGTH, TIMEBAR_WIDTH, WINDOWHEIGHT, WINDOWWIDTH, FPSCLOCK, DISPLAYSURF, BASICFONT, LIVESFONT, LEVEL, BOARDWIDTH, BOARDHEIGHT, BOXSIZEX, BOXSIZEY, XMARGIN, YMARGIN, unlocked_pokemon, x_scale, y_scale
     with open(f'{PATH}/saves/save_game/{email}_saved_collection.json', 'r') as file:
         unlocked_pokemon = json.load(file)
 
@@ -474,7 +474,8 @@ def main(email):
     WINDOWHEIGHT = pygame.display.Info().current_h
     x_scale = WINDOWWIDTH / BASE_WINDOWWIDTH
     y_scale = WINDOWHEIGHT / BASE_WINDOWHEIGHT
-
+    TIMEBAR_LENGTH = int(TIMEBAR_LENGTH*x_scale)
+    TIMEBAR_WIDTH = int(TIMEBAR_WIDTH*y_scale)
     print(WINDOWWIDTH, WINDOWHEIGHT)
     
     pygame.display.set_caption('Pikachu')
@@ -1557,8 +1558,6 @@ def drawPath(board, path):
     pygame.time.wait(300)
 
 def drawTimeBar():
-    TIMEBAR_LENGTH = int(TIMEBAR_LENGTH*x_scale)
-    TIMEBAR_WIDTH = int(TIMEBAR_WIDTH*y_scale)
     barPos = (WINDOWWIDTH // 2 - TIMEBAR_LENGTH // 2, int(8*y_scale))
     barSize = (int(TIMEBAR_LENGTH*x_scale), int(TIMEBAR_WIDTH*y_scale))
     progress = 1 - ((time.time() - STARTTIME - TIMEBONUS) / GAMETIME)
