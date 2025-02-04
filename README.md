@@ -40,7 +40,7 @@ Game Pikachu là phiên bản hiện đại của trò chơi nối thú kinh đi
 
 ## 🔍 Một số tính năng cần lưu ý trong Game Pikachu:
 - ### 🕹️ Keyboard:
-  - #### Di chuyển qua lại các icon bằng các nút A (trái), W (lên), S (dưới), D (phải), Enter (Chọn) ⌨️, Shift (Thay đổi chế độ di chuyển).
+  - #### Di chuyển qua lại các icon bằng các nút A (trái), W (lên), S (dưới), D (phải), Enter (Chọn), Shift (Thay đổi chế độ di chuyển) ⌨️.
   - #### Khi di chuyển sẽ có một hình chữ nhật màu xanh để nhận biết ta đang ở đâu 🔲.
   - #### Có 2 chế độ di chuyển:
     Chế độ 1 (Mặc định): Khi di chuyển tự động sẽ bỏ qua các ô ta đã collect trước đó 📈.  
