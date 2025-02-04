@@ -235,7 +235,7 @@ class LoginLogic:
         # Khởi tạo hiệu ứng âm thanh
         current_dir = os.path.dirname(os.path.abspath(__file__))
         self.click_sound = QSoundEffect()
-        self.click_sound.setSource(QUrl.fromLocalFile(os.path.join(current_dir, "sound_effect", "firstblood.wav")))
+        self.click_sound.setSource(QUrl.fromLocalFile(os.path.join(current_dir, "sound_effect", "popup.wav")))
         self.click_sound.setVolume(0.5)  # Đặt âm lượng (0.0 đến 1.0)
 
     def play_click_sound(self):

@@ -476,7 +476,6 @@ def main(email):
     y_scale = WINDOWHEIGHT / BASE_WINDOWHEIGHT
     TIMEBAR_LENGTH = int(TIMEBAR_LENGTH*x_scale)
     TIMEBAR_WIDTH = int(TIMEBAR_WIDTH*y_scale)
-    print(WINDOWWIDTH, WINDOWHEIGHT)
     
     pygame.display.set_caption('Pikachu')
     BASICFONT = pygame.font.SysFont('comicsansms', 70)
@@ -502,6 +501,7 @@ def MainGame(email):
 
         # Hiển thị màn hình bắt đầu
         global action
+        TimeOutSound.stop()
         action = showStartScreen(email)
         pygame.event.clear(pygame.MOUSEBUTTONUP)  # Xóa sự kiện chuột sau khi nhận hành động
 
@@ -930,7 +930,6 @@ def showStartScreen(email):
                         elif i == 1:  # CONTINUE
                             return "LOAD GAME"
                         elif i == 2:  # RANK
-                            print("Rank selected")
                             import RANKSCREEN
                             RANKSCREEN.main(WINDOWWIDTH, WINDOWHEIGHT, DISPLAYSURF, x_scale, y_scale)
                         elif i == 3:# OPTION
@@ -992,7 +991,6 @@ def load_poke_images(gen_folder):
             pygame.image.load(path + LISTPOKES[i]),
             (BOXSIZEX, BOXSIZEY)
         )
-    print(f"Loaded {NUMPOKES} heroes from {gen_folder}.")
 
 def runGame(email, saved_state, level, gen, device, size, randomBG):
     
@@ -1310,7 +1308,6 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
                         pygame.mixer.music.stop()
                         return showGameOverScreen(mainBoard, gamename=name, email=email)
                     
-        print(boxx, boxy)
         # Nếu Settings bị đóng, xóa các sự kiện chuột dư thừa
         if not settings.visible and mouseClicked:
             pygame.event.clear(pygame.MOUSEBUTTONUP)  # Xóa sự kiện chuột dư thừa
@@ -1759,8 +1756,8 @@ def isGameComplete(board):
 
 def alterBoardWithLevel(board, boxy1, boxx1, boxy2, boxx2, level):
 
-    # Level 2: All the pokemons move up to the top boundary
-    if level == 2:
+    # Level 1: All the pokemons move up to the top boundary
+    if level == 1:
         for boxx in (boxx1, boxx2):
             # rearrange pokes into a current list
             cur_list = [0]
@@ -1776,8 +1773,8 @@ def alterBoardWithLevel(board, boxy1, boxx1, boxy2, boxx2, level):
                 board[j][boxx] = num
                 j += 1
 
-    # Level 3: All the pokemons move down to the bottom boundary
-    if level == 3:
+    # Level 2: All the pokemons move down to the bottom boundary
+    if level == 2:
         for boxx in (boxx1, boxx2):
             # rearrange pokes into a current list
             cur_list = []
@@ -1793,8 +1790,8 @@ def alterBoardWithLevel(board, boxy1, boxx1, boxy2, boxx2, level):
                 board[j][boxx] = num
                 j += 1
 
-    # Level 4: All the pokemons move left to the left boundary
-    if level == 4:
+    # Level 3: All the pokemons move left to the left boundary
+    if level == 3:
         for boxy in (boxy1, boxy2):
             # rearrange pokes into a current list
             cur_list = [0]
@@ -1810,8 +1807,8 @@ def alterBoardWithLevel(board, boxy1, boxx1, boxy2, boxx2, level):
                 board[boxy][j] = num
                 j += 1
 
-    # Level 5: All the pokemons move right to the right boundary
-    if level == 5:
+    # Level 4: All the pokemons move right to the right boundary
+    if level == 4:
         for boxy in (boxy1, boxy2):
             # rearrange pokes into a current list
             cur_list = []
@@ -2257,10 +2254,8 @@ class Settings:
         SettingGame.muteSound = not SettingGame.muteSound
         if self.sound_on:
             pygame.mixer.music.unpause()  # Unpause music if sound is on
-            print("Sound On")
         else:
             pygame.mixer.music.pause()  # Pause music if sound is off
-            print("Sound Off")
 
     def save_game(self):
         if self.saved == False:
@@ -2471,7 +2466,7 @@ class Collections:
                 for i, rect in enumerate(pokemon_rects):
                     if rect.collidepoint(event.pos):
                         if pokemon_list[i] not in self.unlocked_pokemons:
-                            print("Pokémon này chưa được mở khóa!")  # Thông báo
+                            # print("Pokémon này chưa được mở khóa!")  # Thông báo
                             return None  # Không cho phép chọn
                         return pokemon_list[i]  # Trả về tên Pokémon được chọn
 
