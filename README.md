@@ -16,8 +16,8 @@ Game Pikachu là phiên bản hiện đại của trò chơi nối thú kinh đi
 ## 🎮 Hướng dẫn:
 - ### 🌍 Tải file game từ Github:
   Cách 1: Tải trực tiếp game từ Github:
-  - Trực tiếp tải thư mục Pikachu trên nhánh main về máy dưới dạng file '.zip'.
-  - Sau khi tải về, hãy bắt đầu giải nén file Zip 'Pikachu'.
+    - Trực tiếp tải thư mục Pikachu trên nhánh main về máy dưới dạng file '.zip'.
+    - Sau khi tải về, hãy bắt đầu giải nén file Zip 'Pikachu'.
   Cách 2: Clone repository về máy.
 - ### 🛠️ Cài đặt các thư viện cần thiết:
   Các thư viện cài đặt trên command hoặc terminal IDE:
