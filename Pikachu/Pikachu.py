@@ -28,7 +28,7 @@ TIMEBAR_LENGTH = 600
 TIMEBAR_WIDTH = 60
 LEVELMAX = 5
 LIVES = 3
-GAMETIME = 60
+GAMETIME = 180
 GETHINTTIME = 20
 
 # Set up cho màu
@@ -1147,6 +1147,7 @@ def runGame(email, saved_state, level, gen, device, size, randomBG):
     while not restart_flag:  # Vòng lặp chính sẽ thoát khi restart_flag được bật
         # Check game
         if isGameComplete(mainBoard):
+            TimeOutSound.stop()
             restart_flag = not restart_flag
             pygame.mixer.music.stop()
             if name == None:
